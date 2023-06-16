@@ -1,0 +1,9 @@
+.genie-chat-container {
+    width: 200px;
+    height: 500px;
+    background-color: red;
+    z-index: 10;
+    position: absolute;
+    top: 10rem;
+    right: 6rem;
+}

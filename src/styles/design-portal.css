@@ -1,0 +1,43 @@
+.design-portal-container {
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    flex-direction: column;
+    width: 50px;
+    gap: 4rem;
+    top: 10rem;
+    left: 3rem;
+    
+}
+
+.design-portal-btn {
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+    filter: invert(1);
+    transition: all .1s ease-in-out;
+}
+
+.design-portal-btn:hover, .lottery-btn:hover {
+    transform: scale(1.1);
+}
+
+.lottery-btn {
+    height: 65px;
+    width: 65px;
+    cursor: pointer;    
+    transition: all .1s ease-in-out;
+}
+
+.checkout-btn-container {
+    position: absolute;
+    right: 3rem;
+    cursor: pointer;
+}
+
+.genie-lamp-canvas {
+    position: absolute;
+    z-index: 12;
+    bottom: 0;
+    width: 100vw;
+}
