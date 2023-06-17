@@ -10,6 +10,7 @@ import shareIcon from "../assets/shareIcon.png";
 import helpIcon from "../assets/helpIcon.png";
 import GenieLamp from "./GenieLamp";
 import GenieChat from "./GenieChat";
+import GenieChatFreeRange from "./GenieChatFreeRange";
 
 const DesignPortal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +43,8 @@ const DesignPortal = () => {
           <Environment preset="city" />
         </Canvas>
       </div>
-      <GenieChat isOpen={isOpen} />
+      {/* <GenieChat isOpen={isOpen} /> */}
+      <GenieChatFreeRange />
     </div>
   );
 };
