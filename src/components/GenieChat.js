@@ -7,13 +7,14 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { Configuration, OpenAIApi } from "openai";
 
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
-const GenieChatFreeRange = ({ isOpen }) => {
-  const apiKey = "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";
+const GenieChat = ({ toggleGenieChat, ...props }) => {
+  const apiKey = "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";
   const [typing, setTyping] = useState(false);
   const [dalleImage, setDalleImage] = useState("");
 
@@ -210,69 +211,85 @@ const GenieChatFreeRange = ({ isOpen }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "6rem",
-        right: "4rem",
-        height: "600px",
-        zIndex: "13",
-        width: "400px",
-        backgroundColor: "red",
-      }}
-    >
-      <MainContainer>
-        <ChatContainer>
-          <MessageList
-            typingIndicator={
-              typing ? <TypingIndicator content="ChatGPT is typing" /> : null
-            }
-          >
-            {messages.map((message, i) => (
-              <Message key={i} model={message} />
-            ))}
-            {dalleImage ? (
-              <Message
-                model={{
-                  direction: "incoming",
-                }}
-              >
-                <Message.ImageContent
-                  src={dalleImage}
-                  alt="dalle Image"
-                  width={200}
-                />
-              </Message>
-            ) : null}
-          </MessageList>
-        </ChatContainer>
-      </MainContainer>
+    <AnimatePresence>
+      <motion.div
+        initial={{ right: "-400" }}
+        animate={{ right: toggleGenieChat ? "0px" : "100px" }}
+        exit={{ right: toggleGenieChat ? "0" : "-400px" }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: "6rem",
+          right: "4rem",
+          height: "600px",
+          zIndex: "13",
+          width: "400px",
+          // backgroundColor: "red",
+        }}
+        className="genie-chat-container"
+      >
+        <MainContainer className="main-container">
+          <ChatContainer className="chat-container">
+            <MessageList
+              className="message-list"
+              typingIndicator={
+                typing ? <TypingIndicator content="ChatGPT is typing" /> : null
+              }
+            >
+              {messages.map((message, i) => (
+                <Message key={i} model={message} />
+              ))}
+              {dalleImage ? (
+                <Message
+                  model={{
+                    direction: "incoming",
+                  }}
+                >
+                  <Message.ImageContent
+                    src={dalleImage}
+                    alt="dalle Image"
+                    width={200}
+                  />
+                </Message>
+              ) : null}
+            </MessageList>
+          </ChatContainer>
+        </MainContainer>
 
-      {stage === "chooseStyle" ? (
-        <>
-          {!selectVisible && (
-            <button onClick={toggleSelect}>Open Select</button>
-          )}
-          {selectVisible && (
-            <div>
-              <select value={selectedArtStyle} onChange={handleSelectChange}>
-                <option value="">Select an art style</option>
-                <option value="Impressionist">Impressionist</option>
-                <option value="Cubism">Cubism</option>
-                <option value="Abstract">Abstract</option>
-                {/* Add more art styles as needed */}
-              </select>
-              <button onClick={handleSelectSubmit}>Submit</button>
-            </div>
-          )}
-        </>
-      ) : (
-        <MessageInput placeholder="Type message here" onSend={handleSend} />
-      )}
+        {stage === "chooseStyle" ? (
+          <>
+            {!selectVisible && (
+              <button onClick={toggleSelect}>Open Select</button>
+            )}
+            {selectVisible && (
+              <motion.div>
+                <select value={selectedArtStyle} onChange={handleSelectChange}>
+                  <option value="">Select an art style</option>
+                  <option value="Impressionist">Impressionist</option>
+                  <option value="Cubism">Cubism</option>
+                  <option value="Abstract">Abstract</option>
+                  {/* Add more art styles as needed */}
+                </select>
+                <button onClick={handleSelectSubmit}>Submit</button>
+              </motion.div>
+            )}
+          </>
+        ) : (
+          <motion.div>
+            <MessageInput
+              // attachDisabled={false}
+              attachButton={false}
+              sendButton={false}
+              placeholder="Type here"
+              onSend={handleSend}
+            />
+          </motion.div>
+        )}
 
-      <button onClick={generateImage}></button>
-    </div>
+        {/* <button onClick={generateImage}></button> */}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
-export default GenieChatFreeRange;
+export default GenieChat;

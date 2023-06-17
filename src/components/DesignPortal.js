@@ -13,10 +13,10 @@ import GenieChat from "./GenieChat";
 import GenieChatFreeRange from "./GenieChatFreeRange";
 
 const DesignPortal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
 
   const toggleGenieChat = () => {
-    setIsOpen(!isOpen);
+    setIsGenieChatOpen(!isGenieChatOpen);
   };
   return (
     <div style={{ height: "100vh" }}>
@@ -44,7 +44,8 @@ const DesignPortal = () => {
         </Canvas>
       </div>
       {/* <GenieChat isOpen={isOpen} /> */}
-      <GenieChatFreeRange />
+      {isGenieChatOpen && <GenieChat isOpen={isGenieChatOpen} />}
+      {/* <GenieChat /> */}
     </div>
   );
 };
