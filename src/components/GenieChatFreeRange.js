@@ -13,7 +13,7 @@ import { Configuration, OpenAIApi } from "openai";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 
 const GenieChatFreeRange = ({ isOpen }) => {
-  const apiKey = "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";
+  const apiKey = "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";
   const [typing, setTyping] = useState(false);
   const [dalleImage, setDalleImage] = useState("");
 
@@ -218,12 +218,14 @@ const GenieChatFreeRange = ({ isOpen }) => {
         height: "600px",
         zIndex: "13",
         width: "400px",
-        backgroundColor: "red",
+        // backgroundColor: "blue",
       }}
+      className="genie-chat-container"
     >
-      <MainContainer>
-        <ChatContainer>
+      <MainContainer className="main-container">
+        <ChatContainer className="chat-container">
           <MessageList
+            className="message-list"
             typingIndicator={
               typing ? <TypingIndicator content="ChatGPT is typing" /> : null
             }
