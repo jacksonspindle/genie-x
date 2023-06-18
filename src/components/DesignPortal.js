@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
@@ -14,10 +14,16 @@ import GenieChatFreeRange from "./GenieChatFreeRange";
 
 const DesignPortal = () => {
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
+  const [hoodieImage, setHoodieImage] = useState(false);
 
   const toggleGenieChat = () => {
     setIsGenieChatOpen(!isGenieChatOpen);
   };
+
+  useEffect(() => {
+    console.log(hoodieImage); // hoodieImage should have the updated value here
+  }, [hoodieImage]);
+
   return (
     <div style={{ height: "100vh" }}>
       <div className="design-portal-container">
@@ -32,7 +38,7 @@ const DesignPortal = () => {
       </div>
 
       <Canvas>
-        <Hoodie />
+        <Hoodie hoodieImage={hoodieImage} />
 
         <OrbitControls zoomSpeed={0.5} maxDistance={20} minDistance={10} />
         <Environment preset="city" />
@@ -44,7 +50,14 @@ const DesignPortal = () => {
         </Canvas>
       </div>
       {/* <GenieChat isOpen={isOpen} /> */}
-      {isGenieChatOpen && <GenieChat isOpen={isGenieChatOpen} />}
+      {isGenieChatOpen && (
+        <GenieChat
+          setHoodieImage={setHoodieImage}
+          toggleGenieChat={toggleGenieChat}
+          isGenieChatOpen={isGenieChatOpen}
+          hoodieImage={hoodieImage}
+        />
+      )}
       {/* <GenieChat /> */}
     </div>
   );
