@@ -8,13 +8,21 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import axios from "axios";
 import { Configuration, OpenAIApi } from "openai";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
+import localDalleImage from "../assets/downloaded-image.jpg";
 
-const GenieChat = ({ toggleGenieChat, ...props }) => {
-  const apiKey = "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";
+const GenieChat = ({
+  toggleGenieChat,
+  isGenieChatOpen,
+  setHoodieImage,
+  hoodieImage,
+  ...props
+}) => {
+  const apiKey = "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";
   const [typing, setTyping] = useState(false);
   const [dalleImage, setDalleImage] = useState("");
 
@@ -34,6 +42,21 @@ const GenieChat = ({ toggleGenieChat, ...props }) => {
 
     console.log(res.data.data[0].url);
     setDalleImage(res.data.data[0].url);
+  };
+
+  const handleDownloadImage = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/download-image", {
+        params: {
+          imageUrl: dalleImage,
+        },
+      });
+      console.log(response.data);
+      // Handle the success or failure of the image download and post
+    } catch (error) {
+      console.error("Error while downloading the image:", error);
+      // Handle the error
+    }
   };
 
   const [messages, setMessages] = useState([
@@ -210,6 +233,44 @@ const GenieChat = ({ toggleGenieChat, ...props }) => {
     setSelectVisible(!selectVisible);
   };
 
+  const uploadImageToFirebaseStorage = async (imageURL) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "hoodieImage.jpg");
+
+    try {
+      const downloadResponse = await axios.get(imageURL, {
+        responseType: "arraybuffer",
+      });
+
+      await uploadBytes(storageRef, downloadResponse.data);
+      console.log("Image uploaded to Firebase Storage");
+    } catch (error) {
+      console.error("Error while uploading the image:", error);
+      // Handle the error
+    }
+  };
+
+  const applyImage = async () => {
+    console.log("applying image");
+
+    try {
+      const response = await axios.get("http://localhost:3001/download-image", {
+        params: {
+          imageUrl: dalleImage,
+        },
+      });
+
+      setHoodieImage(response.config.url);
+      console.log(response.config.url);
+      await uploadImageToFirebaseStorage(localDalleImage);
+      console.log("Image uploaded successfully");
+    } catch (error) {
+      console.error("Error while downloading the image:", error);
+    }
+
+    console.log(hoodieImage);
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -287,6 +348,8 @@ const GenieChat = ({ toggleGenieChat, ...props }) => {
         )}
 
         {/* <button onClick={generateImage}></button> */}
+        <button onClick={applyImage}></button>
+        <button onClick={handleDownloadImage}>Download and Post Image</button>
       </motion.div>
     </AnimatePresence>
   );
