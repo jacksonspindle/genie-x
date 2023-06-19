@@ -58,14 +58,7 @@ const GenieChat = ({
 
   const handleDownloadImage = async () => {
     try {
-      const response = await axios.get(
-        "https://main--stirring-dusk-267740.netlify.app/static/media/downloaded-image.b53a8e08fd6f23222419.jpg",
-        {
-          params: {
-            imageUrl: dalleImage,
-          },
-        }
-      );
+      const response = await axios.get(dalleImage);
       console.log(response.data);
       // Handle the success or failure of the image download and post
     } catch (error) {
