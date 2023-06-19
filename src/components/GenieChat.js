@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   MainContainer,
   ChatContainer,
@@ -25,16 +25,26 @@ const GenieChat = ({
   const apiKey = process.env.REACT_APP_OPENAI_KEY;
   const [typing, setTyping] = useState(false);
   const [dalleImage, setDalleImage] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      message:
+        "Welcome, I am the genie — here to grant your design wishes. Let's start with choosing a medium of design. For example, would you like a photograph, painting, 3D render, or drawing?",
+      sender: "ChatGPT",
+    },
+  ]);
+  const [stage, setStage] = useState("chooseMedium");
+  const [selectedArtStyle, setSelectedArtStyle] = useState("");
+  const [selectVisible, setSelectVisible] = useState(false);
+  const [dallePrompt, setDallePrompt] = useState([]);
+  const [dalleProptString, setDallePromptString] = useState("");
 
-  const configuration = new Configuration({
-    apiKey: apiKey,
-  });
+  const configuration = useMemo(() => new Configuration({ apiKey }), [apiKey]);
 
   console.log(apiKey);
 
-  const openai = new OpenAIApi(configuration);
+  const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
-  const generateImage = async () => {
+  const generateImage = useCallback(async () => {
     console.log("generating image");
     const res = await openai.createImage({
       prompt: dalleProptString,
@@ -44,7 +54,7 @@ const GenieChat = ({
 
     console.log(res.data.data[0].url);
     setDalleImage(res.data.data[0].url);
-  };
+  }, [dalleProptString, openai]);
 
   const handleDownloadImage = async () => {
     try {
@@ -60,19 +70,6 @@ const GenieChat = ({
       // Handle the error
     }
   };
-
-  const [messages, setMessages] = useState([
-    {
-      message:
-        "Welcome, I am the genie — here to grant your design wishes. Let's start with choosing a medium of design. For example, would you like a photograph, painting, 3D render, or drawing?",
-      sender: "ChatGPT",
-    },
-  ]);
-  const [stage, setStage] = useState("chooseMedium");
-  const [selectedArtStyle, setSelectedArtStyle] = useState("");
-  const [selectVisible, setSelectVisible] = useState(false);
-  const [dallePrompt, setDallePrompt] = useState([]);
-  const [dalleProptString, setDallePromptString] = useState("");
 
   const handleSend = async (message) => {
     const newMessage = {
@@ -98,10 +95,10 @@ const GenieChat = ({
   //   setDallePrompt(dallePrompt.join(" "));
   // };
 
-  useEffect(() => {
-    console.log(dalleProptString);
-    // setDallePrompt(dallePrompt.join(" "));
-  });
+  // useEffect(() => {
+  //   console.log(dalleProptString);
+  //   // setDallePrompt(dallePrompt.join(" "));
+  // });
 
   useEffect(() => {
     if (stage === "dalleOutput" && !dallePrompt.includes("undefined")) {
@@ -110,7 +107,7 @@ const GenieChat = ({
   }, [stage, dallePrompt, generateImage]);
 
   async function processMessageToChatGPT(chatMessages, currentStage) {
-    const userMessage = chatMessages[chatMessages.length - 1].message;
+    // const userMessage = chatMessages[chatMessages.length - 1].message;
 
     // Define prompts and stages
     const promptByStage = {
