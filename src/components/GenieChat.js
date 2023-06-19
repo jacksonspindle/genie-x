@@ -59,7 +59,7 @@ const GenieChat = ({
   const handleDownloadImage = async () => {
     try {
       const response = await axios.get(
-        "https://main--stirring-dusk-267740.netlify.app//download-image",
+        "https://main--stirring-dusk-267740.netlify.app/download-image",
         {
           params: {
             imageUrl: dalleImage,
