@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { Configuration, OpenAIApi } from "openai";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-
+import app from "../config/firebase";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import localDalleImage from "../assets/downloaded-image.jpg";
 
@@ -236,7 +236,7 @@ const GenieChat = ({
   };
 
   const uploadImageToFirebaseStorage = async (imageURL) => {
-    const storage = getStorage();
+    const storage = getStorage(app);
     const storageRef = ref(storage, "hoodieImage.jpg");
 
     try {
