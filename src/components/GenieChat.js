@@ -256,11 +256,14 @@ const GenieChat = ({
     console.log("applying image");
 
     try {
-      const response = await axios.get("http://localhost:3001/download-image", {
-        params: {
-          imageUrl: dalleImage,
-        },
-      });
+      const response = await axios.get(
+        "https://main--stirring-dusk-267740.netlify.app/static/media/downloaded-image.b53a8e08fd6f23222419.jpg",
+        {
+          params: {
+            imageUrl: dalleImage,
+          },
+        }
+      );
 
       setHoodieImage(response.config.url);
       console.log(response.config.url);
