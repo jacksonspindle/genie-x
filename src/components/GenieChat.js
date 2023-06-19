@@ -84,6 +84,7 @@ const GenieChat = ({
   const saveImageToProxyServer = async (imageData) => {
     try {
       console.log("saving to proxy server");
+      await axios.options("https://mellifluous-cendol-c1b874.netlify.app/");
       // Make a POST request to your proxy server endpoint to save the image
       await axios.post(
         "https://mellifluous-cendol-c1b874.netlify.app/",
