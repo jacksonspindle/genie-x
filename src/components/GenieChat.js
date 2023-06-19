@@ -72,19 +72,16 @@ const GenieChat = ({
       link.click();
       document.body.removeChild(link);
 
-      console.log("Image downloaded successfully");
-
-      // Save the downloaded image to your proxy server
       await saveImageToProxyServer(response.data);
 
-      // Handle the success of the image download and saving to the proxy server
+      console.log("Image downloaded successfully");
+      // Handle the success of the image download and post if needed
     } catch (error) {
       console.error("Error while downloading the image:", error);
       // Handle the error
     }
   };
 
-  // Function to save the image to your proxy server
   const saveImageToProxyServer = async (imageData) => {
     try {
       // Make a POST request to your proxy server endpoint to save the image
@@ -107,142 +104,288 @@ const GenieChat = ({
     }
   };
 
+  const handleSend = async (message) => {
+    const newMessage = {
+      message: message,
+      sender: "user",
+      direction: "outgoing",
+    };
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
+    setTyping(true);
+    await processMessageToChatGPT(newMessages, stage);
+
+    const updatedDallePrompt = [...dallePrompt, newMessage.message];
+    setDallePrompt(updatedDallePrompt);
+
+    console.log(dallePrompt);
+    setDallePromptString(
+      `a ${dallePrompt[0]} in the ${dallePrompt[1]} style of ${dallePrompt[2]} ${dallePrompt[3]}`
+    );
+  };
+
+  // const convertDallePromptToString = () => {
+  //   setDallePrompt(dallePrompt.join(" "));
+  // };
+
+  // useEffect(() => {
+  //   console.log(dalleProptString);
+  //   // setDallePrompt(dallePrompt.join(" "));
+  // });
+
   useEffect(() => {
-    console.log(stage, selectVisible);
-  }, [stage, selectVisible]);
-
-  const onMessageSubmit = (message) => {
-    if (message) {
-      setTyping(true);
-      setMessages([
-        ...messages,
-        {
-          message,
-          sender: "You",
-        },
-      ]);
-
-      if (stage === "chooseMedium") {
-        if (message.toLowerCase().includes("photo")) {
-          setStage("chooseSubject");
-          setDallePrompt([...dallePrompt, "painting"]);
-
-          setDallePromptString(
-            dalleProptString +
-              "start with a photo of a natural scene and apply an artistic style to it."
-          );
-        } else if (message.toLowerCase().includes("paint")) {
-          setStage("chooseSubject");
-          setDallePrompt([...dallePrompt, "painting"]);
-
-          setDallePromptString(
-            dalleProptString +
-              "start with a blank canvas and create a painting with a specific style."
-          );
-        } else if (message.toLowerCase().includes("render")) {
-          setStage("chooseSubject");
-          setDallePrompt([...dallePrompt, "3D rendering"]);
-
-          setDallePromptString(
-            dalleProptString +
-              "start with a 3D model and render it with a specific lighting and material setup."
-          );
-        } else if (message.toLowerCase().includes("draw")) {
-          setStage("chooseSubject");
-          setDallePrompt([...dallePrompt, "drawing"]);
-
-          setDallePromptString(
-            dalleProptString +
-              "start with a blank canvas and draw a scene or object in a specific style."
-          );
-        } else {
-          setMessages([
-            ...messages,
-            {
-              message:
-                "I'm sorry, I couldn't understand your request. Please choose one of the following: photograph, painting, 3D render, or drawing.",
-              sender: "ChatGPT",
-            },
-          ]);
-          setTyping(false);
-        }
-      } else if (stage === "chooseSubject") {
-        setStage("provideDetails");
-
-        if (message.toLowerCase().includes("natural scene")) {
-          setDallePrompt([...dallePrompt, "a natural scene"]);
-        } else if (message.toLowerCase().includes("cityscape")) {
-          setDallePrompt([...dallePrompt, "a cityscape"]);
-        } else if (message.toLowerCase().includes("portrait")) {
-          setDallePrompt([...dallePrompt, "a portrait"]);
-        } else if (message.toLowerCase().includes("animal")) {
-          setDallePrompt([...dallePrompt, "an animal"]);
-        } else if (message.toLowerCase().includes("object")) {
-          setDallePrompt([...dallePrompt, "an object"]);
-        } else {
-          setMessages([
-            ...messages,
-            {
-              message:
-                "I'm sorry, I couldn't understand your request. Please choose one of the following: natural scene, cityscape, portrait, animal, or object.",
-              sender: "ChatGPT",
-            },
-          ]);
-          setTyping(false);
-        }
-      } else if (stage === "provideDetails") {
-        setStage("completed");
-        setTyping(false);
-        setDallePrompt([...dallePrompt, message]);
-        setDallePromptString(dalleProptString + message);
-        generateImage();
-      }
+    if (stage === "dalleOutput" && !dallePrompt.includes("undefined")) {
+      generateImage();
     }
+  }, [stage, dallePrompt, generateImage]);
+
+  async function processMessageToChatGPT(chatMessages, currentStage) {
+    // const userMessage = chatMessages[chatMessages.length - 1].message;
+
+    // Define prompts and stages
+    const promptByStage = {
+      chooseMedium:
+        "What kind of art style do you want? For example, impressionist, cubism, etc.",
+      chooseStyle: "What is the subject matter you would like in the design?",
+      chooseSubject: "What is the context of your subject, where is it? etc...",
+      grantingWish: "Okay! I will now grant your wish!",
+      dalleOutput: dalleImage,
+      // Add more stages and prompts as needed
+    };
+
+    const prompt = promptByStage[currentStage];
+
+    const systemMessage = {
+      role: "system",
+      content:
+        "You are a Genie with expertise in fashion, design, and art history.",
+    };
+
+    const apiMessages = [
+      systemMessage,
+      ...chatMessages.map((messageObject) => ({
+        role: messageObject.sender === "ChatGPT" ? "assistant" : "user",
+        content: messageObject.message,
+      })),
+    ];
+
+    const apiRequestBody = {
+      model: "gpt-3.5-turbo",
+      messages: apiMessages,
+    };
+
+    if (currentStage === "chooseMedium" && apiMessages.length === 3) {
+      apiRequestBody.messages.splice(2, 0, {
+        role: "system",
+        content: prompt,
+      });
+    } else if (currentStage === "chooseStyle" && apiMessages.length === 4) {
+      apiRequestBody.messages.splice(3, 0, {
+        role: "system",
+        content: prompt,
+      });
+    } else if (currentStage === "chooseSubject" && apiMessages.length === 5) {
+      apiRequestBody.messages.splice(4, 0, {
+        role: "system",
+        content: prompt,
+      });
+    } else if (currentStage === "grantingWish" && apiMessages.length === 6) {
+      apiRequestBody.messages.splice(5, 0, {
+        role: "system",
+        content: prompt,
+      });
+    } else if (currentStage === "dalleOutput" && apiMessages.length === 7) {
+      apiRequestBody.messages.splice(6, 0, {
+        role: "system",
+        content: prompt,
+      });
+    }
+
+    await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(apiRequestBody),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const response = prompt;
+        setTyping(false);
+        setStage(getNextStage(currentStage));
+        handleMessageResponse(response);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setTyping(false);
+      });
+  }
+
+  function getNextStage(currentStage) {
+    // Define the flow of stages based on the current stage
+    switch (currentStage) {
+      case "chooseMedium":
+        return "chooseStyle";
+      case "chooseStyle":
+        return "chooseSubject";
+      case "chooseSubject":
+        return "grantingWish";
+      case "grantingWish":
+        return "dalleOutput";
+      case "dalleOutput":
+        return "generatePrompt";
+      case "generatePrompt":
+        // Add more stages as needed
+        return "chooseMedium"; // Restart the conversation
+      default:
+        return "chooseMedium";
+    }
+  }
+
+  function handleMessageResponse(response) {
+    const newMessage = {
+      message: response,
+      sender: "ChatGPT",
+    };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  }
+
+  const handleSelectChange = (e) => {
+    setSelectedArtStyle(e.target.value);
+  };
+
+  const handleSelectSubmit = () => {
+    setSelectVisible(false);
+    handleSend(selectedArtStyle);
+  };
+
+  const toggleSelect = () => {
+    setSelectVisible(!selectVisible);
+  };
+
+  const uploadImageToFirebaseStorage = async (imageURL) => {
+    const storage = getStorage(app);
+    const storageRef = ref(storage, "hoodieImage.jpg");
+
+    try {
+      const downloadResponse = await axios.get(imageURL, {
+        responseType: "arraybuffer",
+      });
+
+      await uploadBytes(storageRef, new Uint8Array(downloadResponse.data));
+      console.log("Image uploaded to Firebase Storage");
+    } catch (error) {
+      console.error("Error while uploading the image:", error);
+      // Handle the error
+    }
+  };
+
+  const applyImage = async () => {
+    console.log("applying image");
+
+    try {
+      const response = await axios.get(
+        "https://main--stirring-dusk-267740.netlify.app/static/media/downloaded-image.b53a8e08fd6f23222419.jpg",
+        {
+          params: {
+            imageUrl: dalleImage,
+          },
+        }
+      );
+
+      setHoodieImage(response.config.url);
+      console.log(response.config.url);
+      await uploadImageToFirebaseStorage(localDalleImage);
+      console.log("Image uploaded successfully");
+    } catch (error) {
+      console.error("Error while downloading the image:", error);
+    }
+
+    console.log(hoodieImage);
   };
 
   return (
     <AnimatePresence>
-      {isGenieChatOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          transition={{ duration: 0.2 }}
-          style={{
-            position: "fixed",
-            bottom: 0,
-            right: 0,
-            maxWidth: "400px",
-            width: "100%",
-            margin: "0 auto",
-            height: "450px",
-            zIndex: "999",
-          }}
-        >
-          <MainContainer>
-            <ChatContainer>
-              <MessageList>
-                {messages.map((message, index) => (
-                  <Message
-                    key={index}
-                    model={{
-                      message: message.message,
-                      sentTime: "Now",
-                      sender: message.sender,
-                    }}
-                    // more options
+      <motion.div
+        initial={{ right: "-400" }}
+        animate={{ right: toggleGenieChat ? "0px" : "100px" }}
+        exit={{ right: toggleGenieChat ? "0" : "-400px" }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: "6rem",
+          right: "4rem",
+          height: "600px",
+          zIndex: "13",
+          width: "400px",
+          // backgroundColor: "red",
+        }}
+        className="genie-chat-container"
+      >
+        <MainContainer className="main-container">
+          <ChatContainer className="chat-container">
+            <MessageList
+              className="message-list"
+              typingIndicator={
+                typing ? <TypingIndicator content="ChatGPT is typing" /> : null
+              }
+            >
+              {messages.map((message, i) => (
+                <Message key={i} model={message} />
+              ))}
+              {dalleImage ? (
+                <Message
+                  model={{
+                    direction: "incoming",
+                  }}
+                >
+                  <Message.ImageContent
+                    src={dalleImage}
+                    alt="dalle Image"
+                    width={200}
                   />
-                ))}
-              </MessageList>
-              {typing && <TypingIndicator />}
-              <MessageInput
-                placeholder="Type a message"
-                onSend={onMessageSubmit}
-              />
-            </ChatContainer>
-          </MainContainer>
-        </motion.div>
-      )}
+                </Message>
+              ) : null}
+            </MessageList>
+          </ChatContainer>
+        </MainContainer>
+
+        {stage === "chooseStyle" ? (
+          <>
+            {!selectVisible && (
+              <button onClick={toggleSelect}>Open Select</button>
+            )}
+            {selectVisible && (
+              <motion.div>
+                <select value={selectedArtStyle} onChange={handleSelectChange}>
+                  <option value="">Select an art style</option>
+                  <option value="Impressionist">Impressionist</option>
+                  <option value="Cubism">Cubism</option>
+                  <option value="Abstract">Abstract</option>
+                  {/* Add more art styles as needed */}
+                </select>
+                <button onClick={handleSelectSubmit}>Submit</button>
+              </motion.div>
+            )}
+          </>
+        ) : (
+          <motion.div>
+            <MessageInput
+              // attachDisabled={false}
+              attachButton={false}
+              sendButton={false}
+              placeholder="Type here"
+              onSend={handleSend}
+            />
+          </motion.div>
+        )}
+
+        {/* <button onClick={generateImage}></button> */}
+        <button onClick={applyImage}></button>
+        <button onClick={handleDownloadImage}>Download and Post Image</button>
+      </motion.div>
     </AnimatePresence>
   );
 };
