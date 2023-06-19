@@ -10,6 +10,9 @@ import "firebase/storage";
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
 // import axios from "axios";
 // import { getStorage } from "firebase/storage";
 // import { firebase } from "firebase/app";
@@ -35,4 +38,18 @@ export default app;
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
+const storage = getStorage(app);
+const uploadImageToFirebase = async (file) => {
+  try {
+    const storageRef = ref(storage, "images/" + file.name);
+    await uploadBytes(storageRef, file);
+    console.log("Image uploaded successfully.");
+    return storageRef;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};
 // const storage = getStorage(app);
+
+export { uploadImageToFirebase };

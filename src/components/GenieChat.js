@@ -58,9 +58,22 @@ const GenieChat = ({
 
   const handleDownloadImage = async () => {
     try {
-      const response = await axios.get(dalleImage);
-      console.log(response.data);
-      // Handle the success or failure of the image download and post
+      const response = await axios.get(dalleImage, {
+        responseType: "arraybuffer",
+      });
+
+      const blob = new Blob([response.data], { type: "image/jpeg" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "downloaded-image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("Image downloaded successfully");
+      // Handle the success of the image download and post if needed
     } catch (error) {
       console.error("Error while downloading the image:", error);
       // Handle the error
