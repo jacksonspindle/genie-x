@@ -22,13 +22,15 @@ const GenieChat = ({
   hoodieImage,
   ...props
 }) => {
-  const apiKey = "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";
+  const apiKey = process.env.REACT_APP_OPENAI_KEY;
   const [typing, setTyping] = useState(false);
   const [dalleImage, setDalleImage] = useState("");
 
   const configuration = new Configuration({
     apiKey: apiKey,
   });
+
+  console.log(apiKey);
 
   const openai = new OpenAIApi(configuration);
 
@@ -105,7 +107,7 @@ const GenieChat = ({
     if (stage === "dalleOutput" && !dallePrompt.includes("undefined")) {
       generateImage();
     }
-  }, [stage]);
+  }, [stage, dallePrompt, generateImage]);
 
   async function processMessageToChatGPT(chatMessages, currentStage) {
     const userMessage = chatMessages[chatMessages.length - 1].message;
