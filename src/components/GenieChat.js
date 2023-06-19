@@ -237,7 +237,7 @@ const GenieChat = ({
         responseType: "arraybuffer",
       });
 
-      await uploadBytes(storageRef, downloadResponse.data);
+      await uploadBytes(storageRef, new Uint8Array(downloadResponse.data));
       console.log("Image uploaded to Firebase Storage");
     } catch (error) {
       console.error("Error while uploading the image:", error);
