@@ -61,7 +61,7 @@ const GenieChat = ({
       await saveImageToProxyServer(dalleImage);
 
       const response = await axios.get(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
         {
           responseType: "arraybuffer",
         }
@@ -90,7 +90,7 @@ const GenieChat = ({
   const checkImageFromProxyServer = async () => {
     try {
       const response = await axios.get(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
         {
           responseType: "arraybuffer",
         }
@@ -118,18 +118,18 @@ const GenieChat = ({
 
   const saveImageToProxyServer = async (imageData) => {
     try {
-      console.log("saving to proxy server");
+      console.log("Saving to proxy server");
       console.log(imageData);
 
       const base64ImageData = btoa(imageData); // Encode imageData as base64
 
       await axios.options(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server"
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy"
       );
 
       // Make a POST request to your proxy server endpoint to save the image
       await axios.post(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
         { imageData: base64ImageData }, // Pass base64ImageData in an object
         {
           headers: {
