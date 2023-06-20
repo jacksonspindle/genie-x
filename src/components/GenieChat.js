@@ -91,10 +91,10 @@ const GenieChat = ({
       // Make a POST request to your proxy server endpoint to save the image
       await axios.post(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
-        imageData,
+        { imageData }, // Pass imageData in an object
         {
           headers: {
-            "Content-Type": "image/jpeg",
+            "Content-Type": "application/json", // Set the Content-Type header to JSON
           },
         }
       );
