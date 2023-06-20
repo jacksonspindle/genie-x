@@ -60,9 +60,12 @@ const GenieChat = ({
     try {
       await saveImageToProxyServer(dalleImage);
 
-      const response = await axios.get(dalleImage, {
-        responseType: "arraybuffer",
-      });
+      const response = await axios.get(
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server/downloaded-image.jpg",
+        {
+          responseType: "arraybuffer",
+        }
+      );
 
       const blob = new Blob([response.data], { type: "image/jpeg" });
       const url = URL.createObjectURL(blob);
