@@ -61,7 +61,7 @@ const GenieChat = ({
       await saveImageToProxyServer(dalleImage);
 
       const response = await axios.get(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server/downloaded-image.jpg",
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
         {
           responseType: "arraybuffer",
         }
