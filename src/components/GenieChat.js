@@ -85,13 +85,17 @@ const GenieChat = ({
     try {
       console.log("saving to proxy server");
       console.log(imageData);
+
+      const base64ImageData = btoa(imageData); // Encode imageData as base64
+
       await axios.options(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server"
       );
+
       // Make a POST request to your proxy server endpoint to save the image
       await axios.post(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
-        { imageData }, // Pass imageData in an object
+        { imageData: base64ImageData }, // Pass base64ImageData in an object
         {
           headers: {
             "Content-Type": "application/json", // Set the Content-Type header to JSON
