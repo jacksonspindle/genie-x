@@ -59,7 +59,7 @@ const GenieChat = ({
   const handleDownloadImage = async () => {
     try {
       await saveImageToProxyServer(dalleImage);
-      console.log("Image saved to proxy server successfully");
+
       const response = await axios.get(dalleImage, {
         responseType: "arraybuffer",
       });
@@ -75,6 +75,7 @@ const GenieChat = ({
       document.body.removeChild(link);
 
       console.log("Image downloaded successfully");
+
       await checkImageFromProxyServer();
       // Handle the success of the image download and post if needed
     } catch (error) {
