@@ -75,9 +75,39 @@ const GenieChat = ({
       document.body.removeChild(link);
 
       console.log("Image downloaded successfully");
+      await checkImageFromProxyServer();
       // Handle the success of the image download and post if needed
     } catch (error) {
       console.error("Error while downloading the image:", error);
+      // Handle the error
+    }
+  };
+
+  const checkImageFromProxyServer = async () => {
+    try {
+      const response = await axios.get(
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/server",
+        {
+          responseType: "arraybuffer",
+        }
+      );
+
+      const blob = new Blob([response.data], { type: "image/jpeg" });
+      const url = URL.createObjectURL(blob);
+
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        console.log("Image loaded from the proxy server:", img);
+      };
+      img.onerror = () => {
+        console.error("Error while loading the image from the proxy server");
+      };
+    } catch (error) {
+      console.error(
+        "Error while checking the image from the proxy server:",
+        error
+      );
       // Handle the error
     }
   };
