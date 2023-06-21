@@ -250,29 +250,29 @@ const GenieChat = ({
     }
   };
 
-  const applyImage = async () => {
-    console.log("applying image");
+  // const applyImage = async () => {
+  //   console.log("applying image");
 
-    try {
-      const response = await axios.get(
-        "https://main--stirring-dusk-267740.netlify.app/static/media/downloaded-image.b53a8e08fd6f23222419.jpg",
-        {
-          params: {
-            imageUrl: dalleImage,
-          },
-        }
-      );
+  //   try {
+  //     const response = await axios.get(
+  //       "https://main--stirring-dusk-267740.netlify.app/static/media/downloaded-image.b53a8e08fd6f23222419.jpg",
+  //       {
+  //         params: {
+  //           imageUrl: dalleImage,
+  //         },
+  //       }
+  //     );
 
-      setHoodieImage(response.config.url);
-      console.log(response.config.url);
-      await uploadImageToFirebaseStorage(localDalleImage);
-      console.log("Image uploaded successfully");
-    } catch (error) {
-      console.error("Error while downloading the image:", error);
-    }
+  //     setHoodieImage(response.config.url);
+  //     console.log(response.config.url);
+  //     await uploadImageToFirebaseStorage(localDalleImage);
+  //     console.log("Image uploaded successfully");
+  //   } catch (error) {
+  //     console.error("Error while downloading the image:", error);
+  //   }
 
-    console.log(hoodieImage);
-  };
+  //   console.log(hoodieImage);
+  // };
 
   return (
     <AnimatePresence>
