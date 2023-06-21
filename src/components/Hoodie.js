@@ -12,7 +12,7 @@ export default function Hoodie({ hoodieImage, ...props }) {
   useEffect(() => {
     const loader = new THREE.TextureLoader();
     loader.load(
-      testImage,
+      hoodieImage,
       (texture) => {
         texture.flipY = false;
         texture.minFilter = THREE.LinearFilter;
@@ -26,7 +26,7 @@ export default function Hoodie({ hoodieImage, ...props }) {
         console.error("An error occurred while loading the texture.", error);
       }
     );
-  }, []);
+  }, [hoodieImage]);
 
   // useEffect(() => {
   //   console.log(hoodieImage);
