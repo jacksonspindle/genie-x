@@ -56,7 +56,7 @@ const GenieChat = ({
     setDalleImage(res.data.data[0].url);
   }, [dalleProptString, openai]);
 
-  const downloadImageFromProxy = async () => {
+  const applyImage = async () => {
     try {
       const response = await axios.get(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
@@ -67,11 +67,11 @@ const GenieChat = ({
         }
       );
 
-      // Handle the downloaded image response here
-      console.log(response.data); // Example: Assuming the response contains the downloaded image data
+      // Handle the response and update the hoodie image state
+      setHoodieImage(response.data.imageUrl);
+      console.log(response.data.imageUrl);
     } catch (error) {
       console.error("Error while downloading the image:", error);
-      // Handle the error
     }
   };
 
@@ -354,7 +354,7 @@ const GenieChat = ({
         )}
 
         {/* <button onClick={generateImage}></button> */}
-        <button onClick={downloadImageFromProxy}>Apply Image</button>
+        <button onClick={applyImage}>Apply Image</button>
       </motion.div>
     </AnimatePresence>
   );
