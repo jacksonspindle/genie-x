@@ -10,8 +10,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { Configuration, OpenAIApi } from "openai";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import app from "../config/firebase";
+// import { getStorage, ref, uploadBytes } from "firebase/storage";
+// import app from "../config/firebase";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 // import localDalleImage from "../assets/downloaded-image.jpg";
 
@@ -58,11 +58,14 @@ const GenieChat = ({
 
   const downloadImageFromProxy = async () => {
     try {
-      const response = await axios.get("URL_OF_YOUR_PROXY_SERVER", {
-        params: {
-          imageUrl: dalleImage, // Pass the OpenAI image URL as a parameter
-        },
-      });
+      const response = await axios.get(
+        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
+        {
+          params: {
+            imageUrl: dalleImage, // Pass the OpenAI image URL as a parameter
+          },
+        }
+      );
 
       // Handle the downloaded image response here
       console.log(response.data); // Example: Assuming the response contains the downloaded image data
