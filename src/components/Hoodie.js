@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
-import testImage from "../assets/downloaded-image.jpg";
+// import testImage from "../assets/downloaded-image.jpg";
 
 export default function Hoodie({ hoodieImage, ...props }) {
   const group = useRef();
