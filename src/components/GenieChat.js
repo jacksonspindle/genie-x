@@ -56,93 +56,18 @@ const GenieChat = ({
     setDalleImage(res.data.data[0].url);
   }, [dalleProptString, openai]);
 
-  const handleDownloadImage = async () => {
+  const downloadImageFromProxy = async () => {
     try {
-      await saveImageToProxyServer(dalleImage);
+      const response = await axios.get("URL_OF_YOUR_PROXY_SERVER", {
+        params: {
+          imageUrl: dalleImage, // Pass the OpenAI image URL as a parameter
+        },
+      });
 
-      const response = await axios.get(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
-        {
-          responseType: "arraybuffer",
-        }
-      );
-
-      const blob = new Blob([response.data], { type: "image/jpeg" });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "downloaded-image.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      console.log("Image downloaded successfully");
-
-      await checkImageFromProxyServer();
-      // Handle the success of the image download and post if needed
+      // Handle the downloaded image response here
+      console.log(response.data); // Example: Assuming the response contains the downloaded image data
     } catch (error) {
       console.error("Error while downloading the image:", error);
-      // Handle the error
-    }
-  };
-
-  const checkImageFromProxyServer = async () => {
-    try {
-      const response = await axios.get(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
-        {
-          responseType: "arraybuffer",
-        }
-      );
-
-      const blob = new Blob([response.data], { type: "image/jpeg" });
-      const url = URL.createObjectURL(blob);
-
-      const img = new Image();
-      img.src = url;
-      img.onload = () => {
-        console.log("Image loaded from the proxy server:", img);
-      };
-      img.onerror = () => {
-        console.error("Error while loading the image from the proxy server");
-      };
-    } catch (error) {
-      console.error(
-        "Error while checking the image from the proxy server:",
-        error
-      );
-      // Handle the error
-    }
-  };
-
-  const saveImageToProxyServer = async (imageData) => {
-    try {
-      console.log("Saving to proxy server");
-      console.log(imageData);
-
-      const base64ImageData = btoa(imageData); // Encode imageData as base64
-
-      await axios.options(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy"
-      );
-
-      // Make a POST request to your proxy server endpoint to save the image
-      await axios.post(
-        "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
-        { imageData: base64ImageData }, // Pass base64ImageData in an object
-        {
-          headers: {
-            "Content-Type": "application/json", // Set the Content-Type header to JSON
-          },
-        }
-      );
-
-      console.log("Image saved to proxy server successfully");
-
-      // Handle the success of saving the image to the proxy server
-    } catch (error) {
-      console.error("Error while saving the image to the proxy server:", error);
       // Handle the error
     }
   };
@@ -426,8 +351,7 @@ const GenieChat = ({
         )}
 
         {/* <button onClick={generateImage}></button> */}
-        <button onClick={applyImage}></button>
-        <button onClick={handleDownloadImage}>Download and Post Image</button>
+        <button onClick={downloadImageFromProxy}>Apply Image</button>
       </motion.div>
     </AnimatePresence>
   );
