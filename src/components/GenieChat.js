@@ -355,6 +355,7 @@ const GenieChat = ({
 
         {/* <button onClick={generateImage}></button> */}
         <button onClick={applyImage}>Apply Image</button>
+        <img src={hoodieImage} alt="hoodieimage"></img>
       </motion.div>
     </AnimatePresence>
   );
