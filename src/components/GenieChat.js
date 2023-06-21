@@ -13,7 +13,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import app from "../config/firebase";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import localDalleImage from "../assets/downloaded-image.jpg";
+// import localDalleImage from "../assets/downloaded-image.jpg";
 
 const GenieChat = ({
   toggleGenieChat,
@@ -233,22 +233,22 @@ const GenieChat = ({
     setSelectVisible(!selectVisible);
   };
 
-  const uploadImageToFirebaseStorage = async (imageURL) => {
-    const storage = getStorage(app);
-    const storageRef = ref(storage, "hoodieImage.jpg");
+  // const uploadImageToFirebaseStorage = async (imageURL) => {
+  //   const storage = getStorage(app);
+  //   const storageRef = ref(storage, "hoodieImage.jpg");
 
-    try {
-      const downloadResponse = await axios.get(imageURL, {
-        responseType: "arraybuffer",
-      });
+  //   try {
+  //     const downloadResponse = await axios.get(imageURL, {
+  //       responseType: "arraybuffer",
+  //     });
 
-      await uploadBytes(storageRef, new Uint8Array(downloadResponse.data));
-      console.log("Image uploaded to Firebase Storage");
-    } catch (error) {
-      console.error("Error while uploading the image:", error);
-      // Handle the error
-    }
-  };
+  //     await uploadBytes(storageRef, new Uint8Array(downloadResponse.data));
+  //     console.log("Image uploaded to Firebase Storage");
+  //   } catch (error) {
+  //     console.error("Error while uploading the image:", error);
+  //     // Handle the error
+  //   }
+  // };
 
   // const applyImage = async () => {
   //   console.log("applying image");
