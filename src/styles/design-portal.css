@@ -34,6 +34,25 @@
     right: 3rem;
     cursor: pointer;
     z-index: 13;
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.checkout-btn-container a {
+    color: white;
+    text-decoration: none;
+    font-family: oatmeal-pro-bold;
+    transition: .1s all ease-in-out;
+    font-size: 25px;
+    
+}
+
+.checkout-btn-container a:hover {
+    color: white;
+    text-decoration: none;
+    font-family: oatmeal-pro-bold;
+    transform: scale(1.1);
 }
 
 .genie-lamp-canvas {

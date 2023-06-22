@@ -47,6 +47,7 @@
 .message-list {
     background-color: transparent !important;
     margin-top: .5rem;
+    
     /* opacity: 0; */
 }
 
@@ -57,10 +58,12 @@ background-color: rgba(178, 141, 255, .2) !important;
     border-radius: 10px 10px 0px 0px;
     border: 2px solid #ABC4FF;
     border-bottom: none;
+    
 }
 
 .cs-message__content {
     background-color: #B28DFF !important;
+    font-family: oatmeal-pro-regular !important;
 }
 
 .cs-message--outgoing .cs-message__content {
@@ -113,3 +116,25 @@ background-color: rgba(178, 141, 255, .2) !important;
     background-color: #ABC4FF;
 }
 
+
+
+.apply-image-btn {
+    /* height: 40px; */
+    margin-top: 1rem;
+    font-family: oatmeal-pro-bold;
+    padding: .7rem;
+    background-color: rgba(178, 141, 255, .7) !important;
+    font-size: 15px;
+    border: 1px solid white;
+    border-radius: .5rem;
+    color: white;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.apply-image-btn:hover {
+    /* height: 40px; */
+    transform: scale(1.1);
+    background-color: black !important;
+   
+}

@@ -13,6 +13,7 @@ import GenieChat from "./GenieChat";
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase";
 import { getFirestore } from "firebase/firestore";
+import { motion } from "framer-motion";
 
 import { Link } from "react-router-dom";
 import {
@@ -78,7 +79,7 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
         <img alt="icons" src={helpIcon} className="design-portal-btn" />
       </div>
       <div className="checkout-btn-container">
-        <button className="">Checkout</button>
+        <Link className="">Checkout</Link>
         <Link to="collection">My Collection</Link>
       </div>
 
@@ -88,12 +89,12 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
         <OrbitControls zoomSpeed={0.5} maxDistance={20} minDistance={10} />
         <Environment preset="city" />
       </Canvas>
-      <div className="genie-lamp-canvas">
+      <motion.div className="genie-lamp-canvas">
         <Canvas>
           <GenieLamp toggleGenieChat={toggleGenieChat} />
           <Environment preset="city" />
         </Canvas>
-      </div>
+      </motion.div>
       {/* <GenieChat isOpen={isOpen} /> */}
       {isGenieChatOpen && (
         <GenieChat

@@ -281,7 +281,7 @@ const GenieChat = ({
     <AnimatePresence>
       <motion.div
         initial={{ right: "-400" }}
-        animate={{ right: toggleGenieChat ? "0px" : "100px" }}
+        animate={{ right: toggleGenieChat ? "100px" : "100px" }}
         exit={{ right: toggleGenieChat ? "0" : "-400px" }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
         style={{
@@ -354,8 +354,10 @@ const GenieChat = ({
         )}
 
         {/* <button onClick={generateImage}></button> */}
-        <button onClick={applyImage}>Apply Image</button>
-        <img src={hoodieImage} alt="hoodieimage"></img>
+        <button className="apply-image-btn" onClick={applyImage}>
+          Apply Image
+        </button>
+        {/* <img src={hoodieImage} alt="hoodieimage"></img> */}
       </motion.div>
     </AnimatePresence>
   );

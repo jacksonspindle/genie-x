@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-export const Auth = () => {
+export const Auth = ({ setSignedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,6 +15,7 @@ export const Auth = () => {
   const signIn = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      setSignedIn(true);
     } catch (ex) {
       console.log(ex);
     }
@@ -23,6 +24,7 @@ export const Auth = () => {
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      setSignedIn(true);
     } catch (ex) {
       console.log(ex);
     }
