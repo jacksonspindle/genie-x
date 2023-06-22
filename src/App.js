@@ -9,6 +9,7 @@ import { useState } from "react";
 
 function App() {
   const [hoodieImage, setHoodieImage] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   return (
     <div className="App">
       <Router>
@@ -34,7 +35,7 @@ function App() {
             }
           />
         </Routes>
-        <Auth />
+        {!signedIn ? <Auth setSignedIn={setSignedIn} /> : null}
       </Router>
     </div>
   );
