@@ -3,13 +3,39 @@ import { Auth } from "./components/auth";
 import DesignPortal from "./components/DesignPortal";
 import "./styles/design-portal.css";
 import "./styles/genie-chat.css";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import HoodieCollection from "./components/Collection";
+import { useState } from "react";
 
 function App() {
+  const [hoodieImage, setHoodieImage] = useState(false);
   return (
     <div className="App">
-      <Auth />
-
-      <DesignPortal />
+      <Router>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <DesignPortal
+                setHoodieImage={setHoodieImage}
+                hoodieImage={hoodieImage}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/collection"
+            element={
+              <HoodieCollection
+                setHoodieImage={setHoodieImage}
+                hoodieImage={hoodieImage}
+              />
+            }
+          />
+        </Routes>
+        <Auth />
+      </Router>
     </div>
   );
 }

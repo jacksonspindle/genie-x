@@ -33,6 +33,7 @@
     position: absolute;
     right: 3rem;
     cursor: pointer;
+    z-index: 13;
 }
 
 .genie-lamp-canvas {
