@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
@@ -10,31 +10,76 @@ import shareIcon from "../assets/shareIcon.png";
 import helpIcon from "../assets/helpIcon.png";
 import GenieLamp from "./GenieLamp";
 import GenieChat from "./GenieChat";
+import { collection, addDoc } from "firebase/firestore";
+import { auth } from "../config/firebase";
+import { getFirestore } from "firebase/firestore";
+
+import { Link } from "react-router-dom";
+import {
+  // getFirestore,
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
+
+// import { storage } from "../config/firebase"; // Make sure to import 'storage' from your Firebase configuration file.
+
 // import GenieChatFreeRange from "./GenieChatFreeRange";
 
-const DesignPortal = () => {
+const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
-  const [hoodieImage, setHoodieImage] = useState(false);
+  // const [hoodieImage, setHoodieImage] = useState(false);
+  const db = getFirestore();
+  const storage = getStorage();
 
   const toggleGenieChat = () => {
     setIsGenieChatOpen(!isGenieChatOpen);
   };
 
-  useEffect(() => {
-    console.log(hoodieImage); // hoodieImage should have the updated value here
-  }, [hoodieImage]);
+  const saveHoodieDesign = async () => {
+    console.log("saving hoodie design");
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        const uid = user.uid;
+        const storageRef = ref(storage, `designs/${uid}/${Date.now()}.jpg`);
+
+        await uploadString(storageRef, hoodieImage, "data_url");
+        const downloadURL = await getDownloadURL(storageRef);
+
+        const designData = {
+          image: downloadURL,
+          createdAt: new Date().toISOString(),
+        };
+
+        await addDoc(collection(db, "users", uid, "designs"), designData);
+      } catch (error) {
+        console.error("Error saving hoodie design:", error);
+      }
+    } else {
+      console.log("User is not authenticated or logged in.");
+    }
+  };
 
   return (
     <div style={{ height: "100vh" }}>
       <div className="design-portal-container">
         <img alt="icons" src={slotsIcon} className="lottery-btn" />
-        <img alt="icons" src={saveIcon} className="design-portal-btn" />
+        <img
+          alt="icons"
+          src={saveIcon}
+          onClick={saveHoodieDesign}
+          className="design-portal-btn"
+        />
         <img alt="icons" src={screenshotIcon} className="design-portal-btn" />
         <img alt="icons" src={shareIcon} className="design-portal-btn" />
         <img alt="icons" src={helpIcon} className="design-portal-btn" />
       </div>
       <div className="checkout-btn-container">
         <button className="">Checkout</button>
+        <Link to="collection">My Collection</Link>
       </div>
 
       <Canvas>
