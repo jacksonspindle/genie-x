@@ -7,7 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import axios from "axios";
 
-// collection
+// collection component
 const HoodieCollection = () => {
   const [hoodieCollection, setHoodieCollection] = useState([]);
   const db = getFirestore();
