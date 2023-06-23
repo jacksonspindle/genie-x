@@ -1,0 +1,13 @@
+.Toastify__toast-body {
+    /* background-color: red; */
+    color: black;
+    font-family: oatmeal-pro-bold;
+    
+}
+
+.Toastify__toast{
+    margin-top: 2.5rem;
+    border: 2px solid #ABC4FF;
+
+    background-color: rgba(178, 141, 255, .7) !important;;
+}

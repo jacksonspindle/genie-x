@@ -3,6 +3,7 @@ import { Auth } from "./components/auth";
 import DesignPortal from "./components/DesignPortal";
 import "./styles/design-portal.css";
 import "./styles/genie-chat.css";
+import "./styles/toast-notifications.css";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import HoodieCollection from "./components/Collection";
 import { useState } from "react";

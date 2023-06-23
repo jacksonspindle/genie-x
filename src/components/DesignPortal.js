@@ -16,6 +16,9 @@ import { getFirestore } from "firebase/firestore";
 import { motion } from "framer-motion";
 
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   // getFirestore,
   getStorage,
@@ -40,6 +43,12 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
 
   const saveHoodieDesign = async () => {
     console.log("saving hoodie design");
+    // hoodieImage ? toast("Saving to Your Collection!") : null;
+
+    if (hoodieImage) {
+      toast("Saving to Your Collection!");
+    }
+
     const user = auth.currentUser;
 
     if (user) {
@@ -56,10 +65,14 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
         };
 
         await addDoc(collection(db, "users", uid, "designs"), designData);
+
+        toast("Added to Your Collection!");
       } catch (error) {
         console.error("Error saving hoodie design:", error);
+        toast("You need to make a design first!");
       }
     } else {
+      toast("You Need to Login First!");
       console.log("User is not authenticated or logged in.");
     }
   };
@@ -74,6 +87,7 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
           onClick={saveHoodieDesign}
           className="design-portal-btn"
         />
+        <ToastContainer />
         <img alt="icons" src={screenshotIcon} className="design-portal-btn" />
         <img alt="icons" src={shareIcon} className="design-portal-btn" />
         <img alt="icons" src={helpIcon} className="design-portal-btn" />
@@ -86,7 +100,7 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
       <Canvas>
         <Hoodie hoodieImage={hoodieImage} />
 
-        <OrbitControls zoomSpeed={0.5} maxDistance={20} minDistance={10} />
+        <OrbitControls zoomSpeed={0.5} maxDistance={20} minDistance={4} />
         <Environment preset="city" />
       </Canvas>
       <motion.div className="genie-lamp-canvas">

@@ -13,6 +13,8 @@ import { Configuration, OpenAIApi } from "openai";
 // import { getStorage, ref, uploadBytes } from "firebase/storage";
 // import app from "../config/firebase";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import localDalleImage from "../assets/downloaded-image.jpg";
 
 const GenieChat = ({
@@ -57,6 +59,7 @@ const GenieChat = ({
   }, [dalleProptString, openai]);
 
   const applyImage = async () => {
+    toast("Applying Design to Hoodie!");
     try {
       const response = await axios.get(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
@@ -161,6 +164,7 @@ const GenieChat = ({
         content: prompt,
       });
     } else if (currentStage === "grantingWish" && apiMessages.length === 6) {
+      toast("genie is generating your design!");
       apiRequestBody.messages.splice(5, 0, {
         role: "system",
         content: prompt,
@@ -204,6 +208,7 @@ const GenieChat = ({
       case "chooseSubject":
         return "grantingWish";
       case "grantingWish":
+        toast("The Genie is Generating Your Design!");
         return "dalleOutput";
       case "dalleOutput":
         return "generatePrompt";
@@ -353,10 +358,13 @@ const GenieChat = ({
           </motion.div>
         )}
 
+        {stage === "grantingWish" ? <ToastContainer /> : null}
+
         {/* <button onClick={generateImage}></button> */}
         <button className="apply-image-btn" onClick={applyImage}>
           Apply Image
         </button>
+        <ToastContainer />
         {/* <img src={hoodieImage} alt="hoodieimage"></img> */}
       </motion.div>
     </AnimatePresence>
