@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useState, useEffect } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
 import { Environment } from "@react-three/drei";
@@ -19,6 +19,9 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import PhotoPrompt from "./PhotoPrompt";
+import PromptContainer from "./PromptContainer";
+
 import {
   // getFirestore,
   getStorage,
@@ -31,15 +34,23 @@ import {
 
 // import GenieChatFreeRange from "./GenieChatFreeRange";
 
+function SetupCamera() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    camera.position.z = 9; // Set the initial position of the camera
+    camera.updateProjectionMatrix();
+  }, [camera]);
+
+  return null; // This component doesn't render anything visually
+}
+
 const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
+  // const { camera } = useThree();
   // const [hoodieImage, setHoodieImage] = useState(false);
   const db = getFirestore();
   const storage = getStorage();
-
-  const toggleGenieChat = () => {
-    setIsGenieChatOpen(!isGenieChatOpen);
-  };
 
   const saveHoodieDesign = async () => {
     console.log("saving hoodie design");
@@ -78,8 +89,8 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
   };
 
   return (
-    <div style={{ height: "100vh" }}>
-      <div className="design-portal-container">
+    <div style={{ height: "100vh" }} className="design-portal-container">
+      {/* <div className="design-portal-container">
         <img alt="icons" src={slotsIcon} className="lottery-btn" />
         <img
           alt="icons"
@@ -91,29 +102,46 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
         <img alt="icons" src={screenshotIcon} className="design-portal-btn" />
         <img alt="icons" src={shareIcon} className="design-portal-btn" />
         <img alt="icons" src={helpIcon} className="design-portal-btn" />
-      </div>
-      <div className="checkout-btn-container">
+      </div> */}
+      {/* <div className="checkout-btn-container">
         <Link className="">Checkout</Link>
         <Link to="collection">My Collection</Link>
+      </div> */}
+
+      <div className="hoodie_canvas">
+        <div className="hoodie-canvas-left">
+          <div className="hoodie-scene">
+            <Canvas>
+              <SetupCamera />
+              <Hoodie hoodieImage={hoodieImage} />
+
+              <OrbitControls
+                enablePan={true}
+                target={[0, 0.8, 0]}
+                zoomSpeed={0.5}
+                maxDistance={13}
+                minDistance={4}
+              />
+              <Environment preset="city" />
+            </Canvas>
+          </div>
+        </div>
+      </div>
+      <div className="prompt-container">
+        <PromptContainer setHoodieImage={setHoodieImage} />
       </div>
 
-      <Canvas>
-        <Hoodie hoodieImage={hoodieImage} />
-
-        <OrbitControls zoomSpeed={0.5} maxDistance={20} minDistance={4} />
-        <Environment preset="city" />
-      </Canvas>
-      <motion.div className="genie-lamp-canvas">
+      {/* <motion.div className="genie-lamp-canvas">
         <Canvas>
           <GenieLamp toggleGenieChat={toggleGenieChat} />
           <Environment preset="city" />
         </Canvas>
-      </motion.div>
+      </motion.div> */}
       {/* <GenieChat isOpen={isOpen} /> */}
       {isGenieChatOpen && (
         <GenieChat
           setHoodieImage={setHoodieImage}
-          toggleGenieChat={toggleGenieChat}
+          // toggleGenieChat={toggleGenieChat}
           isGenieChatOpen={isGenieChatOpen}
           hoodieImage={hoodieImage}
         />
