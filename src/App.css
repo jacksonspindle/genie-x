@@ -1,23 +1,36 @@
+/* body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(45deg, #2685e3, #85b2e3, #b4c8e3, white, #2685e3, #85b2e3, #b4c8e3, white);
+    background-size: 200% 200%;
+    animation: AuroraAnimation 20s infinite linear;
+}
+
+@keyframes AuroraAnimation {
+    0%, 100% {
+        background-position: 100% 0%;
+    }
+    50% {
+        background-position: 0% 100%;
+    }
+} */
+
 body {
-  background-color: #16002b;
-  background-image: linear-gradient(120deg, #16002b, #2d004f, #16002b);
-  background-size: 200% 200%;
-  animation: gradientAnimation 5s ease-in-out infinite;
+  background-color: white;
 }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+#gradient-canvas {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  --gradient-color-1: #1495ff;
+  --gradient-color-2: #47bcff;
+  --gradient-color-3: #e2d6ff;
+  --gradient-color-4: #0011ff;
 }
+
+
 
 @font-face {
   font-family: oatmeal-pro-bold;
@@ -34,3 +47,26 @@ body {
   src: url(../public/OatmealProTRIAL-Light.otf);
 }
 
+
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  flex: 2;
+  color: white;
+  font-family: oatmeal-pro-bold;
+  /* position: absolute; */
+}
+
+.nav-container > div {
+  display: flex;
+  gap: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+}

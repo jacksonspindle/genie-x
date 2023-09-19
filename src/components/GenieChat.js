@@ -59,6 +59,7 @@ const GenieChat = ({
   }, [dalleProptString, openai]);
 
   const applyImage = async () => {
+    console.log("test");
     toast("Applying Design to Hoodie!");
     try {
       const response = await axios.get(
@@ -360,9 +361,15 @@ const GenieChat = ({
 
         {stage === "grantingWish" ? <ToastContainer /> : null}
 
-        {/* <button onClick={generateImage}></button> */}
+        <button onClick={generateImage}></button>
         <button className="apply-image-btn" onClick={applyImage}>
           Apply Image
+        </button>
+        <button className="apply-image-btn" onClick={applyImage}>
+          Reset Chat
+        </button>
+        <button className="apply-image-btn" onClick={applyImage}>
+          Regenerate Design
         </button>
         <ToastContainer />
         {/* <img src={hoodieImage} alt="hoodieimage"></img> */}

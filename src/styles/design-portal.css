@@ -1,13 +1,16 @@
 .design-portal-container {
     display: flex;
-    position: absolute;
+    /* position: absolute; */
     z-index: 10;
-    flex-direction: column;
-    width: 50px;
-    gap: 4rem;
-    top: 10rem;
-    left: 3rem;
-    
+    /* flex-direction: column; */
+    /* width: 50px; */
+    /* gap: 4rem; */
+    /* top: 10rem; */
+    /* left: 3rem; */
+    padding: 0 2rem 2rem 2rem;
+    box-sizing: border-box;
+    height: 95vh !important;
+    gap: 2rem;
 }
 
 .design-portal-btn {
@@ -60,4 +63,76 @@
     z-index: 12;
     bottom: 0;
     width: 100vw;
+}
+
+/* .design-portal-container {
+    display: flex;
+
+} */
+
+.hoodie_canvas {
+    /* width: 70%; */
+    /* height: 90%; */
+    display: flex;
+    flex: 2;
+    flex-direction: row;
+    /* align-items: center; */
+    /* padding: 2rem; */
+    box-sizing: border-box;
+    gap: 1rem;
+    /* background-color: blue; */
+    background-color: rgba(255, 255, 255, .3);
+    border-radius: 1rem;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.hoodie-canvas-left {
+    flex: 3;
+    /* align-items: start; */
+    height: 100%;
+}
+
+.hoodie-scene {
+    
+    height: 100%;
+    /* background-image: linear-gradient(120deg, #16002b, #2d004f, #16002b); */
+    background-image: white;
+    /* margin-left: 4rem; */
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.prompt-container {
+    /* position: relative; */
+    flex: .75;
+    justify-content: start;
+    z-index: 16;
+    background-color: rgba(255, 255, 255, .3);
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB2aWV3Qm94PSIwIDAgNCA0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yIDIuNUMyLjI3NzEgMi41IDIuNSAyLjI3NzEgMi41IDIgMi4yNzcxIDEuNSAyIDEuNSAxLjcyMjkgMS41IDEuNSAyIDEuNSAyLjI3NzEgMiAyLjUiIGZpbGw9IiMwMDAwMDAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==");
+    background-blend-mode: overlay; /* This will blend the noise with the background color */
+    border-radius: 1rem;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+
+.prompt-medium-options{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+}
+
+.prompt-medium-options button {
+    height: 50px;
+    border-radius: 1rem;
+    border: 1px solid grey;
+    background-color: white;
+    font-family: oatmeal-pro-regular;
+    font-size: 20px;
+    width: 100%;
+    cursor: pointer;
 }

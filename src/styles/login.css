@@ -1,0 +1,190 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* background-color: #f6f6f6; */
+    background-color: rgba(0, 0, 0, .4);
+    z-index: 20;
+    position: absolute;
+    width: 100vw;
+}
+
+.login-box {
+    width: 300px;
+    padding: 20px;
+    /* border: 1px solid #e0e0e0; */
+    background-color: rgba(255 , 255   , 255, .3);
+    border-radius: 10px;
+                box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    backdrop-filter: blur(4px);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+}
+
+input[type="name"],
+input[type="email"], 
+input[type="password"], 
+input[type="re-enter password"] {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #a0a0a0;
+}
+
+.login-btn,
+.google-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-btn {
+    background-color: #4a90e2;
+    /* Lighter Blue */
+    color: #ffffff;
+}
+
+.login-btn:hover {
+    background-color: #357ABD;
+    /* Slightly darker variant of the lighter blue */
+}
+
+.google-btn {
+    background-color: #9b59b6;
+    /* Purple */
+    color: #ffffff;
+}
+
+.google-btn:hover {
+    background-color: #8e44ad;
+    /* Slightly darker variant of the purple */
+}
+
+.signup-option {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.signup-option a {
+    color: #007aff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.signup-option a:hover {
+    color: #0068e4;
+}
+
+
+.account-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f6f6f6;
+}
+
+.account-box {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #a0a0a0;
+}
+
+.create-btn,
+.google-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-btn {
+    background-color: #4a90e2;
+    /* Lighter Blue */
+    color: #ffffff;
+}
+
+.create-btn:hover {
+    background-color: #357ABD;
+    /* Slightly darker variant of the lighter blue */
+}
+
+.google-btn {
+    background-color: #9b59b6;
+    /* Purple */
+    color: #ffffff;
+}
+
+.google-btn:hover {
+    background-color: #8e44ad;
+    /* Slightly darker variant of the purple */
+}
+
+.login-option {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.login-option a {
+    color: #4a90e2;
+    /* Lighter Blue */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-option a:hover {
+    color: #357ABD;
+    /* Slightly darker variant of the lighter blue */
+}

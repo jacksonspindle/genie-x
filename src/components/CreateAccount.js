@@ -8,12 +8,14 @@ import {
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CreateAccount } from "./CreateAccount";
 
-export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
+export const CreateAccount = ({
+  setToggleCreateAccount,
+  setSignedIn,
+  setToggleLogInPage,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [toggleCreateAccount, setToggleCreateAccount] = useState(false);
 
   console.log(setToggleLogInPage);
 
@@ -66,31 +68,32 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
     }
   };
 
-  return !toggleCreateAccount ? (
+  return (
     <div className="login-container">
       <div className="login-box" ref={loginBoxRef}>
         <h1>Login</h1>
+        <input type="name" placeholder="Name" />
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
+        <input type="re-enter password" placeholder="Re-enter Password" />
         <button className="login-btn" onClick={signIn}>
-          Login
+          Create Account
         </button>
         <button className="google-btn" onClick={signInWithGoogle}>
           Login with Google
         </button>
         <div className="signup-option" style={{ color: "white" }}>
-          Don't have an account?{" "}
-          <a href="#" onClick={() => setToggleCreateAccount(true)}>
-            Create one
+          Already have an account?{" "}
+          <a
+            href="#"
+            onClick={() => {
+              setToggleCreateAccount(false);
+            }}
+          >
+            Sign In
           </a>
         </div>
       </div>
     </div>
-  ) : (
-    <CreateAccount
-      setSignedIn={setSignedIn}
-      setToggleLogInPage={setToggleLogInPage}
-      setToggleCreateAccount={setToggleCreateAccount}
-    />
   );
 };
