@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const CreateAccount = ({
@@ -14,8 +14,10 @@ export const CreateAccount = ({
   setSignedIn,
   setToggleLogInPage,
 }) => {
+  /* eslint-disable no-unused-vars */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  /* eslint-enable no-unused-vars */
 
   console.log(setToggleLogInPage);
 
@@ -34,7 +36,7 @@ export const CreateAccount = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setToggleLogInPage]);
 
   console.log(auth?.currentUser?.email);
 
@@ -59,6 +61,7 @@ export const CreateAccount = ({
     }
   };
 
+  /* eslint-enable no-unused-vars */
   const logout = async () => {
     try {
       await signOut(auth);
@@ -67,6 +70,7 @@ export const CreateAccount = ({
       console.log(ex);
     }
   };
+  /* eslint-enable no-unused-vars */
 
   return (
     <div className="login-container">
