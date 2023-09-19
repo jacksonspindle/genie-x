@@ -31,7 +31,7 @@ function App() {
       console.log(ref);
       gradient.initGradient("#gradient-canvas");
     }
-  }, [ref]);
+  }, [ref, gradient]);
 
   return (
     <div className="App" ref={ref}>
