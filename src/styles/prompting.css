@@ -135,17 +135,20 @@
 }
 
 .prompt-buttons-container>button:first-child {
-    width: 13vw;
+    width: 14vw;
     background-color: #2685e3;
     border: none;
     color: white;
 }
 
-.prompt-buttons-container>button:last-child {
+.prompt-buttons-container>button:last-child, a {
     width: 13vw;
     background-color: white;
     border: none;
     color: #2685e3;
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .info-icon-container {

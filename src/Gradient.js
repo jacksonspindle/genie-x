@@ -31,6 +31,7 @@ class MiniGl {
       debug_output =
         -1 !== document.location.search.toLowerCase().indexOf("debug=webgl");
     // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line no-unused-vars
     (_miniGl.canvas = canvas),
       (_miniGl.gl = _miniGl.canvas.getContext("webgl", {
         antialias: true,

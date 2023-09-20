@@ -1,0 +1,110 @@
+
+
+.cart-container-outer {
+    /* position: absolute; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* height: 100px; */
+    /* width: 100vw; */
+    /* height: 100vh; */
+    display: flex;
+    /* background-color: white; */
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 95vh;
+    font-family: oatmeal-pro-regular;
+}
+
+
+.cart-container {
+    width: 80vw;
+    height: 80vh;
+    border-radius: 1rem;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.cart-hoodie-canvas {
+    /* width: 33%; */
+    /* This will determine the width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, .5);
+    border-radius: 1rem;
+    /* margin-left: 2rem; */
+    background-color: blue;
+    position: relative;
+    /* Important for the aspect ratio trick */
+    overflow: hidden;
+    /* This ensures any content doesn't spill outside */
+}
+
+.cart-hoodie-canvas::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+    /* This ensures the height is the same as the width */
+}
+
+.canvas-checkout {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.cart-info-container {
+    flex: 2;
+    /* background-color: red; */
+    height: 50%;
+    list-style-type: none;
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-info-row-1 {
+    display: flex;
+    gap: 2rem;
+    
+}
+
+.cart-info-row-2 {
+    display: flex;
+    gap: 2rem;
+    
+}
+
+.cart-table-row-1{
+    width: 100%;
+}
+
+.cart-table-row-1 td {
+    text-align: center;
+}
+
+.cart-table-row-2 {
+    width: 100%;
+}
+.cart-table-row-2 td {
+    text-align: center;
+}
+
+.cart-table-row-3 {
+    width: 100%;
+}
+
+.cart-table-row-3 td {
+    text-align: center;
+}

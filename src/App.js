@@ -3,6 +3,7 @@ import { Auth } from "./components/auth";
 import DesignPortal from "./components/DesignPortal";
 import "./styles/design-portal.css";
 import "./styles/genie-chat.css";
+import "./styles/cart.css";
 import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
@@ -11,6 +12,7 @@ import HoodieCollection from "./components/Collection";
 import { useEffect, useState, useRef } from "react";
 import Nav from "./components/Nav";
 import { Gradient } from "./Gradient";
+import Cart from "./components/Cart";
 
 // import Login from "./components/Login";
 
@@ -38,11 +40,11 @@ function App() {
     <div className="App" ref={ref}>
       <canvas id="gradient-canvas" data-js-darken-top data-transition-in />
 
-      <Nav
+      {/* <Nav
         setToggleLogInPage={setToggleLogInPage}
         signedIn={signedIn}
         setSignedIn={setSignedIn}
-      />
+      /> */}
       {toggleLogInPage ? (
         <Auth
           setSignedIn={setSignedIn}
@@ -50,11 +52,17 @@ function App() {
         />
       ) : null}
       <Router>
+        <Nav
+          setToggleLogInPage={setToggleLogInPage}
+          signedIn={signedIn}
+          setSignedIn={setSignedIn}
+        />
         {/* {!signedIn ? <Auth setSignedIn={setSignedIn} /> : null} */}
         <Routes>
+          <Route exact path="/" element={<div>Home</div>} />
           <Route
             exact
-            path="/"
+            path="/design"
             element={
               <DesignPortal
                 setHoodieImage={setHoodieImage}
@@ -70,6 +78,13 @@ function App() {
                 setHoodieImage={setHoodieImage}
                 hoodieImage={hoodieImage}
               />
+            }
+          />
+          <Route
+            exact
+            path="/cart"
+            element={
+              <Cart setHoodieImage={setHoodieImage} hoodieImage={hoodieImage} />
             }
           />
         </Routes>

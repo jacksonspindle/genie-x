@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import infoIcon from "../assets/infoIcon.png";
+import { Link } from "react-router-dom";
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
 
@@ -569,9 +570,9 @@ const PhotoPrompt = ({ setHoodieImage }) => {
         <button className="apply-image-btn" onClick={generateImage}>
           Generate Image
         </button>
-        <button className="apply-image-btn" onClick={generateImage}>
-          Checkout
-        </button>
+        <Link to={"/cart"} className="apply-image-btn" onClick={generateImage}>
+          Cart
+        </Link>
       </div>
     </div>
   );
