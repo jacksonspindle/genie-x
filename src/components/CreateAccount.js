@@ -62,14 +62,14 @@ export const CreateAccount = ({
   };
 
   /* eslint-enable no-unused-vars */
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      toast("Signed Out!");
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
+  // const logout = async () => {
+  //   try {
+  //     await signOut(auth);
+  //     toast("Signed Out!");
+  //   } catch (ex) {
+  //     console.log(ex);
+  //   }
+  // };
   /* eslint-enable no-unused-vars */
 
   return (
@@ -87,15 +87,19 @@ export const CreateAccount = ({
           Login with Google
         </button>
         <div className="signup-option" style={{ color: "white" }}>
-          Already have an account?{" "}
-          <a
-            href="#"
-            onClick={() => {
-              setToggleCreateAccount(false);
+          Already have an account?
+          <span
+            style={{ color: "blue", cursor: "pointer" }}
+            // href="javascript:void(0)" /* eslint-enable no-unused-vars */
+            onClick={(e) => {
+              /* eslint-enable no-unused-vars */
+              e.preventDefault();
+              setToggleCreateAccount(false); /* eslint-enable no-unused-vars */
             }}
           >
+            {" "}
             Sign In
-          </a>
+          </span>
         </div>
       </div>
     </div>

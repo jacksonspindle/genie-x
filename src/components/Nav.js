@@ -1,5 +1,5 @@
 import React from "react";
-import { Auth } from "./auth";
+// import { Auth } from "./auth";
 
 const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
   return (

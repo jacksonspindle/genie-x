@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import PhotoPrompt from "./PhotoPrompt";
-import PaintingPrompt from "./PaintingPrompt";
-import ClaymationPrompt from "./ClaymationPrompt";
-import ThreeDRender from "./ThreeDRender";
-import SculpturePrompt from "./SculpturePrompt";
+// import PaintingPrompt from "./PaintingPrompt";
+// import ClaymationPrompt from "./ClaymationPrompt";
+// import ThreeDRender from "./ThreeDRender";
+// import SculpturePrompt from "./SculpturePrompt";
 
 const PromptContainer = ({ setHoodieImage }) => {
-  const [prompt, setPrompt] = useState(null);
+  // const [prompt, setPrompt] = useState(null);
   return (
     <div>
       {/* <div className="prompt-container"> */}

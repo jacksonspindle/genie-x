@@ -6,12 +6,14 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CreateAccount } from "./CreateAccount";
 
 export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
+  // eslint-disable-next-line no-unused-vars
   const [email, setEmail] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [password, setPassword] = useState("");
   const [toggleCreateAccount, setToggleCreateAccount] = useState(false);
 
@@ -32,7 +34,7 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setToggleLogInPage]);
 
   console.log(auth?.currentUser?.email);
 
@@ -57,14 +59,14 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      toast("Signed Out!");
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
+  // const logout = async () => {
+  //   try {
+  //     await signOut(auth);
+  //     toast("Signed Out!");
+  //   } catch (ex) {
+  //     console.log(ex);
+  //   }
+  // };
 
   return !toggleCreateAccount ? (
     <div className="login-container">
@@ -80,9 +82,12 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
         </button>
         <div className="signup-option" style={{ color: "white" }}>
           Don't have an account?{" "}
-          <a href="#" onClick={() => setToggleCreateAccount(true)}>
+          <span
+            style={{ color: "blue", cursor: "pointer" }}
+            onClick={() => setToggleCreateAccount(true)}
+          >
             Create one
-          </a>
+          </span>
         </div>
       </div>
     </div>

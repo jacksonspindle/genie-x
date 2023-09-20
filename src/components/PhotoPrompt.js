@@ -11,8 +11,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import infoIcon from "../assets/infoIcon.png";
-import { motion, AnimatePresence } from "framer-motion";
-import ImageEditor from "./ImageEditor";
+// import { motion, AnimatePresence } from "framer-motion";
+// import ImageEditor from "./ImageEditor";
 
 const PhotoPrompt = ({ setHoodieImage }) => {
   const [selectedWord, setSelectedWord] = useState(null);
@@ -28,6 +28,7 @@ const PhotoPrompt = ({ setHoodieImage }) => {
 
   const portalRoot = document.getElementById("portal-root");
   const dropdownRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
   const [selectedImage, setSelectedImage] = useState(""); // Add this state variable
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -289,7 +290,7 @@ const PhotoPrompt = ({ setHoodieImage }) => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [showDropdown]);
+  }, [showDropdown, handleOutsideClick]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -328,12 +329,6 @@ const PhotoPrompt = ({ setHoodieImage }) => {
   const configuration = useMemo(() => new Configuration({ apiKey }), [apiKey]);
 
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
-
-  useEffect(() => {
-    if (dalleImages.length > 0) {
-      applyImage();
-    }
-  }, [dalleImages, selectedImageIndex]);
 
   const generateImage = useCallback(async () => {
     console.log("generating image");
@@ -380,6 +375,12 @@ const PhotoPrompt = ({ setHoodieImage }) => {
     }
   };
 
+  useEffect(() => {
+    if (dalleImages.length > 0) {
+      applyImage();
+    }
+  }, [dalleImages, selectedImageIndex, applyImage]);
+
   const handleImageClick = (src, index) => {
     setSelectedImage(src);
     setSelectedImageIndex(index);
@@ -387,9 +388,9 @@ const PhotoPrompt = ({ setHoodieImage }) => {
     console.log(src, index);
   };
 
-  const handleCloseImage = () => {
-    setSelectedImage("");
-  };
+  // const handleCloseImage = () => {
+  //   setSelectedImage("");
+  // };
 
   return (
     <div ref={ref} className="prompt-content-container">
