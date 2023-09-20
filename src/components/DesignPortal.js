@@ -3,23 +3,23 @@ import { Canvas, useThree } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
 import { Environment } from "@react-three/drei";
-import slotsIcon from "../assets/slotsIcon.png";
-import saveIcon from "../assets/saveIcon.png";
-import screenshotIcon from "../assets/screenshotIcon.png";
-import shareIcon from "../assets/shareIcon.png";
-import helpIcon from "../assets/helpIcon.png";
-import GenieLamp from "./GenieLamp";
+// import slotsIcon from "../assets/slotsIcon.png";
+// import saveIcon from "../assets/saveIcon.png";
+// import screenshotIcon from "../assets/screenshotIcon.png";
+// import shareIcon from "../assets/shareIcon.png";
+// import helpIcon from "../assets/helpIcon.png";
+// import GenieLamp from "./GenieLamp";
 import GenieChat from "./GenieChat";
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase";
 import { getFirestore } from "firebase/firestore";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+// import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import PhotoPrompt from "./PhotoPrompt";
+// import PhotoPrompt from "./PhotoPrompt";
 import PromptContainer from "./PromptContainer";
 
 import {
@@ -46,6 +46,7 @@ function SetupCamera() {
 }
 
 const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
+  // eslint-disable-next-line no-unused-vars
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
   // const { camera } = useThree();
   // const [hoodieImage, setHoodieImage] = useState(false);
@@ -87,6 +88,8 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
       console.log("User is not authenticated or logged in.");
     }
   };
+
+  console.log(saveHoodieDesign);
 
   return (
     <div style={{ height: "100vh" }} className="design-portal-container">

@@ -31,7 +31,8 @@ function App() {
       console.log(ref);
       gradient.initGradient("#gradient-canvas");
     }
-  }, [ref, gradient]);
+    // eslint-disable-next-line no-unused-vars
+  }, [ref]);
 
   return (
     <div className="App" ref={ref}>
