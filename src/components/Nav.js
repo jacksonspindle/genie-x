@@ -1,5 +1,6 @@
 import React from "react";
-// import { Auth } from "./auth";
+import { Auth } from "./auth";
+import { Link } from "react-router-dom";
 
 const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
   return (
@@ -7,16 +8,39 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
       <nav className="">
         <ul className="nav-container">
           <div>
-            <li>Home</li>
-            <li>Design</li>
+            <Link
+              style={{ backgroundColor: "transparent", color: "white" }}
+              to="/"
+            >
+              Home
+            </Link>
+            <Link
+              style={{ backgroundColor: "transparent", color: "white" }}
+              to="/design"
+            >
+              Design
+            </Link>
           </div>
           <div>
             {signedIn ? (
-              <li>Account</li>
+              <Link
+                style={{ backgroundColor: "transparent", color: "white" }}
+                to="/account"
+              >
+                Account
+              </Link>
             ) : (
-              <li onClick={() => setToggleLogInPage(true)}>Sign In</li>
+              <span
+                style={{ backgroundColor: "transparent", color: "white" }}
+                to="/"
+                onClick={() => setToggleLogInPage(true)}
+              >
+                Sign In
+              </span>
             )}
-            <li>Cart</li>
+            <Link style={{ backgroundColor: "transparent", color: "white" }}>
+              Cart
+            </Link>
           </div>
         </ul>
       </nav>
