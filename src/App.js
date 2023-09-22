@@ -7,6 +7,7 @@ import "./styles/cart.css";
 import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
+import "./styles/image-editor.css";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import HoodieCollection from "./components/Collection";
 import { useEffect, useState, useRef } from "react";
