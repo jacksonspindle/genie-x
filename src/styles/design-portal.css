@@ -136,3 +136,22 @@
     width: 100%;
     cursor: pointer;
 }
+
+.edit-button {
+    position: absolute;
+    right: 0;
+    margin: .5rem;
+    background-color: #5300FF;
+    border-radius: .2rem;
+    color: white;
+    border: none;
+    padding:.3rem;
+    font-family: oatmeal-pro-regular;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: .1s ease-in-out all;
+}
+
+.edit-button:hover {
+    transform: scale(1.1);
+}

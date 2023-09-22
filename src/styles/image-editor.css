@@ -1,0 +1,189 @@
+.image-editor-container {
+    position: fixed;
+    /* height: 60vw; */
+    height: 91.6vh;
+    width: 100vw;
+    /* background-color: white; */
+    z-index: 100;
+    left: 0;
+    padding-left: 2rem;
+    padding-bottom:2.5rem;
+    padding-right: 2rem;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    /* background-color: red; */
+    /* opacity: .5; */
+}
+
+.image-editor-sub-container {
+    background-color: rgba(255, 255, 255, .8);
+    /* opacity: .8; */
+    width: 100%;
+    /* height: calc(100% - 2rem); */
+    height: 91.6vh;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    display: flex;
+    /* flex-direction: column; */
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Adjusted height */
+}
+
+.image-editor-sub-container-content{
+    /* background-color: rgba(255, 255, 255, .8); */
+        /* opacity: .8; */
+        /* width: 100%; */
+        /* height: calc(100% - 2rem); */
+        height: 71.6vh;
+        border-radius: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        display: flex;
+        /* flex-direction: column; */
+        width: 100%;
+        /* background-color: red; */
+}
+
+.selected-editor-image {
+    height: 100%;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 2rem;
+}
+
+.canvas-container {
+    width: 40vw;
+    /* min-width: 50%; */
+    /* padding-top: 40vw; */
+    /* background-color: red; */
+    /* This will make height equal to width */
+    position: relative;
+    min-width: 637px;
+        /* or whatever minimum you prefer */
+        min-height: 600px;
+}
+
+.image-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    /* background-color: blue; */
+    
+}
+
+.image-editor-buttons-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5rem;
+    gap: 2rem;
+    width: 100px;
+}
+
+.image-editor-buttons-container button {
+    background-color: black;
+    color: white;
+    padding: .5rem;
+    border: none;
+    border-radius: .5rem;
+    font-size: 18px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    align-items: center;
+    transition: .2s ease-in-out all;
+}
+
+.image-editor-buttons-container button:hover {
+    transform: scale(1.05);
+}
+
+.editor-icon {
+    width: 20px;
+    filter: invert(1);
+}
+
+.image-editor-help-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5rem;
+    gap: 2rem;
+    width: 100px;
+}
+
+.image-editor-help-container  button {
+    transition: .2s ease-in-out all;
+    background-color: black;
+    color: white;
+    padding: .5rem;
+    border: none;
+    border-radius: .5rem;
+    font-size: 18px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    align-items: center;
+}
+
+.image-editor-help-container button:hover {
+    transform: scale(1.05);
+}
+
+.help-content-container {
+    width:20vw;
+    border-radius: .5rem;
+    background-color: #191919;
+    height: 100%;
+}
+
+.image-editor-input-container {
+    height: 50px;
+    display: flex;
+    gap: 1rem;
+}
+
+.generate-input {
+    width: 40vw;
+    border-radius: .5rem;
+    font-size: 20px;
+    padding-left: 1rem;
+    font-family: oatmeal-pro-regular;
+    border: none;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.generate-input:focus {
+    outline: none;
+}
+
+.generate-button{
+    background-color: black;
+    color: white;
+    padding: .5rem;
+    border: none;
+    border-radius: .5rem;
+    font-size: 18px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    align-items: center;
+    transition: .2s ease-in-out all;
+}
+
+.generate-button:hover{
+    transform: scale(1.05);
+}

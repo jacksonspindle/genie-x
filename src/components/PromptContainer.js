@@ -5,7 +5,16 @@ import PhotoPrompt from "./PhotoPrompt";
 // import ThreeDRender from "./ThreeDRender";
 // import SculpturePrompt from "./SculpturePrompt";
 
-const PromptContainer = ({ setHoodieImage }) => {
+const PromptContainer = ({
+  dalleImages,
+  setDalleImages,
+  selectedImageIndex,
+  setSelectedImageIndex,
+  setHoodieImage,
+  setEditPopup,
+  editPopup,
+  hoodieImage,
+}) => {
   // const [prompt, setPrompt] = useState(null);
   return (
     <div>
@@ -39,7 +48,16 @@ const PromptContainer = ({ setHoodieImage }) => {
           {prompt === "3D Render" ? <ThreeDRender /> : null}
           {prompt === "Claymation" ? <ClaymationPrompt /> : null}
           {prompt === "Sculpture" ? <SculpturePrompt /> : null} */}
-        <PhotoPrompt setHoodieImage={setHoodieImage} />
+        <PhotoPrompt
+          hoodieImage={hoodieImage}
+          dalleImages={dalleImages}
+          setDalleImages={setDalleImages}
+          selectedImageIndex={selectedImageIndex}
+          setSelectedImageIndex={setSelectedImageIndex}
+          setHoodieImage={setHoodieImage}
+          setEditPopup={setEditPopup}
+          editPopup={editPopup}
+        />
       </div>
       {/* </div> */}
     </div>
