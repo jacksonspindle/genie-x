@@ -3,6 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
 import { Environment } from "@react-three/drei";
+import ImageEditor from "./ImageEditor";
 // import slotsIcon from "../assets/slotsIcon.png";
 // import saveIcon from "../assets/saveIcon.png";
 // import screenshotIcon from "../assets/screenshotIcon.png";
@@ -48,10 +49,21 @@ function SetupCamera() {
 const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
   // eslint-disable-next-line no-unused-vars
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
+  const [editPopup, setEditPopup] = useState(false);
+  const [dalleImages, setDalleImages] = useState([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const [maskImage, setMaskImage] = useState("");
+  const [editPrompt, setEditPrompt] = useState("");
+
   // const { camera } = useThree();
   // const [hoodieImage, setHoodieImage] = useState(false);
   const db = getFirestore();
   const storage = getStorage();
+
+  useEffect(() => {
+    console.log(hoodieImage);
+  }, [hoodieImage]);
 
   const saveHoodieDesign = async () => {
     console.log("saving hoodie design");
@@ -131,16 +143,45 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
         </div>
       </div>
       <div className="prompt-container">
-        <PromptContainer setHoodieImage={setHoodieImage} />
+        <PromptContainer
+          editPrompt={editPrompt}
+          maskImage={maskImage}
+          hoodieImage={hoodieImage}
+          dalleImages={dalleImages}
+          setDalleImages={setDalleImages}
+          selectedImageIndex={selectedImageIndex}
+          setSelectedImageIndex={setSelectedImageIndex}
+          setEditPopup={setEditPopup}
+          editPopup={editPopup}
+          setHoodieImage={setHoodieImage}
+        />
       </div>
 
       {/* <motion.div className="genie-lamp-canvas">
         <Canvas>
           <GenieLamp toggleGenieChat={toggleGenieChat} />
           <Environment preset="city" />
-        </Canvas>
+        </Canvas> 
       </motion.div> */}
       {/* <GenieChat isOpen={isOpen} /> */}
+
+      {editPopup && (
+        <ImageEditor
+          setMaskImage={setMaskImage}
+          maskImage={maskImage}
+          setEditPrompt={setEditPrompt}
+          editPrompt={editPrompt}
+          hoodieImage={hoodieImage}
+          setHoodieImage={setHoodieImage}
+          dalleImages={dalleImages}
+          setDalleImages={setDalleImages}
+          setSelectedImageIndex={setSelectedImageIndex}
+          selectedImageIndex={selectedImageIndex}
+          editPopup={editPopup}
+          setEditPopup={setEditPopup}
+        />
+      )}
+
       {isGenieChatOpen && (
         <GenieChat
           setHoodieImage={setHoodieImage}
