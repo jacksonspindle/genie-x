@@ -12,10 +12,22 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import infoIcon from "../assets/infoIcon.png";
 import { Link } from "react-router-dom";
+import ImageEditor from "./ImageEditor";
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
 
-const PhotoPrompt = ({ setHoodieImage }) => {
+const PhotoPrompt = ({
+  maskImage,
+  editPrompt,
+  dalleImages,
+  setDalleImages,
+  selectedImageIndex,
+  setSelectedImageIndex,
+  setHoodieImage,
+  editPopup,
+  setEditPopup,
+  hoodieImage,
+}) => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [words, setWords] = useState({
     Subject: "Subject",
@@ -31,14 +43,14 @@ const PhotoPrompt = ({ setHoodieImage }) => {
   const dropdownRef = useRef(null);
   // eslint-disable-next-line no-unused-vars
   const [selectedImage, setSelectedImage] = useState(""); // Add this state variable
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  // const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const [inputValue, setInputValue] = useState(""); // State for the input value
   const [showDropdown, setShowDropdown] = useState(false); // Add this state variable
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
-  const [dalleImages, setDalleImages] = useState([]);
+  // const [dalleImages, setDalleImages] = useState([]);
   const [dallePrompt, setDallePrompt] = useState(
     "Photograph of Adjective + Subject Verb in Setting + Style + Composition with a Color Scheme"
   );
@@ -343,6 +355,19 @@ const PhotoPrompt = ({ setHoodieImage }) => {
     setDalleImages(res.data.data.map((img) => img.url)); // Store all 4 image URLs
   }, [dallePrompt, openai]);
 
+  // const generateEdit = useCallback(async () => {
+  //   console.log("generating edit");
+  //   const res = await openai.createImageEdit({
+  //     image: hoodieImage,
+  //     mask: maskImage,
+  //     prompt: editPrompt,
+  //   });
+
+  //   console.log(res);
+
+  //   console.log(res.data.data.map((img) => img.url));
+  // });
+
   const applyImage = async () => {
     console.log("test");
     toast("Applying Design to Hoodie!");
@@ -547,12 +572,28 @@ const PhotoPrompt = ({ setHoodieImage }) => {
               }}
             >
               {dalleImages[index] ? (
-                <img
-                  src={dalleImages[index]}
-                  className="preview-image"
-                  alt={`previewImage-${index}`}
-                  onClick={() => handleImageClick(dalleImages[index], index)}
-                />
+                <div style={{ width: "100%", height: "100%" }}>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setEditPopup(true);
+                      console.log("edit popup opening");
+                      console.log(typeof setEditPopup);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <img
+                    src={dalleImages[index]}
+                    className="preview-image"
+                    alt={`previewImage-${index}`}
+                    style={{
+                      borderRadius: "1rem",
+                      width: "100%",
+                    }}
+                    onClick={() => handleImageClick(dalleImages[index], index)}
+                  />
+                </div>
               ) : (
                 <div
                   style={{
