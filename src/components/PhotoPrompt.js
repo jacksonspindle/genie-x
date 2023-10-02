@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import ImageEditor from "./ImageEditor";
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
+import lockIcon from "../assets/lockIcon.png";
+import previewThumbnail from "../assets/previewThumbnail.png";
 
 const PhotoPrompt = ({
   maskImage,
@@ -54,6 +56,9 @@ const PhotoPrompt = ({
   const [dallePrompt, setDallePrompt] = useState(
     "Photograph of Adjective + Subject Verb in Setting + Style + Composition with a Color Scheme"
   );
+
+  const [placeholder, setPlaceholder] = useState("");
+  const inputRef = useRef(null);
 
   const replacements = {
     Subject: [
@@ -272,28 +277,47 @@ const PhotoPrompt = ({
     ColorScheme: ["Warm", "Cool", "Monochromatic"],
   };
 
-  const handleClick = (key, event) => {
+  const handleClick = (key, event, place) => {
+    if (showDropdown) {
+      setInputValue(""); // Clear the input value when a new dropdown is opened
+    }
     const rect = event.target.getBoundingClientRect();
     setPosition({
       x: rect.left,
       y: rect.bottom,
     });
     setSelectedWord(key);
+    setPlaceholder(place);
     setShowDropdown(true);
+    focusInput(); // Focus on the input every time a dropdown is clicked
   };
 
-  const handleOutsideClick = (event) => {
-    if (
-      showDropdown &&
-      ref.current &&
-      !ref.current.contains(event.target) &&
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target)
-    ) {
-      setShowDropdown(false);
-      setSelectedWord(null);
+  const handleOutsideClick = useCallback(
+    (event) => {
+      if (
+        showDropdown &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+        setSelectedWord(null);
+        setInputValue("");
+      }
+    },
+    [showDropdown]
+  );
+
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
+
+  useEffect(() => {
+    if (showDropdown && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showDropdown]);
 
   useEffect(() => {
     // Add the event listener when the component mounts
@@ -317,6 +341,8 @@ const PhotoPrompt = ({
     if (event.key === "Enter") {
       setShowDropdown(false);
       setSelectedWord(null);
+
+      setInputValue(""); // Clear the input value when the return key is pressed
     }
   };
 
@@ -335,6 +361,7 @@ const PhotoPrompt = ({
     });
     setSelectedWord(null);
     setShowDropdown(false); // Hide the dropdown when an item is selected
+    setInputValue(""); // Clear the input value when an item is selected
   };
 
   const apiKey = process.env.REACT_APP_OPENAI_KEY;
@@ -428,7 +455,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Style", e)}
+          onClick={(e) => handleClick("Style", e, "Style")}
         >
           {words.Style}
         </span>{" "}
@@ -436,7 +463,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Adjective", e)}
+          onClick={(e) => handleClick("Adjective", e, "Descriptive Word")}
         >
           {words.Adjective}
         </span>{" "}
@@ -444,7 +471,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Subject", e)}
+          onClick={(e) => handleClick("Subject", e, "Person or thing")}
         >
           {words.Subject}
         </span>{" "}
@@ -452,7 +479,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Verb", e)}
+          onClick={(e) => handleClick("Verb", e, "Action")}
         >
           {words.Verb}
         </span>{" "}
@@ -460,7 +487,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Setting", e)}
+          onClick={(e) => handleClick("Setting", e, "Place")}
         >
           {words.Setting}
         </span>{" "}
@@ -468,7 +495,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Composition", e)}
+          onClick={(e) => handleClick("Composition", e, "Positioning")}
         >
           {words.Composition}
         </span>{" "}
@@ -476,7 +503,7 @@ const PhotoPrompt = ({
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("ColorScheme", e)}
+          onClick={(e) => handleClick("ColorScheme", e, "Color scheme")}
         >
           {words.ColorScheme}
         </span>{" "}
@@ -494,9 +521,10 @@ const PhotoPrompt = ({
             }}
           >
             <input
+              ref={inputRef}
               className="search-input"
               type="text"
-              placeholder={`Update ${selectedWord}...`}
+              placeholder={`${placeholder}...`}
               value={inputValue}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -559,7 +587,8 @@ const PhotoPrompt = ({
         )}
       </AnimatePresence> */}
 
-      <div className="preview-images-container">
+      {/* THIS SECTION IS FOR THE 4 IMAGE FEATURE */}
+      {/* <div className="preview-images-container">
         {Array(4)
           .fill(null)
           .map((_, index) => (
@@ -573,16 +602,18 @@ const PhotoPrompt = ({
             >
               {dalleImages[index] ? (
                 <div style={{ width: "100%", height: "100%" }}>
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setEditPopup(true);
-                      console.log("edit popup opening");
-                      console.log(typeof setEditPopup);
-                    }}
-                  >
-                    Edit
-                  </button>
+                  {selectedImageIndex === index && (
+                    <button
+                      className="edit-button"
+                      onClick={() => {
+                        setEditPopup(true);
+                        console.log("edit popup opening");
+                        console.log(typeof setEditPopup);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  )}
                   <img
                     src={dalleImages[index]}
                     className="preview-image"
@@ -605,6 +636,67 @@ const PhotoPrompt = ({
               )}
             </div>
           ))}
+      </div> */}
+      <div className="preview-images-container">
+        {Array(4)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className="preview-image-container"
+              style={{
+                border:
+                  selectedImageIndex === index ? "2px solid #5300FF" : "none",
+              }}
+            >
+              {index === 0 && dalleImages[0] ? (
+                <div style={{ width: "100%", height: "100%" }}>
+                  {selectedImageIndex === index && (
+                    <button
+                      className="edit-button"
+                      onClick={() => {
+                        setEditPopup(true);
+                        console.log("edit popup opening");
+                        console.log(typeof setEditPopup);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  )}
+                  <img
+                    src={dalleImages[0]}
+                    className="preview-image"
+                    alt={`previewImage-${index}`}
+                    style={{
+                      borderRadius: "1rem",
+                      width: "100%",
+                    }}
+                    onClick={() => handleImageClick(dalleImages[0], index)}
+                  />
+                </div>
+              ) : (
+                <div
+                  style={{
+                    width: "30%",
+                    height: "30%",
+                    marginTop: "60%",
+                    // backgroundColor: "red", // Changed from red to white
+                    // display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {index !== 0 && (
+                    <img
+                      className="preview-image lock-icon"
+                      src={lockIcon}
+                      alt="locked"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
       </div>
 
       <div className="prompt-buttons-container">
@@ -612,7 +704,11 @@ const PhotoPrompt = ({
           Generate Image
         </button>
         <Link to={"/cart"} className="apply-image-btn" onClick={generateImage}>
-          Cart
+          <button
+            style={{ border: "none", background: "white", boxShadow: "none" }}
+          >
+            Cart
+          </button>
         </Link>
       </div>
     </div>
