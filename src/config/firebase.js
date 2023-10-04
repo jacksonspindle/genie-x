@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
 import "firebase/storage";
+import { getFirestore } from "firebase/firestore";
+
 // import { getStorage } from "firebase/storage";
 // import {
 //   ref,
@@ -52,4 +54,6 @@ const uploadImageToFirebase = async (file) => {
 };
 // const storage = getStorage(app);
 
-export { uploadImageToFirebase };
+const db = getFirestore(app);
+
+export { uploadImageToFirebase, db };
