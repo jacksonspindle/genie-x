@@ -13,10 +13,27 @@ import "react-toastify/dist/ReactToastify.css";
 import infoIcon from "../assets/infoIcon.png";
 import { Link } from "react-router-dom";
 import ImageEditor from "./ImageEditor";
+import { auth, db } from "../config/firebase";
+
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
 import lockIcon from "../assets/lockIcon.png";
 import previewThumbnail from "../assets/previewThumbnail.png";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  getDoc,
+} from "firebase/firestore";
+
+import {
+  getStorage,
+  ref as firebaseStorageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 
 const PhotoPrompt = ({
   maskImage,
@@ -445,6 +462,69 @@ const PhotoPrompt = ({
   //   setSelectedImage("");
   // };
 
+  const storage = getStorage();
+  // const storageReference = storageRef(storage, "path/to/your/image.jpg");
+
+  // const imageRef = storageRef(storage, "path/to/your/image.jpg"); // Use storageRef here
+
+  const addToCart = async () => {
+    if (!hoodieImage) {
+      console.error("hoodieImage is undefined");
+      return;
+    }
+
+    if (!auth.currentUser) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    console.log(auth);
+
+    try {
+      // Convert base64 to Blob
+      const byteCharacters = atob(hoodieImage.split(",")[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "image/jpeg" });
+
+      // Upload to Firebase Storage
+      const storage = getStorage();
+      const storageReference = firebaseStorageRef(
+        storage,
+        `user_images/${auth.currentUser.uid}/${Date.now()}.jpg`
+      ); // Updated the path to be dynamic based on user and timestamp
+
+      await uploadBytes(storageReference, blob); // Upload the blob to Firebase Storage
+
+      // Get download URL and save to Firestore
+      const downloadURL = await getDownloadURL(storageReference);
+
+      const hoodieData = {
+        imageUrl: downloadURL,
+        addedAt: new Date(),
+      };
+
+      const userCartRef = doc(db, "carts", auth.currentUser.uid);
+      const docSnapshot = await getDoc(userCartRef);
+
+      if (docSnapshot.exists()) {
+        let data = docSnapshot.data();
+        let currentItems = data ? data.items || [] : [];
+        currentItems.push(hoodieData);
+        await setDoc(userCartRef, { items: currentItems }, { merge: true });
+      } else {
+        await setDoc(userCartRef, { items: [hoodieData] });
+      }
+
+      console.log("Item added to cart!");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
   return (
     <div ref={ref} className="prompt-content-container">
       <div className="info-icon-container">
@@ -703,11 +783,11 @@ const PhotoPrompt = ({
         <button className="apply-image-btn" onClick={generateImage}>
           Generate Image
         </button>
-        <Link to={"/cart"} className="apply-image-btn" onClick={generateImage}>
+        <Link to={"/cart"} className="apply-image-btn" onClick={addToCart}>
           <button
             style={{ border: "none", background: "white", boxShadow: "none" }}
           >
-            Cart
+            Add to Cart
           </button>
         </Link>
       </div>

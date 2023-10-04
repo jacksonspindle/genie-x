@@ -9,7 +9,8 @@
     /* left: 3rem; */
     padding: 0 2rem 2rem 2rem;
     box-sizing: border-box;
-    height: 92vh !important;
+    /* height: 92vh !important; */
+    height: 93vh !important;
     gap: 2rem;
     overflow-y: hidden;
 }
