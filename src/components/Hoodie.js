@@ -10,6 +10,7 @@ export default function Hoodie({ hoodieImage, ...props }) {
   const [texture, setTexture] = useState(null);
 
   useEffect(() => {
+    console.log(hoodieImage);
     const loader = new THREE.TextureLoader();
     loader.load(
       hoodieImage,
@@ -23,7 +24,10 @@ export default function Hoodie({ hoodieImage, ...props }) {
       },
       undefined,
       (error) => {
-        console.error("An error occurred while loading the texture.", error);
+        console.error(
+          "An error occurred while loading the texture.",
+          error.message
+        );
       }
     );
   }, [hoodieImage]);
