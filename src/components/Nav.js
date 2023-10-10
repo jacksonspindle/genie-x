@@ -105,7 +105,10 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                 Sign In
               </span>
             )}
-            <Link style={{ backgroundColor: "transparent", color: "white" }}>
+            <Link
+              to={"/cart"}
+              style={{ backgroundColor: "transparent", color: "white" }}
+            >
               Cart
             </Link>
           </div>
