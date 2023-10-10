@@ -14,6 +14,8 @@ import infoIcon from "../assets/infoIcon.png";
 import { Link } from "react-router-dom";
 import ImageEditor from "./ImageEditor";
 import { auth, db } from "../config/firebase";
+import { Ring } from "@uiball/loaders";
+import backIcon from "../assets/backIcon.png";
 
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
@@ -57,6 +59,12 @@ const PhotoPrompt = ({
     Composition: "Composition",
     ColorScheme: "X",
   });
+
+  useEffect(() => {
+    console.log("hoodie IMAGE:", hoodieImage);
+  });
+
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const portalRoot = document.getElementById("portal-root");
   const dropdownRef = useRef(null);
@@ -388,6 +396,7 @@ const PhotoPrompt = ({
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
   const generateImage = useCallback(async () => {
+    setIsGenerating(true);
     console.log("generating image");
     const res = await openai.createImage({
       prompt: dallePrompt,
@@ -395,10 +404,18 @@ const PhotoPrompt = ({
       size: "1024x1024",
     });
 
-    console.log(res.data.data.map((img) => img.url));
-    setDalleImages(res.data.data.map((img) => img.url)); // Store all 4 image URLs
-  }, [dallePrompt, openai]);
+    const generatedImages = res.data.data.map((img) => img.url);
+    console.log(generatedImages);
 
+    if (generatedImages.length === 0) {
+      setDalleImages([hoodieImage]); // Set to hoodieImage if empty
+    } else {
+      setDalleImages(generatedImages); // Store all image URLs
+      setHoodieImage(generatedImages[0]); // Set hoodieImage to the first dalleImage
+    }
+
+    setIsGenerating(false);
+  }, [dallePrompt, openai, hoodieImage]); // Note: I've added hoodieImage as a dependency
   // const generateEdit = useCallback(async () => {
   //   console.log("generating edit");
   //   const res = await openai.createImageEdit({
@@ -411,6 +428,14 @@ const PhotoPrompt = ({
 
   //   console.log(res.data.data.map((img) => img.url));
   // });
+
+  useEffect(() => {
+    if (dalleImages.length === 0) {
+      setDalleImages([hoodieImage]);
+      // Only generate if no images have been generated yet
+      // generateImage();
+    }
+  }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
 
   const applyImage = async () => {
     console.log("test");
@@ -729,50 +754,68 @@ const PhotoPrompt = ({
                   selectedImageIndex === index ? "2px solid #5300FF" : "none",
               }}
             >
-              {index === 0 && dalleImages[0] ? (
-                <div style={{ width: "100%", height: "100%" }}>
-                  {selectedImageIndex === index && (
-                    <button
-                      className="edit-button"
-                      onClick={() => {
-                        setEditPopup(true);
-                        console.log("edit popup opening");
-                        console.log(typeof setEditPopup);
-                      }}
-                    >
-                      Edit
-                    </button>
-                  )}
-                  <img
-                    src={dalleImages[0]}
-                    className="preview-image"
-                    alt={`previewImage-${index}`}
+              {index === 0 ? (
+                isGenerating ? (
+                  <div
                     style={{
-                      borderRadius: "1rem",
-                      width: "100%",
+                      width: "30%",
+                      height: "30%",
+                      marginTop: "70%",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
-                    onClick={() => handleImageClick(dalleImages[0], index)}
-                  />
-                </div>
+                  >
+                    <Ring
+                      size={40}
+                      lineWeight={5}
+                      speed={2}
+                      color="black"
+                      style={{ marginTop: "2rem" }}
+                    />
+                  </div>
+                ) : (
+                  dalleImages[0] && (
+                    <div style={{ width: "100%", height: "100%" }}>
+                      {selectedImageIndex === index && (
+                        <button
+                          className="edit-button"
+                          onClick={() => {
+                            setEditPopup(true);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+                      <img
+                        src={hoodieImage}
+                        className="preview-image"
+                        alt={`previewImage-${index}`}
+                        style={{
+                          borderRadius: "1rem",
+                          width: "100%",
+                        }}
+                        onClick={() =>
+                          handleImageClick(dalleImages[index], index)
+                        }
+                      />
+                    </div>
+                  )
+                )
               ) : (
                 <div
                   style={{
                     width: "30%",
                     height: "30%",
                     marginTop: "60%",
-                    // backgroundColor: "red", // Changed from red to white
-                    // display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  {index !== 0 && (
-                    <img
-                      className="preview-image lock-icon"
-                      src={lockIcon}
-                      alt="locked"
-                    />
-                  )}
+                  <img
+                    className="preview-image lock-icon"
+                    src={lockIcon}
+                    alt="locked"
+                  />
                 </div>
               )}
             </div>
