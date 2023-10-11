@@ -157,3 +157,19 @@
 .edit-button:hover {
     transform: scale(1.1);
 }
+
+.product-details-button {
+    position: absolute;
+    margin-left: 20px !important;
+    font-family: oatmeal-pro-regular;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    text-decoration: none;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 2px;
+        opacity: .7;
+
+    z-index: 100;
+    cursor: pointer;
+}

@@ -8,12 +8,15 @@ import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
 import "./styles/image-editor.css";
+import "./styles/product-details.css";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import HoodieCollection from "./components/Collection";
 import { useEffect, useState, useRef } from "react";
 import Nav from "./components/Nav";
 import { Gradient } from "./Gradient";
 import Cart from "./components/Cart";
+import ProductDetails from "./components/ProductDetails";
+import { AnimatePresence } from "framer-motion";
 
 // import Login from "./components/Login";
 
@@ -22,6 +25,7 @@ function App() {
   const [hoodieImage, setHoodieImage] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [toggleLogInPage, setToggleLogInPage] = useState(false);
+  const [productDetails, setProductDetails] = useState(false);
 
   useEffect(() => {
     console.log(signedIn);
@@ -39,6 +43,11 @@ function App() {
 
   return (
     <div className="App" ref={ref}>
+      <AnimatePresence>
+        {productDetails ? (
+          <ProductDetails setProductDetails={setProductDetails} />
+        ) : null}
+      </AnimatePresence>
       <canvas id="gradient-canvas" data-js-darken-top data-transition-in />
 
       {/* <Nav
@@ -66,6 +75,8 @@ function App() {
             path="/design"
             element={
               <DesignPortal
+                productDetails={productDetails}
+                setProductDetails={setProductDetails}
                 setHoodieImage={setHoodieImage}
                 hoodieImage={hoodieImage}
               />

@@ -12,6 +12,7 @@ import helpIcon from "../assets/helpIcon.png";
 import genieIcon from "../assets/genieIcon.png";
 import penCursor from "../assets/penCursor.png";
 import { Configuration, OpenAIApi } from "openai";
+import { motion } from "framer-motion";
 
 const ImageCanvas = ({
   setHoodieImage,
@@ -376,7 +377,13 @@ const ImageEditor = ({
   }, [editPrompt, hoodieImage, maskImage, apiKey]);
 
   return (
-    <div className="image-editor-container">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30, duration: 2 }}
+      className="image-editor-container"
+    >
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div className="image-editor-sub-container">
           <div className="image-editor-sub-container-content">
@@ -451,7 +458,7 @@ const ImageEditor = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
