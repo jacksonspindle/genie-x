@@ -19,6 +19,7 @@ import { getFirestore } from "firebase/firestore";
 // import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import infoIcon from "../assets/infoIcon.png";
 
 // import PhotoPrompt from "./PhotoPrompt";
 import PromptContainer from "./PromptContainer";
@@ -30,6 +31,8 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import ProductDetails from "./ProductDetails";
+import { AnimatePresence } from "framer-motion";
 
 // import { storage } from "../config/firebase"; // Make sure to import 'storage' from your Firebase configuration file.
 
@@ -46,7 +49,12 @@ function SetupCamera() {
   return null; // This component doesn't render anything visually
 }
 
-const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
+const DesignPortal = ({
+  productDetails,
+  setProductDetails,
+  hoodieImage,
+  setHoodieImage,
+}) => {
   // eslint-disable-next-line no-unused-vars
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
@@ -55,7 +63,6 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
 
   const [maskImage, setMaskImage] = useState("");
   const [editPrompt, setEditPrompt] = useState("");
-
   // const { camera } = useThree();
   // const [hoodieImage, setHoodieImage] = useState(false);
   const db = getFirestore();
@@ -103,6 +110,10 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
 
   console.log(saveHoodieDesign);
 
+  useEffect(() => {
+    console.log(productDetails);
+  }, [productDetails]);
+
   return (
     <div style={{ height: "100vh" }} className="design-portal-container">
       {/* <div className="design-portal-container">
@@ -125,6 +136,16 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
 
       <div className="hoodie_canvas">
         <div className="hoodie-canvas-left">
+          <h3
+            onClick={() => {
+              setProductDetails(true);
+              console.log(productDetails);
+            }}
+            className="product-details-button"
+          >
+            <img width={20} src={infoIcon} alt="info" />
+            Product Details{" "}
+          </h3>
           <div className="hoodie-scene">
             <Canvas>
               <SetupCamera />
@@ -166,20 +187,22 @@ const DesignPortal = ({ hoodieImage, setHoodieImage }) => {
       {/* <GenieChat isOpen={isOpen} /> */}
 
       {editPopup && (
-        <ImageEditor
-          setMaskImage={setMaskImage}
-          maskImage={maskImage}
-          setEditPrompt={setEditPrompt}
-          editPrompt={editPrompt}
-          hoodieImage={hoodieImage}
-          setHoodieImage={setHoodieImage}
-          dalleImages={dalleImages}
-          setDalleImages={setDalleImages}
-          setSelectedImageIndex={setSelectedImageIndex}
-          selectedImageIndex={selectedImageIndex}
-          editPopup={editPopup}
-          setEditPopup={setEditPopup}
-        />
+        <AnimatePresence>
+          <ImageEditor
+            setMaskImage={setMaskImage}
+            maskImage={maskImage}
+            setEditPrompt={setEditPrompt}
+            editPrompt={editPrompt}
+            hoodieImage={hoodieImage}
+            setHoodieImage={setHoodieImage}
+            dalleImages={dalleImages}
+            setDalleImages={setDalleImages}
+            setSelectedImageIndex={setSelectedImageIndex}
+            selectedImageIndex={selectedImageIndex}
+            editPopup={editPopup}
+            setEditPopup={setEditPopup}
+          />
+        </AnimatePresence>
       )}
 
       {isGenieChatOpen && (

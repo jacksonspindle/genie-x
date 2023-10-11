@@ -1,7 +1,7 @@
 .image-editor-container {
     position: fixed;
     /* height: 60vw; */
-    height: 91.6vh;
+    height: 90.6vh !important;
     width: 100vw;
     /* background-color: white; */
     z-index: 100;
@@ -13,6 +13,7 @@
     border-radius: 1rem;
     /* background-color: red; */
     /* opacity: .5; */
+    top: 4rem;
 }
 
 .image-editor-sub-container {
@@ -20,7 +21,7 @@
     /* opacity: .8; */
     width: 100%;
     /* height: calc(100% - 2rem); */
-    height: 91.6vh;
+    height: 89.6vh;
     border-radius: 1rem;
     display: flex;
     justify-content: center;
