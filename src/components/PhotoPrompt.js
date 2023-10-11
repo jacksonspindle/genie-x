@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 import ImageEditor from "./ImageEditor";
 import { auth, db } from "../config/firebase";
 import { Ring } from "@uiball/loaders";
-import backIcon from "../assets/backIcon.png";
 
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";

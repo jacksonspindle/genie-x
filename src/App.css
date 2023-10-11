@@ -103,3 +103,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.nav-container span {
+  margin-top: .5rem;
+}
