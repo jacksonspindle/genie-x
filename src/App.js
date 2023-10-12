@@ -69,7 +69,11 @@ function App() {
         />
         {/* {!signedIn ? <Auth setSignedIn={setSignedIn} /> : null} */}
         <Routes>
-          <Route exact path="/" element={<div>Home</div>} />
+          <Route
+            exact
+            path="/"
+            element={<DesignPortal setProductDetails={setProductDetails} />}
+          />
           <Route
             exact
             path="/design"
