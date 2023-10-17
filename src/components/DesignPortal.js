@@ -23,6 +23,7 @@ import infoIcon from "../assets/infoIcon.png";
 
 // import PhotoPrompt from "./PhotoPrompt";
 import PromptContainer from "./PromptContainer";
+import { motion } from "framer-motion";
 
 import {
   // getFirestore,

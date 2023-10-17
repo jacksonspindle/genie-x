@@ -14,6 +14,7 @@
     /* background-color: red; */
     /* opacity: .5; */
     top: 4rem;
+    backdrop-filter: blur(5px);
 }
 
 .image-editor-sub-container {
@@ -86,7 +87,7 @@
     flex-direction: column;
     margin-top: 5rem;
     gap: 2rem;
-    width: 100px;
+    width: 150px;
 }
 
 .image-editor-buttons-container button {
@@ -187,4 +188,16 @@
 
 .generate-button:hover{
     transform: scale(1.05);
+}
+
+.image-editor-x-btn {
+    position: absolute;
+    left: 3rem;
+    top: 1rem;
+    cursor: pointer;
+    transition: all ease-in-out .2s;
+}
+
+.image-editor-x-btn:hover {
+    transform: scale(1.2);
 }

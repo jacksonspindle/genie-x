@@ -13,6 +13,10 @@ import genieIcon from "../assets/genieIcon.png";
 import penCursor from "../assets/penCursor.png";
 import { Configuration, OpenAIApi } from "openai";
 import { motion } from "framer-motion";
+import { Ring } from "@uiball/loaders";
+
+import xIcon from "../assets/xIcon.png";
+import clearIcon from "../assets/clearIcon.png";
 
 const ImageCanvas = ({
   setHoodieImage,
@@ -32,8 +36,11 @@ const ImageCanvas = ({
   maskPoints,
   clearSelection,
   setClearSelection,
+  isEraserActive,
+  setIsLoading,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
+  const imageLoadedRef = useRef(false);
 
   useEffect(() => {
     console.log(dalleImages[selectedImageIndex]);
@@ -117,10 +124,43 @@ const ImageCanvas = ({
   };
 
   const handleMouseDown = (event) => {
-    if (!isPenToolActive) return; // Do not place point if Pen tool is not active
+    if (isEraserActive) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 10; // You can adjust the eraser size
+      ctx.lineCap = "round";
+      setIsDrawing(true);
+      ctx.beginPath();
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      ctx.moveTo(x, y);
+    } else if (isPenToolActive) {
+      placePoint(event);
+      setIsDrawing(true);
+    }
+  };
 
-    placePoint(event);
-    setIsDrawing(true);
+  const handleMouseMove = (event) => {
+    if (isDrawing && isEraserActive) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDrawing(false);
+    if (isEraserActive) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      ctx.globalCompositeOperation = "source-over";
+    }
   };
 
   const completeSelection = () => {
@@ -136,8 +176,8 @@ const ImageCanvas = ({
       }
     });
     ctx.closePath();
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 2;
+    // ctx.strokeStyle = "red";
+    // ctx.lineWidth = 2;
     ctx.stroke();
 
     // Create a pattern
@@ -169,12 +209,17 @@ const ImageCanvas = ({
 
   return (
     <canvas
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       ref={canvasRef}
       className="image-canvas"
       style={{
-        cursor: isPenToolActive ? `url(${penCursor}), auto` : "default",
+        cursor: isPenToolActive
+          ? `url(${penCursor}), auto`
+          : isEraserActive
+          ? "crosshair"
+          : "default",
       }}
-      //   style={styles.canvas}
       onMouseDown={handleMouseDown}
       onDoubleClick={completeSelection} // Close the selection with a double-click
     />
@@ -182,6 +227,7 @@ const ImageCanvas = ({
 };
 
 const ImageEditor = ({
+  setEditPopup,
   maskImage,
   editPrompt,
   setMaskImage,
@@ -201,6 +247,8 @@ const ImageEditor = ({
   const [isPenToolActive, setIsPenToolActive] = useState(false);
   const [clearSelection, setClearSelection] = useState(false);
   const [editedImage, setEditedImage] = useState("");
+  const [isEraserActive, setIsEraserActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event) => {
     // Update the editPrompt state with the new value of the input
@@ -213,11 +261,45 @@ const ImageEditor = ({
   };
 
   useEffect(() => {
-    if (editedImage) {
-      setHoodieImage(editedImage); // Update the hoodieImage with the editedImage
-      setMaskPoints([]); // Clear previous mask points
-      setPoints([]); // Clear previous points
+    async function sendImageToProxy() {
+      try {
+        if (editedImage) {
+          console.log("sending edited Image to proxy");
+
+          // Send the editedImage to your proxy server
+          const response = await axios.get(
+            "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
+            {
+              params: {
+                imageUrl: editedImage,
+              },
+            }
+          );
+
+          if (
+            response.status === 200 &&
+            response.data &&
+            response.data.imageUrl
+          ) {
+            console.log("Image from proxy received", response.data.imageUrl);
+
+            // Set the image from the proxy to the hoodieImage
+            setHoodieImage(response.data.imageUrl);
+
+            console.log("SET");
+            setMaskPoints([]); // Clear previous mask points
+            setPoints([]); // Clear previous points
+            setIsLoading(false);
+          } else {
+            console.error("Failed to get image from proxy");
+          }
+        }
+      } catch (error) {
+        console.error("Error sending editedImage to proxy:", error);
+      }
     }
+
+    sendImageToProxy();
   }, [editedImage]);
 
   const processImage = (img, x, y, width, height) => {
@@ -246,69 +328,89 @@ const ImageEditor = ({
     return tempCanvas;
   };
 
+  const convertToPNG = async (dataURL) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.onerror = function (err) {
+        reject(err);
+      };
+      img.src = dataURL;
+    });
+  };
+
   const downloadMask = () => {
+    setIsLoading(true);
+
     console.log("downloadMask function entered");
     console.log("downloading image");
+
     if (canvasRef.current) {
       const originalCanvas = canvasRef.current;
       const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = 1024; // Set width to 1024
-      tempCanvas.height = 1024; // Set height to 1024
+      tempCanvas.width = 1024;
+      tempCanvas.height = 1024;
       const tempCtx = tempCanvas.getContext("2d");
 
-      // Calculate the scale factors
+      tempCtx.drawImage(
+        originalCanvas,
+        0,
+        0,
+        tempCanvas.width,
+        tempCanvas.height
+      );
+
+      const imageData = tempCtx.getImageData(
+        0,
+        0,
+        tempCanvas.width,
+        tempCanvas.height
+      );
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        if (imageData.data[i + 3] === 0) {
+          imageData.data[i] = 255;
+          imageData.data[i + 1] = 255;
+          imageData.data[i + 2] = 255;
+          imageData.data[i + 3] = 0;
+        }
+      }
+      tempCtx.putImageData(imageData, 0, 0);
+
+      tempCtx.globalCompositeOperation = "destination-out";
+
       const scaleX = tempCanvas.width / originalCanvas.width;
       const scaleY = tempCanvas.height / originalCanvas.height;
 
-      // Draw the original image on the temporary canvas
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = hoodieImage;
-      img.onload = () => {
-        tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-
-        // Convert RGB to RGBA
-        const imageData = tempCtx.getImageData(
-          0,
-          0,
-          tempCanvas.width,
-          tempCanvas.height
-        );
-        for (let i = 0; i < imageData.data.length; i += 4) {
-          if (imageData.data[i + 3] === 0) {
-            imageData.data[i] = 255; // Set Red to 255
-            imageData.data[i + 1] = 255; // Set Green to 255
-            imageData.data[i + 2] = 255; // Set Blue to 255
-            imageData.data[i + 3] = 0; // Keep Alpha at 0
-          }
+      tempCtx.beginPath();
+      maskPoints.forEach((point, index) => {
+        const scaledX = point.x * scaleX;
+        const scaledY = point.y * scaleY;
+        if (index === 0) {
+          tempCtx.moveTo(scaledX, scaledY);
+        } else {
+          tempCtx.lineTo(scaledX, scaledY);
         }
-        tempCtx.putImageData(imageData, 0, 0);
+      });
+      tempCtx.closePath();
+      tempCtx.fill();
 
-        // Apply the mask (if any) on the temporary canvas
-        tempCtx.globalCompositeOperation = "destination-out";
+      const maskData = tempCanvas.toDataURL("image/png");
+      handleDownload("mask.png", maskData);
+      setMaskImage(maskData);
+      console.log(maskData);
+      // setTimeout(generateEdit, 1000);
 
-        // Draw the selection mask using scaled maskPoints
-        tempCtx.beginPath();
-        maskPoints.forEach((point, index) => {
-          const scaledX = point.x * scaleX;
-          const scaledY = point.y * scaleY;
-          if (index === 0) {
-            tempCtx.moveTo(scaledX, scaledY);
-          } else {
-            tempCtx.lineTo(scaledX, scaledY);
-          }
-        });
-        tempCtx.closePath();
-        tempCtx.fill(); // cut out the selection
-
-        // Convert the temporary canvas to Data URL and download it
-        const maskData = tempCanvas.toDataURL("image/png");
-        handleDownload("mask.png", maskData);
-        setMaskImage(maskData);
-        console.log(maskData);
-        generateEdit();
-      };
+      // generateEdit();
     }
+
+    // setIsLoading(false);
   };
 
   const apiKey = process.env.REACT_APP_OPENAI_KEY;
@@ -317,7 +419,7 @@ const ImageEditor = ({
 
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
-  function dataURLtoBlob(dataurl) {
+  function dataURLtoBlob(dataurl, label) {
     var arr = dataurl.split(","),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
@@ -326,10 +428,13 @@ const ImageEditor = ({
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
+    console.log("MIME type for", label, ":", mime);
     return new Blob([u8arr], { type: mime });
   }
 
   const generateEdit = useCallback(async () => {
+    setIsLoading(true);
+
     try {
       console.log("editPrompt value: ", editPrompt);
       console.log("image value: ", hoodieImage);
@@ -338,12 +443,14 @@ const ImageEditor = ({
       const formData = new FormData();
 
       if (hoodieImage) {
-        const imageBlob = dataURLtoBlob(hoodieImage);
+        console.log("hoodie image is logging");
+        const pngHoodieImage = await convertToPNG(hoodieImage);
+        const imageBlob = dataURLtoBlob(pngHoodieImage, "hoodieImage");
         formData.append("image", imageBlob, "image.png");
       }
 
       if (maskImage) {
-        const maskBlob = dataURLtoBlob(maskImage);
+        const maskBlob = dataURLtoBlob(maskImage, "maskImage");
         formData.append("mask", maskBlob, "mask.png");
       }
 
@@ -367,17 +474,24 @@ const ImageEditor = ({
     } catch (error) {
       console.error("Error generating edit: ", error);
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.error("Response data:", error.response.data);
         console.error("Response status:", error.response.status);
         console.error("Response headers:", error.response.headers);
       }
+    } finally {
+      // setIsLoading(false);
     }
-  }, [editPrompt, hoodieImage, maskImage, apiKey]);
+  }, [hoodieImage, maskImage, apiKey, editedImage]);
+
+  useEffect(() => {
+    if (maskImage) {
+      generateEdit();
+    }
+  }, [maskImage]);
 
   return (
     <motion.div
+      key="image-editor"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -386,26 +500,43 @@ const ImageEditor = ({
     >
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div className="image-editor-sub-container">
+          <img
+            src={xIcon}
+            alt="close"
+            width={40}
+            className="image-editor-x-btn"
+            onClick={() => setEditPopup(false)}
+          />
           <div className="image-editor-sub-container-content">
             <div className="image-editor-buttons-container">
-              <button onClick={() => setIsPenToolActive(!isPenToolActive)}>
+              <button
+                onClick={() => {
+                  setIsPenToolActive(true);
+                  setIsEraserActive(false);
+                }}
+              >
                 <img className="editor-icon" src={penIcon} alt="penIcon"></img>
                 Pen
               </button>
-              <button>
+              <button
+                onClick={() => {
+                  setIsPenToolActive(false);
+                  setIsEraserActive(true);
+                }}
+              >
                 <img
                   className="editor-icon"
                   src={eraserIcon}
-                  alt="penIcon"
+                  alt="eraserIcon"
                 ></img>
                 Eraser
               </button>
               <button onClick={handleClearSelection}>
-                {/* <img
+                <img
                   className="editor-icon"
-                  src={eraserIcon}
+                  src={clearIcon}
                   alt="penIcon"
-                ></img> */}
+                ></img>
                 Clear Selection
               </button>
             </div>
@@ -415,26 +546,55 @@ const ImageEditor = ({
               src={dalleImages[selectedImageIndex]}
             ></img> */}
             <div className="canvas-container">
-              <ImageCanvas
-                setHoodieImage={setHoodieImage}
-                setClearSelection={setClearSelection}
-                isPenToolActive={isPenToolActive}
-                setMaskPoints={setMaskPoints}
-                maskPoints={maskPoints}
-                points={points} // Pass points as prop
-                setPoints={setPoints} // Pass setPoints as prop
-                hoodieImage={hoodieImage}
-                dalleImages={dalleImages}
-                selectedImageIndex={selectedImageIndex}
-                className={"image-canvas"}
-                imageData={imageData}
-                canvasRef={canvasRef}
-                clearSelection={clearSelection}
-              />
+              {isLoading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    height: "100%",
+                    alignItems: "center",
+                    // backgroundColor: "white",
+                    // border: "2px solid black",
+                    boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
+                    borderRadius: "1rem",
+                  }}
+                >
+                  <Ring
+                    size={40}
+                    lineWeight={5}
+                    speed={2}
+                    color="black"
+                    style={{ marginTop: "2rem" }}
+                  />
+                </div>
+              ) : (
+                <ImageCanvas
+                  setIsLoading={setIsLoading}
+                  isEraserActive={isEraserActive}
+                  setHoodieImage={setHoodieImage}
+                  setClearSelection={setClearSelection}
+                  isPenToolActive={isPenToolActive}
+                  setMaskPoints={setMaskPoints}
+                  maskPoints={maskPoints}
+                  points={points} // Pass points as prop
+                  setPoints={setPoints} // Pass setPoints as prop
+                  hoodieImage={hoodieImage}
+                  dalleImages={dalleImages}
+                  selectedImageIndex={selectedImageIndex}
+                  className={"image-canvas"}
+                  imageData={imageData}
+                  canvasRef={canvasRef}
+                  clearSelection={clearSelection}
+                />
+              )}
             </div>
             <div className="image-editor-help-container">
               <button onClick={() => setHelpContainer(!helpContainer)}>
-                <img className="editor-icon" src={penIcon} alt="helpIcon"></img>
+                <img
+                  className="editor-icon"
+                  src={helpIcon}
+                  alt="helpIcon"
+                ></img>
                 Help
               </button>
               {helpContainer && <div className="help-content-container"></div>}
@@ -452,7 +612,12 @@ const ImageEditor = ({
               onClick={downloadMask}
               className="generate-button"
             >
-              <img className="editor-icon" src={penIcon} alt="genieIcon"></img>
+              <img
+                className="editor-icon"
+                src={genieIcon}
+                style={{ width: "30px" }}
+                alt="genieIcon"
+              ></img>
               Generate
             </button>
           </div>
