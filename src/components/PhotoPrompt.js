@@ -473,7 +473,7 @@ const PhotoPrompt = ({
     if (dalleImages.length > 0) {
       applyImage();
     }
-  }, [dalleImages, selectedImageIndex, applyImage]);
+  }, [dalleImages, selectedImageIndex]);
 
   const handleImageClick = (src, index) => {
     setSelectedImage(src);
