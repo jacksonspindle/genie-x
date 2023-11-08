@@ -445,7 +445,7 @@ const ImageEditor = ({
       tempCtx.fill();
 
       const maskData = tempCanvas.toDataURL("image/png");
-      handleDownload("mask.png", maskData);
+      // handleDownload("mask.png", maskData);
       setMaskImage(maskData);
       console.log(maskData);
       // setTimeout(generateEdit, 1000);
