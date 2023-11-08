@@ -161,6 +161,27 @@ const DesignPortal = ({
               />
               <Environment preset="city" />
             </Canvas>
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                padding: "2rem",
+              }}
+            >
+              <p>
+                <em>
+                  <b>Orbit</b>
+                </em>{" "}
+                - Click + Drag
+              </p>
+              <p>
+                <em>
+                  <b>Zoom</b>
+                </em>{" "}
+                - Scroll
+              </p>
+            </div>
           </div>
         </div>
       </div>
