@@ -208,21 +208,64 @@ const ImageCanvas = ({
   };
 
   return (
-    <canvas
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      ref={canvasRef}
-      className="image-canvas"
+    <div
       style={{
-        cursor: isPenToolActive
-          ? `url(${penCursor}), auto`
-          : isEraserActive
-          ? "crosshair"
-          : "default",
+        height: `${
+          window.innerHeight < 656
+            ? "75%"
+            : window.innerHeight < 720
+            ? "87%"
+            : window.innerHeight >= 720 && window.innerHeight < 800
+            ? "95%"
+            : "100%"
+        }`,
+        width: `${
+          window.innerHeight < 656
+            ? "75%"
+            : window.innerHeight < 720
+            ? "87%"
+            : window.innerHeight >= 720 && window.innerHeight < 800
+            ? "95%"
+            : "100%"
+        }`,
       }}
-      onMouseDown={handleMouseDown}
-      onDoubleClick={completeSelection} // Close the selection with a double-click
-    />
+    >
+      <canvas
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        ref={canvasRef}
+        className="image-canvas"
+        style={{
+          // height: `${
+          //   window.innerHeight < 656
+          //     ? "75%"
+          //     : window.innerHeight < 720
+          //     ? "87%"
+          //     : window.innerHeight >= 720 && window.innerHeight < 800
+          //     ? "95%"
+          //     : "100%"
+          // }`,
+          // width: `${
+          //   window.innerHeight < 656
+          //     ? "75%"
+          //     : window.innerHeight < 720
+          //     ? "87%"
+          //     : window.innerHeight >= 720 && window.innerHeight < 800
+          //     ? "95%"
+          //     : "100%"
+          // }`,
+          // height: `${"100%"}`,
+          // width: `${"100%"}`,
+          cursor: isPenToolActive
+            ? `url(${penCursor}), auto`
+            : isEraserActive
+            ? "crosshair"
+            : "default",
+        }}
+        onMouseDown={handleMouseDown}
+        onDoubleClick={completeSelection} // Close the selection with a double-click
+      />
+    </div>
   );
 };
 

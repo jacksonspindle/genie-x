@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import genieXLogo from "../assets/genieXLogo.png";
+import genieXLogo2 from "../assets/genieXLogo2.png";
 
 const dropdownVariants = {
   hidden: { opacity: 0, y: -10 },
@@ -31,7 +33,12 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
               style={{ backgroundColor: "transparent", color: "white" }}
               to="/"
             >
-              Home
+              <img
+                src={genieXLogo2}
+                alt="logo"
+                width={190}
+                style={{ position: "absolute", top: 0 }}
+              />
             </Link>
             <Link
               style={{ backgroundColor: "transparent", color: "white" }}
@@ -99,7 +106,11 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
               </div>
             ) : (
               <span
-                style={{ backgroundColor: "transparent", color: "white" }}
+                style={{
+                  backgroundColor: "transparent",
+                  color: "white",
+                  fontSize: 20,
+                }}
                 onClick={() => setToggleLogInPage(true)}
               >
                 Sign In

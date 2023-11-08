@@ -173,3 +173,49 @@
     z-index: 100;
     cursor: pointer;
 }
+
+
+.switch {
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 50px / 3 ;
+    background-color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 50px;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.switch[data-isOn="true"] {
+    justify-content: flex-end;
+}
+
+.handle {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 40px;
+}
+
+.free-range-input {
+    width: 40vw;
+        border-radius: .5rem;
+        font-size: 20px;
+        padding-left: 1rem;
+        font-family: oatmeal-pro-regular;
+        border: none;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        position: absolute;
+        bottom: 1.1rem;
+        /* top: 0; */
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 35px;
+        backdrop-filter: blur(10px);
+    
+}
+
+.free-range-input:focus {
+    outline: none;
+}
