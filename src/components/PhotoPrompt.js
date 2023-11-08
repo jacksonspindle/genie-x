@@ -57,6 +57,7 @@ const PhotoPrompt = ({
     Style: "Style",
     Composition: "Composition",
     ColorScheme: "X",
+    Medium: "Photograph ",
   });
 
   useEffect(() => {
@@ -299,6 +300,13 @@ const PhotoPrompt = ({
     Style: ["Monochrome", "Vintage", "HDR"],
     Composition: ["Rule of Thirds", "Centered", "Diagonal"],
     ColorScheme: ["Warm", "Cool", "Monochromatic"],
+    Medium: [
+      "Photograph ",
+      "Painting ",
+      "3D Render ",
+      "Sculpture ",
+      "Drawing ",
+    ],
   };
 
   const handleClick = (key, event, place) => {
@@ -377,8 +385,9 @@ const PhotoPrompt = ({
         [key]: replacement,
       };
 
-      const newDallePrompt = `${updatedWords.Style} photograph of ${updatedWords.Adjective} + ${updatedWords.Subject} ${updatedWords.Verb} in ${updatedWords.Setting} + ${updatedWords.Composition} with a ${updatedWords.ColorScheme} color scheme`;
+      const newDallePrompt = `${updatedWords.Style} ${updatedWords.Medium}  of ${updatedWords.Adjective} + ${updatedWords.Subject} ${updatedWords.Verb} in ${updatedWords.Setting} + with a ${updatedWords.ColorScheme} color scheme`;
 
+      console.log("setting new dalle prompt");
       setDallePrompt(newDallePrompt);
 
       return updatedWords;
@@ -395,13 +404,18 @@ const PhotoPrompt = ({
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
   const generateImage = useCallback(async () => {
+    selectReplacement();
     setIsGenerating(true);
     console.log("generating image");
     const res = await openai.createImage({
+      model: "dall-e-3",
       prompt: dallePrompt,
-      n: 4, // Request 4 images
+      n: 1, // Request 4 images
       size: "1024x1024",
+      quality: "hd",
     });
+
+    console.log(dallePrompt);
 
     const generatedImages = res.data.data.map((img) => img.url);
     console.log(generatedImages);
@@ -563,7 +577,15 @@ const PhotoPrompt = ({
         >
           {words.Style}
         </span>{" "}
-        photograph of{" "}
+        +{" "}
+        <span
+          className="clickable"
+          style={{ color: "#5300FF" }}
+          onClick={(e) => handleClick("Medium", e, "Medium")}
+        >
+          {words.Medium}
+        </span>
+        of{" "}
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
@@ -596,13 +618,13 @@ const PhotoPrompt = ({
           {words.Setting}
         </span>{" "}
         +{" "}
-        <span
+        {/* <span
           className="clickable"
           style={{ color: "#5300FF" }}
           onClick={(e) => handleClick("Composition", e, "Positioning")}
         >
           {words.Composition}
-        </span>{" "}
+        </span>{" "} */}
         with a{" "}
         <span
           className="clickable"

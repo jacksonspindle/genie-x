@@ -72,7 +72,14 @@ function App() {
           <Route
             exact
             path="/"
-            element={<DesignPortal setProductDetails={setProductDetails} />}
+            element={
+              <DesignPortal
+                productDetails={productDetails}
+                setProductDetails={setProductDetails}
+                setHoodieImage={setHoodieImage}
+                hoodieImage={hoodieImage}
+              />
+            }
           />
           <Route
             exact
