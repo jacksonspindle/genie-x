@@ -87,8 +87,15 @@ const PhotoPrompt = ({
 
   const replacements = {
     Subject: [
-      "Dog",
-      "Building",
+      "Wizard with a gold staff",
+      "Scientist in a red lab coat",
+      "Assassin holding two daggers",
+      "Aztec with a spiked necklace made of bones",
+      "Roman Soldier with gold trimmed armor",
+      "Monkey in a business suit",
+      "Robot",
+      "Ghost",
+      "Spaceship",
       "Car",
       "Cat",
       "Bicycle",
@@ -295,11 +302,43 @@ const PhotoPrompt = ({
       "Shallow",
       "Dry",
     ],
-    Verb: ["Running", "Fighting", "Eating"],
-    Setting: ["Park", "Street", "Beach"],
-    Style: ["Monochrome", "Vintage", "HDR"],
+    Verb: [
+      "Playing Chess",
+      "Jumping over the moon",
+      "Running from a zombie",
+      "Riding a horse",
+      "Eating a gold pizza",
+      "Crying",
+      "Laughing",
+      "Eating",
+    ],
+    Setting: [
+      "a destroyed castle covered in rubble",
+      "A tropical beach with palm trees",
+      "a mountain on mars",
+    ],
+    Style: [
+      "Renaissance",
+      "Cubism",
+      "Impressionist",
+      "Punk",
+      "Abstract",
+      "Monochrome",
+      "Vintage",
+      "HDR",
+    ],
     Composition: ["Rule of Thirds", "Centered", "Diagonal"],
-    ColorScheme: ["Warm", "Cool", "Monochromatic"],
+    ColorScheme: [
+      "Red",
+      "Blue",
+      "Yellow",
+      "Vibrant",
+      "Colorful",
+      "Warm",
+      "Cool",
+      "Happy",
+      "Dark",
+    ],
     Medium: [
       "Photograph ",
       "Painting ",
@@ -385,7 +424,7 @@ const PhotoPrompt = ({
         [key]: replacement,
       };
 
-      const newDallePrompt = `${updatedWords.Style} ${updatedWords.Medium}  of ${updatedWords.Adjective} + ${updatedWords.Subject} ${updatedWords.Verb} in ${updatedWords.Setting} + with a ${updatedWords.ColorScheme} color scheme`;
+      const newDallePrompt = `${updatedWords.Style} style ${updatedWords.Medium}  of ${updatedWords.Subject} ${updatedWords.Verb} in ${updatedWords.Setting} with a ${updatedWords.ColorScheme} color scheme`;
 
       console.log("setting new dalle prompt");
       setDallePrompt(newDallePrompt);
@@ -586,14 +625,14 @@ const PhotoPrompt = ({
           {words.Medium}
         </span>
         of{" "}
-        <span
+        {/* <span
           className="clickable"
           style={{ color: "#5300FF" }}
           onClick={(e) => handleClick("Adjective", e, "Descriptive Word")}
         >
           {words.Adjective}
         </span>{" "}
-        +{" "}
+        +{" "} */}
         <span
           className="clickable"
           style={{ color: "#5300FF" }}
