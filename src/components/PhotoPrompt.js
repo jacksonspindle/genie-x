@@ -893,7 +893,12 @@ const PhotoPrompt = ({
         </button>
         <Link to={"/cart"} className="apply-image-btn" onClick={addToCart}>
           <button
-            style={{ border: "none", background: "white", boxShadow: "none" }}
+            style={{
+              border: "none",
+              background: "white",
+              boxShadow: "none",
+              fontFamily: "oatmeal-pro-regular",
+            }}
           >
             Add to Cart
           </button>

@@ -90,6 +90,8 @@ body {
   color: white;
   font-family: oatmeal-pro-bold;
   /* position: absolute; */
+  /* background-color: rgba(255, 255, 255, 0.4);; */
+  padding: .2rem 0 0rem 0;
 }
 
 .nav-container > div {
