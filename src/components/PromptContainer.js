@@ -14,6 +14,9 @@ const PromptContainer = ({
   setEditPopup,
   editPopup,
   hoodieImage,
+  freeRangeToggle,
+  setFreeRangeToggle,
+  freeRangePrompt,
 }) => {
   // const [prompt, setPrompt] = useState(null);
   return (
@@ -57,6 +60,9 @@ const PromptContainer = ({
           setHoodieImage={setHoodieImage}
           setEditPopup={setEditPopup}
           editPopup={editPopup}
+          freeRangeToggle={freeRangeToggle}
+          setFreeRangeToggle={setFreeRangeToggle}
+          freeRangePrompt={freeRangePrompt}
         />
       </div>
       {/* </div> */}

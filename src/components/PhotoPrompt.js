@@ -47,6 +47,9 @@ const PhotoPrompt = ({
   editPopup,
   setEditPopup,
   hoodieImage,
+  freeRangeToggle,
+  setFreeRangeToggle,
+  freeRangePrompt,
 }) => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [words, setWords] = useState({
@@ -360,6 +363,7 @@ const PhotoPrompt = ({
     setSelectedWord(key);
     setPlaceholder(place);
     setShowDropdown(true);
+
     focusInput(); // Focus on the input every time a dropdown is clicked
   };
 
@@ -443,15 +447,16 @@ const PhotoPrompt = ({
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
   const generateImage = useCallback(async () => {
-    selectReplacement();
+    // selectReplacement();
     setIsGenerating(true);
     console.log("generating image");
     const res = await openai.createImage({
       model: "dall-e-3",
-      prompt: dallePrompt,
+      prompt: freeRangeToggle === false ? dallePrompt : freeRangePrompt,
       n: 1, // Request 4 images
       size: "1024x1024",
-      quality: "hd",
+      // quality: "hd",
+      style: "natural",
     });
 
     console.log(dallePrompt);
@@ -467,7 +472,7 @@ const PhotoPrompt = ({
     }
 
     setIsGenerating(false);
-  }, [dallePrompt, openai, hoodieImage]); // Note: I've added hoodieImage as a dependency
+  }, [dallePrompt, openai, hoodieImage, freeRangePrompt, freeRangeToggle]); // Note: I've added hoodieImage as a dependency
   // const generateEdit = useCallback(async () => {
   //   console.log("generating edit");
   //   const res = await openai.createImageEdit({

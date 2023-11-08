@@ -115,6 +115,17 @@ const DesignPortal = ({
     console.log(productDetails);
   }, [productDetails]);
 
+  const [freeRangeToggle, setFreeRangeToggle] = useState(false);
+  const [freeRangePrompt, setFreeRangePrompt] = useState("a blue genie");
+
+  const toggleSwitch = () => setFreeRangeToggle(!freeRangeToggle);
+
+  const spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30,
+  };
+
   return (
     <div style={{ height: "100vh" }} className="design-portal-container">
       {/* <div className="design-portal-container">
@@ -161,12 +172,38 @@ const DesignPortal = ({
               />
               <Environment preset="city" />
             </Canvas>
+            <input
+              className="free-range-input"
+              disabled={!freeRangeToggle}
+              style={{
+                backgroundColor: `${
+                  !freeRangeToggle
+                    ? "rgba(255, 255, 255, 0.1)"
+                    : "rgba(255, 255, 255, 0.4)"
+                }`,
+              }}
+              onChange={(e) => setFreeRangePrompt(e.target.value)}
+            />
+            <div
+              className="switch"
+              data-isOn={freeRangeToggle}
+              onClick={toggleSwitch}
+              style={{
+                position: "absolute",
+                margin: "1rem",
+                backgroundColor: `${
+                  !freeRangeToggle ? "rgba(255, 255, 255, 0.4)" : "#2685e3"
+                } `,
+              }}
+            >
+              <motion.div className="handle" layout transition={spring} />
+            </div>
             <div
               style={{
                 position: "absolute",
-                left: 0,
+                left: 10,
                 bottom: 0,
-                padding: "2rem",
+                // padding: "2rem",
               }}
             >
               <p>
@@ -197,6 +234,9 @@ const DesignPortal = ({
           setEditPopup={setEditPopup}
           editPopup={editPopup}
           setHoodieImage={setHoodieImage}
+          freeRangeToggle={freeRangeToggle}
+          setFreeRangeToggle={setFreeRangeToggle}
+          freeRangePrompt={freeRangePrompt}
         />
       </div>
 

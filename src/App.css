@@ -107,3 +107,7 @@ body {
 .nav-container span {
   margin-top: .5rem;
 }
+
+.nav-container a {
+  font-size: 20px;
+}
