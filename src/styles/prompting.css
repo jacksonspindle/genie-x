@@ -196,3 +196,45 @@
 .keep-designing-btn {
     width: 80% !important;
 }
+
+
+.clickable-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-right: 20px;
+    background-color: white;
+    padding: .3rem 1.5rem .3rem 1rem;
+    border-radius: 1rem; 
+    margin: .2rem;
+    /* Adjust as needed */
+}
+
+.clickable-wrapper .remove-word {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 4px;
+    /* padding: 1px !important; */
+    /* flex-direction: column; */
+    top: 0px;
+    font-size: 20px !important;
+    /* Adjust as needed */
+    right: 0cqmax;
+    /* Adjust as needed */
+    background-color: black;
+    color: white;
+    border-radius: 1rem;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 24px;
+    /* Adjust as needed */
+    height: 20px;
+    /* Adjust as needed */
+    text-align: center;
+    line-height: 0px !important;
+    /* Adjust as needed */
+    cursor: pointer;
+    font-size: 14px;
+    /* Adjust as needed */
+}

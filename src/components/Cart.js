@@ -164,6 +164,11 @@ const Cart = ({ setHoodieImage }) => {
               }}
             />
             <h1 style={{ display: "flex", margin: "2rem" }}>My Cart</h1>
+            {cartItems.length === 0 && (
+              <div className="empty-cart-message">
+                <h2>Your cart is currently empty.</h2>
+              </div>
+            )}
           </div>
           {cartItems.map((item, index) => {
             return (

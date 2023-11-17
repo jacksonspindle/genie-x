@@ -607,78 +607,158 @@ const PhotoPrompt = ({
     }
   };
 
+  const removeWord = useCallback((key) => {
+    setWords((prevWords) => {
+      return { ...prevWords, [key]: "" }; // Set the word to an empty string instead of deleting it
+    });
+  }, []);
+
+  useEffect(() => {
+    // Updating the Dalle prompt when words change
+    const newDallePrompt = `${words.Style} style ${words.Medium} of ${words.Subject} ${words.Verb} in ${words.Setting} with a ${words.ColorScheme} color scheme`;
+    setDallePrompt(newDallePrompt);
+  }, [words]); // This useEffect will run whenever the 'words' state changes
+
   return (
     <div ref={ref} className="prompt-content-container">
       <div className="info-icon-container">
         <img src={infoIcon} width="20px" alt="infoIcon"></img>
-        <p>click colored words to replace them...</p>
+        <p
+          style={{
+            color: "black",
+            opacity: 1,
+            fontFamily: "oatmeal-pro-regular",
+          }}
+        >
+          click colored words to replace them...
+        </p>
       </div>
       <h1 style={{ textAlign: "left" }}>
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Style", e, "Style")}
-        >
-          {words.Style}
-        </span>{" "}
-        +{" "}
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Medium", e, "Medium")}
-        >
-          {words.Medium}
-        </span>
-        of{" "}
-        {/* <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Adjective", e, "Descriptive Word")}
-        >
-          {words.Adjective}
-        </span>{" "}
-        +{" "} */}
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Subject", e, "Person or thing")}
-        >
-          {words.Subject}
-        </span>{" "}
-        +{" "}
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Verb", e, "Action")}
-        >
-          {words.Verb}
-        </span>{" "}
-        in{" "}
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Setting", e, "Place")}
-        >
-          {words.Setting}
-        </span>{" "}
-        +{" "}
-        {/* <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("Composition", e, "Positioning")}
-        >
-          {words.Composition}
-        </span>{" "} */}
-        with a{" "}
-        <span
-          className="clickable"
-          style={{ color: "#5300FF" }}
-          onClick={(e) => handleClick("ColorScheme", e, "Color scheme")}
-        >
-          {words.ColorScheme}
-        </span>{" "}
-        color scheme
+        {words.Style && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("Style", e, "Style")}
+              >
+                {words.Style}
+              </span>
+              <span
+                // style={{ color: "red", cursor: "pointer" }}
+                className="remove-word"
+                onClick={() => removeWord("Style")}
+              >
+                x
+              </span>
+            </div>
+            {" + "}
+          </>
+        )}
+
+        {words.Medium && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("Medium", e, "Medium")}
+              >
+                {words.Medium}
+              </span>
+              <span
+                onClick={() => removeWord("Medium")}
+                className="remove-word"
+              >
+                x
+              </span>
+            </div>
+            {" of "}
+          </>
+        )}
+
+        {words.Subject && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("Subject", e, "Person or thing")}
+              >
+                {words.Subject}
+              </span>
+              <span
+                className="remove-word"
+                onClick={() => removeWord("Subject")}
+              >
+                x
+              </span>
+            </div>
+            {" + "}
+          </>
+        )}
+
+        {words.Verb && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("Verb", e, "Action")}
+              >
+                {words.Verb}
+              </span>
+              <span className="remove-word" onClick={() => removeWord("Verb")}>
+                x
+              </span>
+            </div>
+            {" in "}
+          </>
+        )}
+
+        {words.Setting && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("Setting", e, "Place")}
+              >
+                {words.Setting}
+              </span>
+              <span
+                className="remove-word"
+                onClick={() => removeWord("Setting")}
+              >
+                x
+              </span>
+            </div>
+            {" + "}
+          </>
+        )}
+
+        {words.ColorScheme && (
+          <>
+            <div className="clickable-wrapper">
+              <span
+                className="clickable"
+                style={{ color: "#5300FF" }}
+                onClick={(e) => handleClick("ColorScheme", e, "Color scheme")}
+              >
+                {words.ColorScheme}
+              </span>
+              <span
+                className="remove-word"
+                onClick={() => removeWord("ColorScheme")}
+              >
+                x
+              </span>
+            </div>
+            {" color scheme"}
+          </>
+        )}
       </h1>
+
       {selectedWord &&
         ReactDOM.createPortal(
           <div
