@@ -18,6 +18,8 @@ import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
 import { AnimatePresence } from "framer-motion";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 // import Login from "./components/Login";
 
 function App() {
@@ -32,6 +34,20 @@ function App() {
   });
 
   const ref = useRef();
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setSignedIn(true);
+      } else {
+        // User is signed out
+        setSignedIn(false);
+      }
+    });
+    return () => unsubscribe(); // Make sure to unsubscribe on component unmount
+  }, []);
 
   useEffect(() => {
     if (ref.current) {

@@ -174,6 +174,7 @@ const DesignPortal = ({
             </Canvas>
             <input
               className="free-range-input"
+              placeholder="Type in a detailed description..."
               disabled={!freeRangeToggle}
               style={{
                 backgroundColor: `${
