@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
 import genieXLogo2 from "../assets/genieXLogo2.png";
+import { getAuth, signOut } from "firebase/auth";
+import defaultProfile from "../assets/defaultProfile.webp";
 
 const dropdownVariants = {
   hidden: { opacity: 0, y: -10 },
@@ -15,6 +17,8 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
   const accountRef = useRef(null);
 
   useEffect(() => {
+    console.log("isHovered:", isHovered); // Debugging line
+
     if (isHovered && accountRef.current) {
       const rect = accountRef.current.getBoundingClientRect();
       setPosition({
@@ -23,6 +27,18 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
       });
     }
   }, [isHovered]);
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      setSignedIn(false); // Update the signedIn state
+      //  toast("Signed Out!"); // Provide a message to the user
+    } catch (error) {
+      console.error("Logout failed", error);
+      //  toast("Logout failed. Please try again.");
+    }
+  };
 
   return (
     <div>
@@ -40,14 +56,26 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                 style={{ position: "absolute", top: 0 }}
               />
             </Link>
+            {/* <Link
+              style={{ backgroundColor: "transparent", color: "white" }}
+              to="/design"
+            >
+              Design
+            </Link> */}
+          </div>
+          <div>
             <Link
               style={{ backgroundColor: "transparent", color: "white" }}
               to="/design"
             >
               Design
             </Link>
-          </div>
-          <div>
+            <Link
+              to={"/cart"}
+              style={{ backgroundColor: "transparent", color: "white" }}
+            >
+              Cart
+            </Link>
             {signedIn ? (
               <div
                 style={{ position: "relative" }}
@@ -59,7 +87,16 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                   style={{ backgroundColor: "transparent", color: "white" }}
                   to="/account"
                 >
-                  Account
+                  <img
+                    src={defaultProfile}
+                    alt="profile-pic"
+                    style={{
+                      width: "50px",
+                      position: "absolute",
+                      top: -5,
+                      borderRadius: "50%",
+                    }}
+                  />
                 </Link>
                 <AnimatePresence>
                   {isHovered && (
@@ -72,7 +109,7 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                         zIndex: "100",
                         position: "fixed",
                         top: `${position.top}px`,
-                        left: `${position.left}px`,
+                        right: `${position.right}px`,
                         transform: "translateX(-50%)", // centering dropdown
                         backgroundColor: "rgba(255, 255, 255, .9)",
                         color: "black",
@@ -96,7 +133,8 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                       </Link>
                       <Link
                         style={{ width: "100%", background: "transparent" }}
-                        onClick={() => setSignedIn(false)}
+                        // onClick={() => setSignedIn(false)}
+                        onClick={handleLogout}
                       >
                         Logout
                       </Link>
@@ -111,17 +149,14 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                   color: "white",
                   fontSize: 20,
                 }}
-                onClick={() => setToggleLogInPage(true)}
+                onClick={() => {
+                  setToggleLogInPage(true);
+                  setIsHovered(false);
+                }}
               >
                 Sign In
               </span>
             )}
-            <Link
-              to={"/cart"}
-              style={{ backgroundColor: "transparent", color: "white" }}
-            >
-              Cart
-            </Link>
           </div>
         </ul>
       </nav>
