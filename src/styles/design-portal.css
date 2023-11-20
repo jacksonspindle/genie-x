@@ -200,23 +200,56 @@
     border-radius: 40px;
 }
 
+.free-range-input-container{
+position: absolute;
+bottom: 1.1rem;
+width: 40vw;
+display: flex;
+justify-content: right;
+/* background-color: red; */
+border-bottom-right-radius: .5rem;
+    border-top-right-radius: .5rem;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
 .free-range-input {
+    z-index: 1000;
     width: 40vw;
         border-radius: .5rem;
         font-size: 20px;
         padding-left: 1rem;
         font-family: oatmeal-pro-regular;
         border: none;
-        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
-        position: absolute;
+        
+        /* position: absolute; */
         bottom: 1.1rem;
         /* top: 0; */
     background-color: rgba(255, 255, 255, 0.4);
     height: 35px;
         backdrop-filter: blur(10px);
+        border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        
     
 }
 
 .free-range-input:focus {
     outline: none;
+}
+
+
+.generate-image-free-range-btn {
+    position: relative;
+    /* Adjusted from display: absolute; */
+    top: 0rem;
+    /* Other properties */
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border-bottom-right-radius: .5rem;
+    border-top-right-radius: .5rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+    font-family: oatmeal-pro-regular;
 }
