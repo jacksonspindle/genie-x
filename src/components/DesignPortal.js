@@ -172,19 +172,29 @@ const DesignPortal = ({
               />
               <Environment preset="city" />
             </Canvas>
-            <input
-              className="free-range-input"
-              placeholder="Type in a detailed description..."
-              disabled={!freeRangeToggle}
-              style={{
-                backgroundColor: `${
-                  !freeRangeToggle
-                    ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(255, 255, 255, 0.4)"
-                }`,
-              }}
-              onChange={(e) => setFreeRangePrompt(e.target.value)}
-            />
+            <div className="free-range-input-container">
+              <input
+                className="free-range-input"
+                placeholder="Type in a detailed description..."
+                disabled={!freeRangeToggle}
+                style={{
+                  backgroundColor: `${
+                    !freeRangeToggle
+                      ? "rgba(255, 255, 255, 0.1)"
+                      : "rgba(255, 255, 255, 0.4)"
+                  }`,
+                }}
+                onChange={(e) => setFreeRangePrompt(e.target.value)}
+              ></input>
+              <button
+                className="generate-image-free-range-btn"
+                // onClick={generateFreeRangeImage}
+                // disabled={dallePrompt === "genie"}
+              >
+                Generate Image
+              </button>
+            </div>
+
             <div
               className="switch"
               data-isOn={freeRangeToggle}

@@ -81,9 +81,7 @@ const PhotoPrompt = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
   // const [dalleImages, setDalleImages] = useState([]);
-  const [dallePrompt, setDallePrompt] = useState(
-    "Photograph of Adjective + Subject Verb in Setting + Style + Composition with a Color Scheme"
-  );
+  const [dallePrompt, setDallePrompt] = useState("genie");
 
   const [placeholder, setPlaceholder] = useState("");
   const inputRef = useRef(null);
@@ -968,7 +966,11 @@ const PhotoPrompt = ({
       </div>
 
       <div className="prompt-buttons-container">
-        <button className="apply-image-btn" onClick={generateImage}>
+        <button
+          className="apply-image-btn"
+          onClick={generateImage}
+          disabled={dallePrompt === "genie"}
+        >
           Generate Image
         </button>
         <Link to={"/cart"} className="apply-image-btn" onClick={addToCart}>
