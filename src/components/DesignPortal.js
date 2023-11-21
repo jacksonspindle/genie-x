@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import Hoodie from "./Hoodie";
 import { OrbitControls } from "@react-three/drei";
@@ -61,6 +61,7 @@ const DesignPortal = ({
   const [editPopup, setEditPopup] = useState(false);
   const [dalleImages, setDalleImages] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [freeRangeInput, setFreeRangeInput] = useState(false);
 
   const [maskImage, setMaskImage] = useState("");
   const [editPrompt, setEditPrompt] = useState("");
@@ -117,6 +118,7 @@ const DesignPortal = ({
 
   const [freeRangeToggle, setFreeRangeToggle] = useState(false);
   const [freeRangePrompt, setFreeRangePrompt] = useState("a blue genie");
+  const [isFreeRange, setIsFreeRange] = useState(false);
 
   const toggleSwitch = () => setFreeRangeToggle(!freeRangeToggle);
 
@@ -124,6 +126,11 @@ const DesignPortal = ({
     type: "spring",
     stiffness: 700,
     damping: 30,
+  };
+
+  const generateFreeRangeImage = () => {
+    setIsFreeRange(true);
+    setFreeRangeInput(!freeRangeInput);
   };
 
   return (
@@ -176,7 +183,7 @@ const DesignPortal = ({
               <input
                 className="free-range-input"
                 placeholder="Type in a detailed description..."
-                disabled={!freeRangeToggle}
+                // disabled={!freeRangeToggle}
                 style={{
                   backgroundColor: `${
                     !freeRangeToggle
@@ -188,14 +195,14 @@ const DesignPortal = ({
               ></input>
               <button
                 className="generate-image-free-range-btn"
-                // onClick={generateFreeRangeImage}
+                onClick={generateFreeRangeImage}
                 // disabled={dallePrompt === "genie"}
               >
                 Generate Image
               </button>
             </div>
 
-            <div
+            {/* <div
               className="switch"
               data-isOn={freeRangeToggle}
               onClick={toggleSwitch}
@@ -208,7 +215,7 @@ const DesignPortal = ({
               }}
             >
               <motion.div className="handle" layout transition={spring} />
-            </div>
+            </div> */}
             <div
               style={{
                 position: "absolute",
@@ -235,6 +242,9 @@ const DesignPortal = ({
       </div>
       <div className="prompt-container">
         <PromptContainer
+          isFreeRange={isFreeRange}
+          setIsFreeRange={setIsFreeRange}
+          freeRangeInput={freeRangeInput}
           editPrompt={editPrompt}
           maskImage={maskImage}
           hoodieImage={hoodieImage}

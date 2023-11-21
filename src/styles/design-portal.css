@@ -252,4 +252,23 @@ border-bottom-right-radius: .5rem;
     border: none;
     border-left: 1px solid rgba(0, 0, 0, 0.3);
     font-family: oatmeal-pro-regular;
+    transition: all ease-in-out .3s;
+}
+
+
+.generate-image-free-range-btn:hover {
+    position: relative;
+    /* Adjusted from display: absolute; */
+    top: 0rem;
+    /* Other properties */
+    background-color: #5300FF;
+    backdrop-filter: blur(10px);
+    border-bottom-right-radius: .5rem;
+    border-top-right-radius: .5rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-left: 1px solid #5300FF;
+    font-family: oatmeal-pro-regular;
+    color: white;
 }
