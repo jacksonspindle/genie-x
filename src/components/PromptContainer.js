@@ -6,6 +6,9 @@ import PhotoPrompt from "./PhotoPrompt";
 // import SculpturePrompt from "./SculpturePrompt";
 
 const PromptContainer = ({
+  isFreeRange,
+  setIsFreeRange,
+  freeRangeInput,
   dalleImages,
   setDalleImages,
   selectedImageIndex,
@@ -52,6 +55,9 @@ const PromptContainer = ({
           {prompt === "Claymation" ? <ClaymationPrompt /> : null}
           {prompt === "Sculpture" ? <SculpturePrompt /> : null} */}
         <PhotoPrompt
+          isFreeRange={isFreeRange}
+          setIsFreeRange={setIsFreeRange}
+          freeRangeInput={freeRangeInput}
           hoodieImage={hoodieImage}
           dalleImages={dalleImages}
           setDalleImages={setDalleImages}

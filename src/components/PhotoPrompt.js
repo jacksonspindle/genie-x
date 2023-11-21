@@ -37,6 +37,9 @@ import {
 } from "firebase/storage";
 
 const PhotoPrompt = ({
+  isFreeRange,
+  setIsFreeRange,
+  freeRangeInput,
   maskImage,
   editPrompt,
   dalleImages,
@@ -66,6 +69,14 @@ const PhotoPrompt = ({
   useEffect(() => {
     console.log("hoodie IMAGE:", hoodieImage);
   });
+
+  useEffect(() => {
+    if (freeRangePrompt === "a blue genie") {
+      return;
+    } else {
+      generateImage(isFreeRange);
+    }
+  }, [isFreeRange]);
 
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -444,33 +455,49 @@ const PhotoPrompt = ({
 
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
-  const generateImage = useCallback(async () => {
-    // selectReplacement();
-    setIsGenerating(true);
-    console.log("generating image");
-    const res = await openai.createImage({
-      model: "dall-e-3",
-      prompt: freeRangeToggle === false ? dallePrompt : freeRangePrompt,
-      n: 1, // Request 4 images
-      size: "1024x1024",
-      // quality: "hd",
-      style: "natural",
-    });
+  const generateImageCheck = () => {
+    setIsFreeRange(false);
+    generateImage(false);
+  };
 
-    console.log(dallePrompt);
+  const generateImage = useCallback(
+    async (currentIsFreeRange) => {
+      // selectReplacement();
+      console.log("IsFreeRange: ", currentIsFreeRange);
+      setIsGenerating(true);
+      console.log("generating image");
+      const res = await openai.createImage({
+        model: "dall-e-3",
+        prompt: currentIsFreeRange === true ? freeRangePrompt : dallePrompt,
+        n: 1, // Request 4 images
+        size: "1024x1024",
+        // quality: "hd",
+        style: "natural",
+      });
 
-    const generatedImages = res.data.data.map((img) => img.url);
-    console.log(generatedImages);
+      console.log(dallePrompt);
 
-    if (generatedImages.length === 0) {
-      setDalleImages([hoodieImage]); // Set to hoodieImage if empty
-    } else {
-      setDalleImages(generatedImages); // Store all image URLs
-      setHoodieImage(generatedImages[0]); // Set hoodieImage to the first dalleImage
-    }
+      const generatedImages = res.data.data.map((img) => img.url);
+      console.log(generatedImages);
 
-    setIsGenerating(false);
-  }, [dallePrompt, openai, hoodieImage, freeRangePrompt, freeRangeToggle]); // Note: I've added hoodieImage as a dependency
+      if (generatedImages.length === 0) {
+        setDalleImages([hoodieImage]); // Set to hoodieImage if empty
+      } else {
+        setDalleImages(generatedImages); // Store all image URLs
+        setHoodieImage(generatedImages[0]); // Set hoodieImage to the first dalleImage
+      }
+
+      setIsGenerating(false);
+    },
+    [
+      dallePrompt,
+      openai,
+      hoodieImage,
+      freeRangePrompt,
+      freeRangeToggle,
+      isFreeRange,
+    ]
+  ); // Note: I've added hoodieImage as a dependency
   // const generateEdit = useCallback(async () => {
   //   console.log("generating edit");
   //   const res = await openai.createImageEdit({
@@ -968,7 +995,7 @@ const PhotoPrompt = ({
       <div className="prompt-buttons-container">
         <button
           className="apply-image-btn"
-          onClick={generateImage}
+          onClick={generateImageCheck}
           disabled={dallePrompt === "genie"}
         >
           Generate Image
