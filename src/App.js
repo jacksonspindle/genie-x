@@ -19,6 +19,7 @@ import ProductDetails from "./components/ProductDetails";
 import { AnimatePresence } from "framer-motion";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import MyImageEditor from "./components/MyImageEditor";
 
 // import Login from "./components/Login";
 
@@ -126,6 +127,7 @@ function App() {
               <Cart setHoodieImage={setHoodieImage} hoodieImage={hoodieImage} />
             }
           />
+          <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
       </Router>
 
