@@ -11,7 +11,7 @@
     box-sizing: border-box;
     /* height: 92vh !important; */
     height: 93vh !important;
-    gap: 2rem;
+    gap: 0rem;
     overflow-y: hidden;
     font-family: oatmeal-pro-regular;
 }
@@ -86,8 +86,11 @@
     /* background-color: blue; */
     background-color: rgba(255, 255, 255, .3);
     border-radius: 1rem;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    border-right: 1px solid black;
 }
 
 .hoodie-canvas-left {
@@ -117,6 +120,8 @@
     background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB2aWV3Qm94PSIwIDAgNCA0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yIDIuNUMyLjI3NzEgMi41IDIuNSAyLjI3NzEgMi41IDIgMi4yNzcxIDEuNSAyIDEuNSAxLjcyMjkgMS41IDEuNSAyIDEuNSAyLjI3NzEgMiAyLjUiIGZpbGw9IiMwMDAwMDAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==");
     background-blend-mode: overlay; /* This will blend the noise with the background color */
     border-radius: 1rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
 }
@@ -272,3 +277,61 @@ border-bottom-right-radius: .5rem;
     font-family: oatmeal-pro-regular;
     color: white;
 }
+
+.instructions-container {
+    position: fixed;
+    z-index: 1001;
+    display: flex;
+    width: 96.3%;
+    height: 70%;
+    /* background-color: red; */
+    justify-content: center;
+        padding: 2rem;
+       
+
+}
+
+.instructions-container div {
+    /* background-color: blue; */
+    width: 55%;
+    /* background-color: rgba(20, 20, 20, .3)  !important; */
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        border-radius: 1rem;
+        color: white;
+            backdrop-filter: blur(10px);
+
+}
+
+.carousel-container {
+    width: 100% !important;
+    height: 100% !important;
+        background-color: rgba(20, 20, 20, 1)  !important;
+}
+
+
+.carousel-item {
+    width: 100% !important;
+    height: 86%;
+    border-radius: 1rem !important;
+    display: fle !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+    /* background-color: red !important; */
+    /* box-shadow: none; */
+}
+
+.get-started-btn:hover {
+    transform: scale(1.05);
+}
+
+.arrow-container {
+    background-color: transparent !important;
+    border-radius: none !important;
+}
+
+.carousel-container video {
+    width: 100%;
+    max-width: 630px;
+    border-radius: 1rem !important;
+}
+

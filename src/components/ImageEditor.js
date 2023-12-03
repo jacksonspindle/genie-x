@@ -14,9 +14,12 @@ import penCursor from "../assets/penCursor.png";
 import { Configuration, OpenAIApi } from "openai";
 import { motion } from "framer-motion";
 import { Ring } from "@uiball/loaders";
+import MyImageEditor from "../components/MyImageEditor";
 
 import xIcon from "../assets/xIcon.png";
 import clearIcon from "../assets/clearIcon.png";
+import textIcon from "../assets/textIcon.png";
+import scissorsIcon from "../assets/scissorsIcon.png";
 
 const ImageCanvas = ({
   setHoodieImage,
@@ -25,6 +28,8 @@ const ImageCanvas = ({
   editPrompt,
   setEditPrompt,
   isPenToolActive,
+  isTextToolActive,
+  setIsTextToolActive,
   dalleImages,
   selectedImageIndex,
   //   imageData,
@@ -38,9 +43,15 @@ const ImageCanvas = ({
   setClearSelection,
   isEraserActive,
   setIsLoading,
+  eraserSize,
+  isInverted,
+  setIsInverted,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const imageLoadedRef = useRef(false);
+
+  const [textPosition, setTextPosition] = useState(null);
+  const [currentText, setCurrentText] = useState("");
 
   useEffect(() => {
     console.log(dalleImages[selectedImageIndex]);
@@ -48,6 +59,8 @@ const ImageCanvas = ({
 
   useEffect(() => {
     if (clearSelection) {
+      lastPointRef.current = null; // Reset lastPointRef to null
+
       // Clear the points and redraw the original image
       setPoints([]);
       setMaskPoints([]);
@@ -104,6 +117,10 @@ const ImageCanvas = ({
     };
   }, [hoodieImage]);
 
+  let lastPointRef = useRef(null);
+  let isFirstPoint = true; // Add a flag to track the first point
+
+  // Modify the placePoint function to connect points with lines
   const placePoint = (event) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -112,103 +129,253 @@ const ImageCanvas = ({
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    setPoints([...points, { x, y }]);
+    if (isFirstPoint) {
+      // Clear the points if it's the first point
+      setPoints([]);
+      isFirstPoint = false; // Reset the flag
+    }
 
     // Visual feedback: Draw a small circle for the point
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "yellow";
     ctx.beginPath();
-    ctx.arc(x, y, 2, 0, 2 * Math.PI);
+    ctx.arc(x, y, 4, 0, 4 * Math.PI);
     ctx.fill();
 
-    console.log("point placed");
+    if (lastPointRef.current) {
+      // Connect the current point to the last placed point with a line
+      ctx.beginPath();
+      ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = LINE_WIDTH;
+      ctx.stroke();
+    }
+
+    // Update the lastPointRef with the current point
+    lastPointRef.current = { x, y };
+
+    // Add the current point to the points array
+    setPoints([...points, { x, y }]);
   };
 
-  const handleMouseDown = (event) => {
-    if (isEraserActive) {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (isTextToolActive && textPosition) {
+        // Append the new character to currentText
+        setCurrentText((prev) => prev + event.key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isTextToolActive, textPosition]);
+
+  useEffect(() => {
+    if (textPosition) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.src = hoodieImage;
+
+      img.onload = () => {
+        // Redraw the image
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Add the text
+        ctx.font = "16px Arial";
+        ctx.fillText(currentText, textPosition.x, textPosition.y);
+
+        // Update hoodieImage with the new canvas content
+        const updatedImage = canvas.toDataURL();
+        setTimeout(setHoodieImage(updatedImage), 500);
+      };
+    }
+  }, [currentText, textPosition, hoodieImage]);
+
+  // Constants
+  const ERASER_SIZE = eraserSize; // Example eraser size
+  const LINE_WIDTH = 3; // Example line width
+  const LINE_COLOR = "yellow"; // Example line color
+
+  function handleMouseDown(event) {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    if (isEraserActive) {
       ctx.globalCompositeOperation = "destination-out";
-      ctx.lineWidth = 10; // You can adjust the eraser size
+      ctx.lineWidth = ERASER_SIZE;
       ctx.lineCap = "round";
       setIsDrawing(true);
+
+      const { left, top } = canvas.getBoundingClientRect();
+      const x = event.clientX - left;
+      const y = event.clientY - top;
       ctx.beginPath();
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
       ctx.moveTo(x, y);
     } else if (isPenToolActive) {
       placePoint(event);
       setIsDrawing(true);
+    } else if (isTextToolActive) {
+      const { left, top } = canvasRef.current.getBoundingClientRect();
+      const x = event.clientX - left;
+      const y = event.clientY - top;
+      setTextPosition({ x, y });
+      setCurrentText("");
     }
-  };
+  }
 
-  const handleMouseMove = (event) => {
+  function handleMouseMove(event) {
     if (isDrawing && isEraserActive) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      const { left, top } = canvas.getBoundingClientRect();
+      const x = event.clientX - left;
+      const y = event.clientY - top;
       ctx.lineTo(x, y);
       ctx.stroke();
     }
-  };
+  }
 
-  const handleMouseUp = () => {
+  function handleMouseUp() {
     setIsDrawing(false);
     if (isEraserActive) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       ctx.globalCompositeOperation = "source-over";
     }
-  };
+  }
 
   const completeSelection = () => {
     if (!isPenToolActive) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    ctx.beginPath();
-    points.forEach((point, index) => {
-      if (index === 0) {
-        ctx.moveTo(point.x, point.y);
-      } else {
-        ctx.lineTo(point.x, point.y);
-      }
-    });
-    ctx.closePath();
-    // ctx.strokeStyle = "red";
-    // ctx.lineWidth = 2;
-    ctx.stroke();
 
-    // Create a pattern
-    const patternCanvas = document.createElement("canvas");
-    const patternCtx = patternCanvas.getContext("2d");
-    patternCanvas.width = 10; // Width of one square of the pattern
-    patternCanvas.height = 10; // Height of one square of the pattern
+    if (isInverted) {
+      // Code to make the outer contents of the shape transparent
 
-    // Draw a checkered pattern
-    patternCtx.fillStyle = "white";
-    patternCtx.fillRect(0, 0, 5, 5);
-    patternCtx.fillRect(5, 5, 5, 5);
-    patternCtx.fillStyle = "gray";
-    patternCtx.fillRect(0, 5, 5, 5);
-    patternCtx.fillRect(5, 0, 5, 5);
+      // Create a temporary canvas
+      const tempCanvas = document.createElement("canvas");
+      const tempCtx = tempCanvas.getContext("2d");
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
 
-    // Use the pattern as fillStyle
-    const pattern = ctx.createPattern(patternCanvas, "repeat");
-    ctx.fillStyle = pattern;
-    ctx.fill();
+      // Draw the original canvas content onto the temporary canvas
+      tempCtx.drawImage(canvas, 0, 0);
 
-    // Set maskPoints with the current points
-    setMaskPoints(points);
+      // Set the drawing mode to keep the inside of the shape
+      tempCtx.globalCompositeOperation = "destination-in";
+
+      // Begin a new path for the shape on the temporary canvas
+      tempCtx.beginPath();
+      points.forEach((point, index) => {
+        if (index === 0) {
+          tempCtx.moveTo(point.x, point.y);
+        } else {
+          tempCtx.lineTo(point.x, point.y);
+        }
+      });
+      tempCtx.closePath();
+
+      // Fill the shape, which will clip the outside content
+      tempCtx.fill();
+
+      // Clear the original canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the modified content back onto the original canvas
+      ctx.drawImage(tempCanvas, 0, 0);
+
+      // Convert the canvas content to a data URL and set the hoodie image
+      const newHoodieImage = canvas.toDataURL();
+      setHoodieImage(newHoodieImage);
+    } else {
+      // Original code to fill the shape with a pattern
+
+      ctx.beginPath();
+      points.forEach((point, index) => {
+        if (index === 0) {
+          ctx.moveTo(point.x, point.y);
+        } else {
+          ctx.lineTo(point.x, point.y);
+        }
+      });
+      ctx.closePath();
+      ctx.strokeStyle = LINE_COLOR;
+      ctx.lineWidth = LINE_WIDTH;
+      ctx.stroke();
+
+      // Create a pattern
+      const patternCanvas = document.createElement("canvas");
+      const patternCtx = patternCanvas.getContext("2d");
+      patternCanvas.width = 10;
+      patternCanvas.height = 10;
+
+      // Draw a checkered pattern
+      patternCtx.fillStyle = "white";
+      patternCtx.fillRect(0, 0, 5, 5);
+      patternCtx.fillRect(5, 5, 5, 5);
+      patternCtx.fillStyle = "gray";
+      patternCtx.fillRect(0, 5, 5, 5);
+      patternCtx.fillRect(5, 0, 5, 5);
+
+      const pattern = ctx.createPattern(patternCanvas, "repeat");
+      ctx.fillStyle = pattern;
+      ctx.fill();
+    }
 
     // Reset the drawing state and clear the points
     setIsDrawing(false);
     setPoints([]);
   };
 
+  // const completeSelection = () => {
+  //   if (!isPenToolActive) return;
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext("2d");
+
+  //   // Create a temporary canvas
+  //   const tempCanvas = document.createElement("canvas");
+  //   const tempCtx = tempCanvas.getContext("2d");
+  //   tempCanvas.width = canvas.width;
+  //   tempCanvas.height = canvas.height;
+
+  //   // Draw the original canvas content onto the temporary canvas
+  //   tempCtx.drawImage(canvas, 0, 0);
+
+  //   // Set the drawing mode to keep the inside of the shape
+  //   tempCtx.globalCompositeOperation = "destination-in";
+
+  //   // Begin a new path for the shape on the temporary canvas
+  //   tempCtx.beginPath();
+  //   points.forEach((point, index) => {
+  //     if (index === 0) {
+  //       tempCtx.moveTo(point.x, point.y);
+  //     } else {
+  //       tempCtx.lineTo(point.x, point.y);
+  //     }
+  //   });
+  //   tempCtx.closePath();
+
+  //   // Fill the shape, which will clip the outside content
+  //   tempCtx.fill();
+
+  //   // Clear the original canvas
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  //   // Draw the modified content back onto the original canvas
+  //   ctx.drawImage(tempCanvas, 0, 0);
+
+  //   // Reset the drawing state and clear the points
+  //   setIsDrawing(false);
+  //   setPoints([]);
+  // };
+
   return (
     <div
+      className="editor-container"
       style={{
         height: `${
           window.innerHeight < 656
@@ -230,6 +397,7 @@ const ImageCanvas = ({
         }`,
       }}
     >
+      {/* <div> */}
       <canvas
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -265,6 +433,7 @@ const ImageCanvas = ({
         onMouseDown={handleMouseDown}
         onDoubleClick={completeSelection} // Close the selection with a double-click
       />
+      {/* </div> */}
     </div>
   );
 };
@@ -289,9 +458,12 @@ const ImageEditor = ({
   const [maskPoints, setMaskPoints] = useState([]);
   const [isPenToolActive, setIsPenToolActive] = useState(false);
   const [clearSelection, setClearSelection] = useState(false);
+  const [isTextToolActive, setIsTextToolActive] = useState(false);
   const [editedImage, setEditedImage] = useState("");
   const [isEraserActive, setIsEraserActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [eraserSize, setEraserSize] = useState(30); // default size
+  const [isInverted, setIsInverted] = useState(false);
 
   const handleInputChange = (event) => {
     // Update the editPrompt state with the new value of the input
@@ -532,6 +704,21 @@ const ImageEditor = ({
     }
   }, [maskImage]);
 
+  const handleSliderChange = (event) => {
+    setSliderValue(event.target.value);
+  };
+
+  const [sliderValue, setSliderValue] = useState(30); // Initial slider value
+
+  const handleSliderMouseUp = () => {
+    setEraserSize(sliderValue);
+    console.log("Final slider value:", sliderValue);
+  };
+
+  const sliderStyle = {
+    background: `linear-gradient(to right, white 0%, white ${sliderValue}%, gray ${sliderValue}%, white 120%)`,
+  };
+
   return (
     <motion.div
       key="image-editor"
@@ -541,97 +728,244 @@ const ImageEditor = ({
       transition={{ type: "spring", stiffness: 300, damping: 30, duration: 2 }}
       className="image-editor-container"
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          // maxWidth: "700px",
+        }}
+      >
         <div className="image-editor-sub-container">
-          <img
-            src={xIcon}
-            alt="close"
-            width={40}
-            className="image-editor-x-btn"
-            onClick={() => setEditPopup(false)}
-          />
           <div className="image-editor-sub-container-content">
-            <div className="image-editor-buttons-container">
-              <button
-                onClick={() => {
-                  setIsPenToolActive(true);
-                  setIsEraserActive(false);
-                }}
-              >
-                <img className="editor-icon" src={penIcon} alt="penIcon"></img>
-                Pen
-              </button>
-              <button
-                onClick={() => {
-                  setIsPenToolActive(false);
-                  setIsEraserActive(true);
-                }}
-              >
-                <img
-                  className="editor-icon"
-                  src={eraserIcon}
-                  alt="eraserIcon"
-                ></img>
-                Eraser
-              </button>
-              <button onClick={handleClearSelection}>
-                <img
-                  className="editor-icon"
-                  src={clearIcon}
-                  alt="penIcon"
-                ></img>
-                Clear Selection
-              </button>
+            <div className="formatting-bar">
+              <img
+                src={xIcon}
+                alt="close"
+                width={35}
+                className="image-editor-x-btn"
+                onClick={() => setEditPopup(false)}
+              />
+              <div className="slider-container">
+                {isEraserActive && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "10px",
+                        height: "10px",
+                        border: "1px solid white",
+                        borderRadius: "50%",
+                      }}
+                    ></div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={sliderValue}
+                      onChange={handleSliderChange}
+                      onMouseUp={handleSliderMouseUp}
+                      className="slider"
+                      style={sliderStyle}
+                    />
+                    <div
+                      style={{
+                        width: "15px",
+                        height: "15px",
+                        border: "1px solid white",
+                        borderRadius: "50%",
+                      }}
+                    ></div>
+                  </div>
+                )}
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={() => handleClearSelection()}
+                    className="clear-selection-btn"
+                  >
+                    Clear Selection
+                  </button>
+                </div>
+              </div>
             </div>
-            {/* <img
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                // flexDirection: "column",
+                //
+              }}
+              className="buttons-canvas-container"
+            >
+              <div
+                className="image-editor-buttons-container"
+                style={{ maxWidth: "100px" }}
+              >
+                <button
+                  onClick={() => {
+                    setIsInverted(false);
+                    setIsPenToolActive(true);
+                    setIsEraserActive(false);
+                    // setSliderValue(30);
+                    setEraserSize(10);
+                  }}
+                >
+                  <img
+                    className="editor-icon"
+                    src={penIcon}
+                    alt="penIcon"
+                  ></img>
+                  Pen
+                </button>
+                <button
+                  onClick={() => {
+                    setIsPenToolActive(false);
+                    setIsEraserActive(true);
+                    console.log("eraser active");
+                  }}
+                >
+                  <img
+                    className="editor-icon"
+                    src={eraserIcon}
+                    alt="eraserIcon"
+                  ></img>
+                  Eraser
+                </button>
+                <button
+                  onClick={() => {
+                    setIsInverted(true);
+                    setIsPenToolActive(true);
+                    setIsEraserActive(false);
+                  }}
+                >
+                  <img
+                    className="editor-icon"
+                    src={scissorsIcon}
+                    alt="eraserIcon"
+                  ></img>
+                  Cut
+                </button>
+
+                <button onClick={() => setIsTextToolActive(true)}>
+                  <img
+                    className="editor-icon"
+                    src={textIcon}
+                    alt="penIcon"
+                  ></img>
+                  Text
+                </button>
+                <button onClick={() => setHelpContainer(!helpContainer)}>
+                  <img
+                    className="editor-icon"
+                    src={helpIcon}
+                    alt="helpIcon"
+                  ></img>
+                  Help
+                </button>
+              </div>
+
+              {/* <img
               className="selected-editor-image"
               alt="selectedImage"
               src={dalleImages[selectedImageIndex]}
             ></img> */}
-            <div className="canvas-container">
-              {isLoading ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    height: "100%",
-                    alignItems: "center",
-                    // backgroundColor: "white",
-                    // border: "2px solid black",
-                    boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
-                    borderRadius: "1rem",
-                  }}
-                >
-                  <Ring
-                    size={40}
-                    lineWeight={5}
-                    speed={2}
-                    color="black"
-                    style={{ marginTop: "2rem" }}
+              <div className="canvas-container">
+                {isLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      height: "100%",
+                      alignItems: "center",
+                      // backgroundColor: "white",
+                      // border: "2px solid black",
+                      boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
+                      borderRadius: "1rem",
+                      borderBottomRightRadius: "0",
+                    }}
+                  >
+                    <Ring
+                      size={40}
+                      lineWeight={5}
+                      speed={2}
+                      color="white"
+                      style={{ marginTop: "2rem" }}
+                    />
+                  </div>
+                ) : (
+                  <ImageCanvas
+                    setIsLoading={setIsLoading}
+                    isEraserActive={isEraserActive}
+                    setHoodieImage={setHoodieImage}
+                    setClearSelection={setClearSelection}
+                    isPenToolActive={isPenToolActive}
+                    isTextToolActive={isTextToolActive}
+                    setIsTextToolActive={setIsTextToolActive}
+                    setMaskPoints={setMaskPoints}
+                    maskPoints={maskPoints}
+                    points={points} // Pass points as prop
+                    setPoints={setPoints} // Pass setPoints as prop
+                    hoodieImage={hoodieImage}
+                    dalleImages={dalleImages}
+                    selectedImageIndex={selectedImageIndex}
+                    className={"image-canvas"}
+                    imageData={imageData}
+                    canvasRef={canvasRef}
+                    clearSelection={clearSelection}
+                    eraserSize={eraserSize}
+                    setIsInverted={setIsInverted}
+                    isInverted={isInverted}
                   />
-                </div>
-              ) : (
-                <ImageCanvas
-                  setIsLoading={setIsLoading}
-                  isEraserActive={isEraserActive}
-                  setHoodieImage={setHoodieImage}
-                  setClearSelection={setClearSelection}
-                  isPenToolActive={isPenToolActive}
-                  setMaskPoints={setMaskPoints}
-                  maskPoints={maskPoints}
-                  points={points} // Pass points as prop
-                  setPoints={setPoints} // Pass setPoints as prop
-                  hoodieImage={hoodieImage}
-                  dalleImages={dalleImages}
-                  selectedImageIndex={selectedImageIndex}
-                  className={"image-canvas"}
-                  imageData={imageData}
-                  canvasRef={canvasRef}
-                  clearSelection={clearSelection}
-                />
-              )}
+                )}
+              </div>
             </div>
-            <div className="image-editor-help-container">
+            <div
+              className="image-editor-input-container"
+              style={{
+                display: "flex",
+                gap: 0,
+                // justifyContent: "center",
+                backgroundColor: "rgb(20,20,20)",
+                borderBottomRightRadius: "1rem",
+                borderBottomLeftRadius: "1rem",
+                // paddingBottom: ".1rem",
+                // justifyContent: "space-between",
+                // width: "50%",
+                // marginLeft: "20vw",
+                // marginRight: "20vw",
+              }}
+            >
+              <input
+                onChange={handleInputChange}
+                placeholder="Type anything you want to fill into your selection..."
+                className="generate-input"
+                style={{
+                  width: "81%",
+                  borderTopRightRadius: "0",
+                  borderBottomRightRadius: "0",
+                  borderTopLeftRadius: "0",
+                }}
+              ></input>
+              <button
+                disabled={!editPrompt}
+                onClick={downloadMask}
+                className="generate-button"
+              >
+                <img
+                  className="editor-icon"
+                  src={genieIcon}
+                  style={{ width: "30px" }}
+                  alt="genieIcon"
+                ></img>
+                Generate
+              </button>
+            </div>
+
+            {/* <div className="image-editor-help-container">
               <button onClick={() => setHelpContainer(!helpContainer)}>
                 <img
                   className="editor-icon"
@@ -641,10 +975,9 @@ const ImageEditor = ({
                 Help
               </button>
               {helpContainer && <div className="help-content-container"></div>}
-            </div>
+            </div> */}
           </div>
-
-          <div className="image-editor-input-container">
+          {/* <div className="image-editor-input-container">
             <input
               onChange={handleInputChange}
               placeholder="Type anything you want to fill into your selection..."
@@ -663,7 +996,7 @@ const ImageEditor = ({
               ></img>
               Generate
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </motion.div>
