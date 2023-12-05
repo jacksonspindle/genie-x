@@ -504,7 +504,7 @@ const InstructionalPopup = ({
   };
 
   return (
-    <div className="carousel-container">
+    <div className="carousel-container" style={{ boxShadow: "none" }}>
       <img
         src={xIcon}
         width={30}
@@ -522,6 +522,7 @@ const InstructionalPopup = ({
       />
       <AnimatePresence mode="wait">
         <motion.div
+          className="1"
           key={carouselItems[current].id}
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
@@ -546,6 +547,7 @@ const InstructionalPopup = ({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                boxShadow: "none",
               }}
             >
               {!toggleCreateAccount ? (
@@ -567,6 +569,7 @@ const InstructionalPopup = ({
                       padding: "2rem",
                       boxSizing: "border-box",
                       gap: ".5rem",
+                      boxShadow: "none",
                     }}
                   >
                     <h1 style={{ color: "white" }}>Create Account</h1>
@@ -684,9 +687,11 @@ const InstructionalPopup = ({
                     alignItems: "center",
 
                     boxSizing: "border-box",
+                    boxShadow: "none",
                   }}
                 >
                   <div
+                    className="test1"
                     ref={loginBoxRef}
                     style={{
                       marginTop: "5.5rem",
