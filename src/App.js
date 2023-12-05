@@ -95,6 +95,8 @@ function App() {
                 setProductDetails={setProductDetails}
                 setHoodieImage={setHoodieImage}
                 hoodieImage={hoodieImage}
+                setSignedIn={setSignedIn}
+                setToggleLogInPage={setToggleLogInPage}
               />
             }
           />
@@ -107,6 +109,8 @@ function App() {
                 setProductDetails={setProductDetails}
                 setHoodieImage={setHoodieImage}
                 hoodieImage={hoodieImage}
+                setSignedIn={setSignedIn}
+                setToggleLogInPage={setToggleLogInPage}
               />
             }
           />
