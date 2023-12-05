@@ -658,7 +658,10 @@ const PhotoPrompt = ({
           click colored words to replace them...
         </p>
       </div>
-      <h1 style={{ textAlign: "left" }}>
+      <div
+        className="madlibs-container"
+        style={{ textAlign: "left", lineHeight: "4rem" }}
+      >
         {words.Style && (
           <>
             <div className="clickable-wrapper">
@@ -782,7 +785,7 @@ const PhotoPrompt = ({
             {" color scheme"}
           </>
         )}
-      </h1>
+      </div>
 
       {selectedWord &&
         ReactDOM.createPortal(

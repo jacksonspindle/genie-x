@@ -46,19 +46,36 @@ const ImageCanvas = ({
   eraserSize,
   isInverted,
   setIsInverted,
+  maskCanvas,
+  setMaskCanvas,
 }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const imageLoadedRef = useRef(false);
 
   const [textPosition, setTextPosition] = useState(null);
   const [currentText, setCurrentText] = useState("");
+  const [originalHoodieImage, setOriginalHoodieImage] = useState(hoodieImage);
 
   useEffect(() => {
     console.log(dalleImages[selectedImageIndex]);
   });
 
+  // useEffect(() => setTimeout(() => setIsLoading(false), 1000));
+
   useEffect(() => {
+    console.log("canvasRef.current:", canvasRef.current);
+  }, [clearSelection]);
+
+  useEffect(() => {
+    console.log("points", points);
+    console.log(hoodieImage);
+  }, [points, hoodieImage]);
+
+  useEffect(() => {
+    console.log("points", points);
+    console.log(lastPointRef);
     if (clearSelection) {
+      console.log("selection cleared");
       lastPointRef.current = null; // Reset lastPointRef to null
 
       // Clear the points and redraw the original image
@@ -67,12 +84,14 @@ const ImageCanvas = ({
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      // console.log("testing");
       const img = new Image();
-      img.src = hoodieImage;
+      img.src = originalHoodieImage;
+      console.log("hoodie Image: ", hoodieImage);
       img.onload = () => {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Redraw the original image
       };
-      setClearSelection(false); // Reset clearSelection to false after clearing
+      setTimeout(setClearSelection(false), 2000); // Reset clearSelection to false after clearing
     }
   }, [clearSelection]);
 
@@ -82,6 +101,10 @@ const ImageCanvas = ({
       const container = canvas.parentElement;
       canvas.width = container.clientWidth;
       canvas.height = container.clientHeight;
+
+      const uiCanvas = uiCanvasRef.current;
+      uiCanvas.width = container.clientWidth;
+      uiCanvas.height = container.clientHeight;
 
       // Redraw the image after resizing the canvas
       const ctx = canvas.getContext("2d");
@@ -120,12 +143,15 @@ const ImageCanvas = ({
   let lastPointRef = useRef(null);
   let isFirstPoint = true; // Add a flag to track the first point
 
+  const baseCanvasRef = useRef(); // For actual image manipulation
+  const uiCanvasRef = useRef(); // For drawing points and lines
+
   // Modify the placePoint function to connect points with lines
   const placePoint = (event) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const uiCanvas = uiCanvasRef.current; // Reference to the main canvas
+    const ctx = uiCanvas.getContext("2d");
 
-    const rect = canvas.getBoundingClientRect();
+    const rect = uiCanvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
@@ -197,8 +223,7 @@ const ImageCanvas = ({
 
   // Constants
   const ERASER_SIZE = eraserSize; // Example eraser size
-  const LINE_WIDTH = 3; // Example line width
-  const LINE_COLOR = "yellow"; // Example line color
+  const LINE_WIDTH = 1; // Example line width
 
   function handleMouseDown(event) {
     const canvas = canvasRef.current;
@@ -248,66 +273,61 @@ const ImageCanvas = ({
     }
   }
 
+  const downloadCanvasAsImage = (canvas, filename) => {
+    if (canvas) {
+      const dataUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   const completeSelection = () => {
     if (!isPenToolActive) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
+    // Create a temporary canvas
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+    tempCanvas.width = 1024;
+    tempCanvas.height = 1024;
+
+    // canvas.width = 1024;
+    // canvas.height = 1024;
+
+    // Draw the original canvas content onto the temporary canvas
+    tempCtx.drawImage(canvas, 0, 0);
+
     if (isInverted) {
-      // Code to make the outer contents of the shape transparent
-
-      // Create a temporary canvas
-      const tempCanvas = document.createElement("canvas");
-      const tempCtx = tempCanvas.getContext("2d");
-      tempCanvas.width = canvas.width;
-      tempCanvas.height = canvas.height;
-
-      // Draw the original canvas content onto the temporary canvas
-      tempCtx.drawImage(canvas, 0, 0);
-
-      // Set the drawing mode to keep the inside of the shape
+      // Make the outer contents of the shape transparent
       tempCtx.globalCompositeOperation = "destination-in";
-
-      // Begin a new path for the shape on the temporary canvas
-      tempCtx.beginPath();
-      points.forEach((point, index) => {
-        if (index === 0) {
-          tempCtx.moveTo(point.x, point.y);
-        } else {
-          tempCtx.lineTo(point.x, point.y);
-        }
-      });
-      tempCtx.closePath();
-
-      // Fill the shape, which will clip the outside content
-      tempCtx.fill();
-
-      // Clear the original canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw the modified content back onto the original canvas
-      ctx.drawImage(tempCanvas, 0, 0);
-
-      // Convert the canvas content to a data URL and set the hoodie image
-      const newHoodieImage = canvas.toDataURL();
-      setHoodieImage(newHoodieImage);
     } else {
-      // Original code to fill the shape with a pattern
+      // Make the inside of the shape transparent
+      tempCtx.globalCompositeOperation = "destination-out";
+    }
 
-      ctx.beginPath();
-      points.forEach((point, index) => {
-        if (index === 0) {
-          ctx.moveTo(point.x, point.y);
-        } else {
-          ctx.lineTo(point.x, point.y);
-        }
-      });
-      ctx.closePath();
-      ctx.strokeStyle = LINE_COLOR;
-      ctx.lineWidth = LINE_WIDTH;
-      ctx.stroke();
+    // Begin a new path for the shape on the temporary canvas
+    tempCtx.beginPath();
+    points.forEach((point, index) => {
+      if (index === 0) {
+        tempCtx.moveTo(point.x, point.y);
+      } else {
+        tempCtx.lineTo(point.x, point.y);
+      }
+    });
+    tempCtx.closePath();
+    tempCtx.fill();
 
-      // Create a pattern
+    // Clear the original canvas and draw the modified content back onto it
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(tempCanvas, 0, 0);
+
+    if (!isInverted) {
+      // Overlay a checkered pattern for visual representation
       const patternCanvas = document.createElement("canvas");
       const patternCtx = patternCanvas.getContext("2d");
       patternCanvas.width = 10;
@@ -326,9 +346,18 @@ const ImageCanvas = ({
       ctx.fill();
     }
 
+    // Draw the stroke for the selection
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = LINE_WIDTH;
+    ctx.stroke();
+
+    // Convert the canvas content to a data URL and set the hoodie image
+    const newHoodieImage = canvas.toDataURL();
+    setHoodieImage(newHoodieImage);
+
     // Reset the drawing state and clear the points
     setIsDrawing(false);
-    setPoints([]);
+    // setPoints([]);
   };
 
   // const completeSelection = () => {
@@ -399,6 +428,17 @@ const ImageCanvas = ({
     >
       {/* <div> */}
       <canvas
+        ref={uiCanvasRef}
+        className="ui-canvas"
+        style={{
+          position: "absolute",
+          zIndex: 1000,
+          backgroundColor: "transparent",
+          pointerEvents: "none",
+        }}
+      />
+
+      <canvas
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         ref={canvasRef}
@@ -433,6 +473,20 @@ const ImageCanvas = ({
         onMouseDown={handleMouseDown}
         onDoubleClick={completeSelection} // Close the selection with a double-click
       />
+      {/* <canvas
+        ref={uiCanvasRef}
+        className="overlay-canvas"
+        style={{
+          // position: "absolute",
+          // zIndex: 1000,
+          top: 0,
+          bottom: 0,
+          // height: "100%",
+          backgroundColor: "red",
+          left: "0rem",
+          // width: "100%",
+        }}
+      /> */}
       {/* </div> */}
     </div>
   );
@@ -464,7 +518,11 @@ const ImageEditor = ({
   const [isLoading, setIsLoading] = useState(false);
   const [eraserSize, setEraserSize] = useState(30); // default size
   const [isInverted, setIsInverted] = useState(false);
+  const [maskCanvas, setMaskCanvas] = useState(null);
 
+  useEffect(() => {
+    console.log("loading is ", isLoading);
+  }, [isLoading]);
   const handleInputChange = (event) => {
     // Update the editPrompt state with the new value of the input
     setEditPrompt(event.target.value);
@@ -564,16 +622,14 @@ const ImageEditor = ({
   const downloadMask = () => {
     setIsLoading(true);
 
-    console.log("downloadMask function entered");
-    console.log("downloading image");
-
     if (canvasRef.current) {
       const originalCanvas = canvasRef.current;
       const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = 1024;
-      tempCanvas.height = 1024;
+      tempCanvas.width = originalCanvas.width;
+      tempCanvas.height = originalCanvas.height;
       const tempCtx = tempCanvas.getContext("2d");
 
+      // Step 1: Draw the original canvas onto the temporary canvas
       tempCtx.drawImage(
         originalCanvas,
         0,
@@ -582,12 +638,19 @@ const ImageEditor = ({
         tempCanvas.height
       );
 
+      console.log("Step 1: Original canvas drawn onto temporary canvas");
+
+      // Step 2: Create a copy of the canvas's image data
       const imageData = tempCtx.getImageData(
         0,
         0,
         tempCanvas.width,
         tempCanvas.height
       );
+
+      console.log("Step 2: Image data copied");
+
+      // Step 3: Iterate through the image data and make pixels with alpha value 0 transparent
       for (let i = 0; i < imageData.data.length; i += 4) {
         if (imageData.data[i + 3] === 0) {
           imageData.data[i] = 255;
@@ -596,13 +659,28 @@ const ImageEditor = ({
           imageData.data[i + 3] = 0;
         }
       }
+
+      console.log("Step 3: Transparent pixels created");
+
+      // Step 4: Put the modified image data back onto the temporary canvas
       tempCtx.putImageData(imageData, 0, 0);
 
+      console.log("Step 4: Modified image data put back onto temporary canvas");
+
+      // Step 5: Set the global composite operation to "destination-out"
       tempCtx.globalCompositeOperation = "destination-out";
 
+      console.log(
+        "Step 5: Global composite operation set to 'destination-out'"
+      );
+
+      // Step 6: Scale the mask points to match the canvas size
       const scaleX = tempCanvas.width / originalCanvas.width;
       const scaleY = tempCanvas.height / originalCanvas.height;
 
+      console.log("Step 6: Mask points scaled");
+
+      // Step 7: Draw the mask shape
       tempCtx.beginPath();
       maskPoints.forEach((point, index) => {
         const scaledX = point.x * scaleX;
@@ -616,16 +694,21 @@ const ImageEditor = ({
       tempCtx.closePath();
       tempCtx.fill();
 
-      const maskData = tempCanvas.toDataURL("image/png");
-      // handleDownload("mask.png", maskData);
-      setMaskImage(maskData);
-      console.log(maskData);
-      // setTimeout(generateEdit, 1000);
+      console.log("Step 7: Mask shape drawn");
 
-      // generateEdit();
+      // Step 8: Convert the temporary canvas to a data URL
+      const maskData = tempCanvas.toDataURL("image/png");
+
+      console.log("Step 8: Temporary canvas converted to data URL");
+
+      // Step 9: Set the mask image data
+      setMaskImage(maskData);
+
+      console.log("Step 9: Mask image data set");
     }
 
-    // setIsLoading(false);
+    setIsLoading(false);
+    setPoints([]);
   };
 
   const apiKey = process.env.REACT_APP_OPENAI_KEY;
@@ -649,11 +732,14 @@ const ImageEditor = ({
 
   const generateEdit = useCallback(async () => {
     setIsLoading(true);
+    console.log("testing to see if this calls every time");
 
     try {
       console.log("editPrompt value: ", editPrompt);
       console.log("image value: ", hoodieImage);
       console.log("mask value: ", maskImage);
+
+      console.log("maskImage", maskImage);
 
       const formData = new FormData();
 
@@ -667,7 +753,10 @@ const ImageEditor = ({
       if (maskImage) {
         const maskBlob = dataURLtoBlob(maskImage, "maskImage");
         formData.append("mask", maskBlob, "mask.png");
+        console.log("maskBlob:", maskBlob);
       }
+
+      console.log("formData:", formData);
 
       formData.append("prompt", editPrompt || "test prompt");
 
@@ -743,7 +832,10 @@ const ImageEditor = ({
                 alt="close"
                 width={35}
                 className="image-editor-x-btn"
-                onClick={() => setEditPopup(false)}
+                onClick={() => {
+                  setEditPopup(false);
+                  setIsLoading(false);
+                }}
               />
               <div className="slider-container">
                 {isEraserActive && (
@@ -919,6 +1011,9 @@ const ImageEditor = ({
                     eraserSize={eraserSize}
                     setIsInverted={setIsInverted}
                     isInverted={isInverted}
+                    maskCanvas={maskCanvas}
+                    setMaskCanvas={setMaskCanvas}
+                    setMaskImage={setMaskImage}
                   />
                 )}
               </div>

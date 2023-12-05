@@ -203,38 +203,85 @@
     position: relative;
     margin-right: 20px;
     background-color: white;
-    padding: .3rem 1.5rem .3rem 1rem;
+    /* padding: .3rem 1.5rem .3rem 1rem; */
+    padding: .2rem;
     border-radius: 1rem; 
     margin: .2rem;
+            /* Adjusted horizontal margin */
     /* Adjust as needed */
 }
 
-.clickable-wrapper .remove-word {
+.remove-word {
     position: absolute;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
-    padding-bottom: 4px;
+    /* padding-bottom: 4px; */
     /* padding: 1px !important; */
     /* flex-direction: column; */
-    top: 0px;
+    /* top: 0px; */
     font-size: 20px !important;
     /* Adjust as needed */
-    right: 0cqmax;
+    /* right: 0cqmax; */
     /* Adjust as needed */
     background-color: black;
     color: white;
     border-radius: 1rem;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
     width: 24px;
     /* Adjust as needed */
     height: 20px;
+    left: 0rem;
+    top: -.3rem;
     /* Adjust as needed */
     text-align: center;
-    line-height: 0px !important;
+    line-height: 14px !important;
     /* Adjust as needed */
     cursor: pointer;
     font-size: 14px;
+    transition: all ease-in-out .3s;
     /* Adjust as needed */
+
+}
+
+.remove-word {
+    opacity: 0;
+    transition: all ease-in-out .3s;
+    /* Hide by default */
+    cursor: pointer;
+    /* top: 2rem; */
+    /* right: 3rem; */
+    /* position: absolute; */
+    display: inline;
+    font-size: 30px;
+    z-index: 1000;
+    margin-top: .2rem;
+    /* Other styling for the 'x' icon */
+}
+
+
+.clickable-wrapper {
+    display: inline;
+    width: 100%;
+  
+    /* margin-top: 1rem; */
+            /* margin-top: 1rem !important; */
+}
+
+.clickable-wrapper:hover  .remove-word {
+    opacity: 1;
+    visibility: visible;
+    /* Other styles as needed */
+}
+
+.madlibs-container {
+    font-size: 40px;
+    font-family: oatmeal-pro-regular;
+    display: inline;
+}
+
+.clickable {
+    width: 100%;
+
 }
