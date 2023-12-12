@@ -125,12 +125,17 @@ const InstructionalPopup = ({
           >
             <video
               src={madLibsDemo}
-              width={"90%"}
+              width={window.innerHeight > 750 ? "90%" : "400px"}
               autoPlay
               loop
               muted
+              className="madlibs-video"
               alt="welcomeImage"
-              style={{ backgroundColor: "transparent", borderRadius: "1rem" }}
+              style={{
+                // border: "2px solid red",
+                backgroundColor: "transparent",
+                borderRadius: "0",
+              }}
             />
           </div>
         </div>
