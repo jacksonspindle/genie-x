@@ -283,12 +283,20 @@ border-bottom-right-radius: .5rem;
     z-index: 1001;
     display: flex;
     width: 96.3%;
-    height: 70%;
+    height: 90%;
     /* background-color: red; */
     justify-content: center;
         padding: 2rem;
+        top: 0rem;
        
 
+}
+
+@media screen and (min-height: 751px) {
+    .instructions-container {
+        height: 80% !important;
+       top: 4rem
+    }
 }
 
 .instructions-container div {
@@ -298,7 +306,7 @@ border-bottom-right-radius: .5rem;
         /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); */
         border-radius: 1rem;
         color: white;
-            backdrop-filter: blur(10px);
+            /* backdrop-filter: blur(10px); */
 
 }
 
@@ -334,4 +342,5 @@ border-bottom-right-radius: .5rem;
     max-width: 630px;
     border-radius: 1rem !important;
 }
+
 
