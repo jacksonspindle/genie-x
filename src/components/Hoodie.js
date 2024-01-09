@@ -71,7 +71,7 @@ export default function Hoodie({ hoodieImage, ...props }) {
   //   }
   // }, [hoodieImage]);
 
-  console.log(materials);
+  // console.log(materials);
 
   return (
     <group ref={group} {...props} dispose={null}>

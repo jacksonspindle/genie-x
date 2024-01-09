@@ -66,9 +66,9 @@ const PhotoPrompt = ({
     Medium: "Photograph ",
   });
 
-  useEffect(() => {
-    console.log("hoodie IMAGE:", hoodieImage);
-  });
+  // useEffect(() => {
+  //   console.log("hoodie IMAGE:", hoodieImage);
+  // });
 
   useEffect(() => {
     if (freeRangePrompt === "a blue genie") {
@@ -520,7 +520,6 @@ const PhotoPrompt = ({
   }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
 
   const applyImage = async () => {
-    console.log("test");
     toast("Applying Design to Hoodie!");
 
     // Check if there are any images to process
@@ -529,10 +528,7 @@ const PhotoPrompt = ({
       return;
     }
 
-    console.log("test", dalleImages[selectedImageIndex]);
-
     try {
-      console.log("test", dalleImages[selectedImageIndex]);
       // Process the first image in the array (you can adjust this as needed)
       const response = await axios.get(
         "https://mellifluous-cendol-c1b874.netlify.app/.netlify/functions/image-proxy",
@@ -545,10 +541,10 @@ const PhotoPrompt = ({
 
       // Handle the response and update the hoodie image state
       setHoodieImage(response.data.imageUrl);
-      console.log(response.data.imageUrl);
+      // console.log(response.data.imageUrl);
     } catch (error) {
-      console.log("test", dalleImages[selectedImageIndex]);
-      console.error("Error while downloading the image:", error);
+      // console.log("test", dalleImages[selectedImageIndex]);
+      // console.error("Error while downloading the image:", error);
     }
   };
 

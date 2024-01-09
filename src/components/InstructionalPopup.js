@@ -369,8 +369,6 @@ const InstructionalPopup = ({
 
   const [toggleCreateAccount, setToggleCreateAccount] = useState(false);
 
-  console.log(setToggleLogInPage);
-
   const loginBoxRef = useRef(null);
 
   useEffect(() => {

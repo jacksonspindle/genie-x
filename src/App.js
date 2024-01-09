@@ -30,9 +30,9 @@ function App() {
   const [toggleLogInPage, setToggleLogInPage] = useState(false);
   const [productDetails, setProductDetails] = useState(false);
 
-  useEffect(() => {
-    console.log(signedIn);
-  });
+  // useEffect(() => {
+  //   console.log(signedIn);
+  // });
 
   const ref = useRef();
 
@@ -52,7 +52,7 @@ function App() {
 
   useEffect(() => {
     if (ref.current) {
-      console.log(ref);
+      // console.log(ref);
       gradient.initGradient("#gradient-canvas");
     }
     // eslint-disable-next-line no-unused-vars

@@ -67,7 +67,7 @@ const DesignPortal = ({
   setSignedIn,
   setToggleLogInPage,
 }) => {
-  console.log("In DesignPortal, setSignedIn is: ", typeof setSignedIn);
+  // console.log("In DesignPortal, setSignedIn is: ", typeof setSignedIn);
 
   // eslint-disable-next-line no-unused-vars
   const [isGenieChatOpen, setIsGenieChatOpen] = useState(false);
@@ -85,9 +85,9 @@ const DesignPortal = ({
   const db = getFirestore();
   const storage = getStorage();
 
-  useEffect(() => {
-    console.log(hoodieImage);
-  }, [hoodieImage]);
+  // useEffect(() => {
+  //   console.log(hoodieImage);
+  // }, [hoodieImage]);
 
   const saveHoodieDesign = async () => {
     console.log("saving hoodie design");
@@ -125,14 +125,13 @@ const DesignPortal = ({
     }
   };
 
-  console.log(saveHoodieDesign);
-
-  useEffect(() => {
-    console.log(productDetails);
-  }, [productDetails]);
+  // useEffect(() => {
+  //   console.log(productDetails);
+  // }, [productDetails]);
 
   const [freeRangeToggle, setFreeRangeToggle] = useState(false);
   const [freeRangePrompt, setFreeRangePrompt] = useState("a blue genie");
+
   const [isFreeRange, setIsFreeRange] = useState(false);
 
   const toggleSwitch = () => setFreeRangeToggle(!freeRangeToggle);
@@ -146,6 +145,7 @@ const DesignPortal = ({
   const generateFreeRangeImage = () => {
     setIsFreeRange(true);
     setFreeRangeInput(!freeRangeInput);
+    console.log("testing image");
   };
 
   return (
