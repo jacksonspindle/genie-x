@@ -20,8 +20,6 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
 
   const [toggleCreateAccount, setToggleCreateAccount] = useState(false);
 
-  console.log(setToggleLogInPage);
-
   const loginBoxRef = useRef(null);
 
   useEffect(() => {

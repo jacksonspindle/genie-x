@@ -17,7 +17,7 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
   const accountRef = useRef(null);
 
   useEffect(() => {
-    console.log("isHovered:", isHovered); // Debugging line
+    // console.log("isHovered:", isHovered); // Debugging line
 
     if (isHovered && accountRef.current) {
       const rect = accountRef.current.getBoundingClientRect();

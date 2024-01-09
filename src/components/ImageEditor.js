@@ -9,6 +9,7 @@ import axios from "axios";
 import penIcon from "../assets/penIcon.png";
 import eraserIcon from "../assets/eraserIcon.png";
 import helpIcon from "../assets/helpIcon.png";
+import noteIcon from "../assets/noteIcon.png";
 import genieIcon from "../assets/genieIcon.png";
 import penCursor from "../assets/penCursor.png";
 import { Configuration, OpenAIApi } from "openai";
@@ -519,6 +520,7 @@ const ImageEditor = ({
   const [eraserSize, setEraserSize] = useState(30); // default size
   const [isInverted, setIsInverted] = useState(false);
   const [maskCanvas, setMaskCanvas] = useState(null);
+  const [helpToggle, setHelpToggle] = useState(false);
 
   useEffect(() => {
     console.log("loading is ", isLoading);
@@ -879,7 +881,7 @@ const ImageEditor = ({
                     onClick={() => handleClearSelection()}
                     className="clear-selection-btn"
                   >
-                    Clear Selection
+                    Undo
                   </button>
                 </div>
               </div>
@@ -897,7 +899,7 @@ const ImageEditor = ({
                 className="image-editor-buttons-container"
                 style={{ maxWidth: "100px" }}
               >
-                <button
+                {/* <button
                   onClick={() => {
                     setIsInverted(false);
                     setIsPenToolActive(true);
@@ -912,8 +914,8 @@ const ImageEditor = ({
                     alt="penIcon"
                   ></img>
                   Pen
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   onClick={() => {
                     setIsPenToolActive(false);
                     setIsEraserActive(true);
@@ -926,7 +928,7 @@ const ImageEditor = ({
                     alt="eraserIcon"
                   ></img>
                   Eraser
-                </button>
+                </button> */}
                 <button
                   onClick={() => {
                     setIsInverted(true);
@@ -942,15 +944,23 @@ const ImageEditor = ({
                   Cut
                 </button>
 
-                <button onClick={() => setIsTextToolActive(true)}>
+                {/* <button onClick={() => setIsTextToolActive(true)}>
                   <img
                     className="editor-icon"
                     src={textIcon}
                     alt="penIcon"
                   ></img>
                   Text
+                </button> */}
+                <button onClick={() => setHelpToggle(!helpToggle)}>
+                  <img
+                    className="editor-icon"
+                    src={noteIcon}
+                    alt="noteIcon"
+                  ></img>
+                  Notes
                 </button>
-                <button onClick={() => setHelpContainer(!helpContainer)}>
+                <button onClick={() => setHelpToggle(!helpToggle)}>
                   <img
                     className="editor-icon"
                     src={helpIcon}
@@ -966,15 +976,18 @@ const ImageEditor = ({
               src={dalleImages[selectedImageIndex]}
             ></img> */}
               <div className="canvas-container">
-                {isLoading ? (
+                {helpToggle ? (
+                  <div className="help-content">
+                    {/* You can add more detailed help information here */}
+                    Help
+                  </div>
+                ) : isLoading ? (
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "center",
                       height: "100%",
                       alignItems: "center",
-                      // backgroundColor: "white",
-                      // border: "2px solid black",
                       boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
                       borderRadius: "1rem",
                       borderBottomRightRadius: "0",
@@ -1018,7 +1031,7 @@ const ImageEditor = ({
                 )}
               </div>
             </div>
-            <div
+            {/* <div
               className="image-editor-input-container"
               style={{
                 display: "flex",
@@ -1058,7 +1071,7 @@ const ImageEditor = ({
                 ></img>
                 Generate
               </button>
-            </div>
+            </div> */}
 
             {/* <div className="image-editor-help-container">
               <button onClick={() => setHelpContainer(!helpContainer)}>
