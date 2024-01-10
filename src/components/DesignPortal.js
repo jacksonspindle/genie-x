@@ -43,6 +43,7 @@ import madLibsDemo from "../assets/madLibsDemo.mp4";
 import freeRangeDemo from "../assets/freeRangeDemo.mp4";
 import imageEditorDemo from "../assets/imageEditorDemo.mp4";
 import addToCartDemo from "../assets/addToCartDemo.mp4";
+import { NewHoodie } from "./NewGenieXHoodie";
 
 // import { storage } from "../config/firebase"; // Make sure to import 'storage' from your Firebase configuration file.
 
@@ -224,7 +225,8 @@ const DesignPortal = ({
           <div className="hoodie-scene">
             <Canvas>
               <SetupCamera />
-              <Hoodie hoodieImage={hoodieImage} />
+              {/* <Hoodie hoodieImage={hoodieImage} /> */}
+              <NewHoodie genieXLogo={genieXLogo} hoodieImage={hoodieImage} />
 
               <OrbitControls
                 enablePan={true}
@@ -234,6 +236,8 @@ const DesignPortal = ({
                 minDistance={4}
               />
               <Environment preset="city" />
+              <ambientLight intensity={0.2} />
+              {/* <directionalLightHelper /> */}
             </Canvas>
             <div className="free-range-input-container">
               <input
