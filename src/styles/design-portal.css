@@ -100,7 +100,7 @@
 }
 
 .hoodie-scene {
-    
+    /* max-width: 300px; */
     height: 100%;
     /* background-image: linear-gradient(120deg, #16002b, #2d004f, #16002b); */
     background-image: white;
@@ -124,6 +124,7 @@
     border-bottom-left-radius: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    min-width: 430px;
 }
 
 
@@ -341,6 +342,59 @@ border-bottom-right-radius: .5rem;
     width: 100%;
     max-width: 630px;
     border-radius: 1rem !important;
+}
+
+
+
+
+.tab-buttons {
+    position: relative;
+    width: 100%;
+        display: flex;
+        
+        /* justify-content: space-around; */
+    /* ... your styles for the container ... */
+}
+
+.tab-container {
+    width: 100%;
+    display: flex;
+    /* justify-content: space-around; */
+    background-color: rgba(255, 255, 255, .3);
+    border-top-right-radius: 1rem;
+    padding-bottom: .3rem;
+    
+}
+
+.tab-container button {
+    flex: 1;
+    cursor: pointer;
+    /* Each button will take up equal space */
+    /* Add your additional button styles here */
+}
+
+
+.tab-buttons button {
+    background: none;
+    color: black;
+    font-family: oatmeal-pro-regular;
+    border: none;
+    font-size: 25px;
+    /* ... your styles for the button ... */
+}
+
+.tab-buttons button.active {
+    /* styles for active button */
+}
+
+.underline-2 {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    /* or the thickness you want */
+    background-color: #5300FF;
+    /* your desired purple color */
+    /* ... other styles for the underline ... */
 }
 
 
