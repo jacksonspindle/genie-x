@@ -62,7 +62,7 @@ const PhotoPrompt = ({
     Verb: "Verb",
     Style: "Style",
     Composition: "Composition",
-    ColorScheme: "X",
+    ColorScheme: "Color",
     Medium: "Photograph ",
   });
 
@@ -642,7 +642,7 @@ const PhotoPrompt = ({
 
   return (
     <div ref={ref} className="prompt-content-container">
-      <div className="info-icon-container">
+      {/* <div className="info-icon-container">
         <img src={infoIcon} width="20px" alt="infoIcon"></img>
         <p
           style={{
@@ -653,7 +653,7 @@ const PhotoPrompt = ({
         >
           click colored words to replace them...
         </p>
-      </div>
+      </div> */}
       <div
         className="madlibs-container"
         style={{ textAlign: "left", lineHeight: "4rem" }}
@@ -778,7 +778,6 @@ const PhotoPrompt = ({
                 x
               </span>
             </div>
-            {" color scheme"}
           </>
         )}
       </div>
@@ -912,6 +911,65 @@ const PhotoPrompt = ({
           ))}
       </div> */}
       <div className="preview-images-container">
+        <div
+          className="preview-image-container"
+          style={{
+            border: selectedImageIndex === 0 ? "2px solid #5300FF" : "none",
+            // position: "absolute", // Position absolute to fit into the parent
+            // top: 0,
+            // left: 0,
+            width: "100%", // Take the full width of the parent
+            // height: "100%", // Take the full height of the parent
+            boxSizing: "border-box", // Include padding and border in the element's tot
+          }}
+        >
+          {isGenerating ? (
+            <div
+              style={{
+                // width: "30%",
+                height: "100%",
+                marginTop: "90%", // Adjusted to center the loading icon
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Ring
+                size={40}
+                lineWeight={5}
+                speed={2}
+                color="black"
+                style={{ marginTop: "2rem" }}
+              />
+            </div>
+          ) : (
+            dalleImages[0] && (
+              <div style={{ width: "100%", height: "100%" }}>
+                <button
+                  className="edit-button"
+                  onClick={() => {
+                    setEditPopup(true);
+                  }}
+                >
+                  Edit
+                </button>
+
+                <img
+                  src={hoodieImage}
+                  className="preview-image"
+                  alt={`previewImage-0`}
+                  style={{
+                    borderRadius: ".9rem",
+                    width: "100%",
+                    height: "100%", // Ensure the image takes up the entire div
+                  }}
+                  onClick={() => handleImageClick(dalleImages[0], 0)}
+                />
+              </div>
+            )
+          )}
+        </div>
+      </div>
+      {/* <div className="preview-images-container">
         {Array(4)
           .fill(null)
           .map((_, index) => (
@@ -989,7 +1047,7 @@ const PhotoPrompt = ({
               )}
             </div>
           ))}
-      </div>
+      </div> */}
 
       <div className="prompt-buttons-container">
         <button
