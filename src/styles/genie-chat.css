@@ -120,6 +120,7 @@ background-color: rgba(178, 141, 255, .2) !important;
 
 .apply-image-btn {
     /* height: 40px; */
+    min-width: 140px;
     width: 13vw;
     margin-top: 1rem;
     font-family: oatmeal-pro-bold;

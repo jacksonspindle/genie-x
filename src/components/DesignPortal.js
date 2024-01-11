@@ -29,6 +29,8 @@ import xIcon from "../assets/xIcon.png";
 import PromptContainer from "./PromptContainer";
 import { motion } from "framer-motion";
 import InstructionalPopup from "./InstructionalPopup";
+import ImageUpload from "./ImageUpload";
+import AssetLibrary from "./AssetLibrary";
 
 import {
   // getFirestore,
@@ -48,6 +50,17 @@ import { NewHoodie } from "./NewGenieXHoodie";
 // import { storage } from "../config/firebase"; // Make sure to import 'storage' from your Firebase configuration file.
 
 // import GenieChatFreeRange from "./GenieChatFreeRange";
+
+const TabContent = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: 10 }}
+    transition={{ type: "spring", stiffness: 300, damping: 30, duration: 2 }}
+  >
+    {children}
+  </motion.div>
+);
 
 function SetupCamera() {
   const { camera } = useThree();
@@ -81,6 +94,14 @@ const DesignPortal = ({
 
   const [maskImage, setMaskImage] = useState("");
   const [editPrompt, setEditPrompt] = useState("");
+  const [activeTab, setActiveTab] = useState("generate");
+  const tabs = ["generate", "upload", "assets"]; // Array to map buttons
+  const underlineStyle = {
+    width: "33.33%", // Since there are three tabs
+    transition: { duration: 0.2 },
+    x: `${tabs.indexOf(activeTab) * 100}%`,
+  };
+
   // const { camera } = useThree();
   // const [hoodieImage, setHoodieImage] = useState(false);
   const db = getFirestore();
@@ -301,24 +322,63 @@ const DesignPortal = ({
         </div>
       </div>
       <div className="prompt-container">
-        <PromptContainer
-          isFreeRange={isFreeRange}
-          setIsFreeRange={setIsFreeRange}
-          freeRangeInput={freeRangeInput}
-          editPrompt={editPrompt}
-          maskImage={maskImage}
-          hoodieImage={hoodieImage}
-          dalleImages={dalleImages}
-          setDalleImages={setDalleImages}
-          selectedImageIndex={selectedImageIndex}
-          setSelectedImageIndex={setSelectedImageIndex}
-          setEditPopup={setEditPopup}
-          editPopup={editPopup}
-          setHoodieImage={setHoodieImage}
-          freeRangeToggle={freeRangeToggle}
-          setFreeRangeToggle={setFreeRangeToggle}
-          freeRangePrompt={freeRangePrompt}
-        />
+        <div className="tab-buttons">
+          <div className="tab-container">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                className={activeTab === tab ? "active" : ""}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}{" "}
+                {/* Capitalize first letter */}
+              </button>
+            ))}
+          </div>
+          {/* Underline element */}
+          <motion.div
+            className="underline-2"
+            initial={false}
+            animate={underlineStyle}
+          />
+        </div>
+
+        <AnimatePresence mode="wait">
+          {activeTab === "generate" && (
+            <TabContent key="generate">
+              <PromptContainer
+                isFreeRange={isFreeRange}
+                setIsFreeRange={setIsFreeRange}
+                freeRangeInput={freeRangeInput}
+                editPrompt={editPrompt}
+                maskImage={maskImage}
+                hoodieImage={hoodieImage}
+                dalleImages={dalleImages}
+                setDalleImages={setDalleImages}
+                selectedImageIndex={selectedImageIndex}
+                setSelectedImageIndex={setSelectedImageIndex}
+                setEditPopup={setEditPopup}
+                editPopup={editPopup}
+                setHoodieImage={setHoodieImage}
+                freeRangeToggle={freeRangeToggle}
+                setFreeRangeToggle={setFreeRangeToggle}
+                freeRangePrompt={freeRangePrompt}
+              />
+            </TabContent>
+          )}
+
+          {activeTab === "upload" && (
+            <TabContent key="upload">
+              <ImageUpload setHoodieImage={setHoodieImage} />
+            </TabContent>
+          )}
+
+          {activeTab === "assets" && (
+            <TabContent key="assets">
+              <AssetLibrary setHoodieImage={setHoodieImage} />
+            </TabContent>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* <motion.div className="genie-lamp-canvas">
