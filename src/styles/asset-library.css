@@ -1,0 +1,70 @@
+.asset-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 1rem;
+    max-height: 80.5vh;
+    /* Adjust this value as needed to fit within your layout */
+    overflow-y: auto;
+    /* Enables vertical scrolling when necessary */
+}
+
+.genie-x-asset {
+    width: 100%;
+    height: auto;
+    border-radius: .5rem;
+    cursor: pointer;
+    border: 2px solid rgba(0, 0, 0, 0);
+    transition: all ease-in-out .1s;
+}
+
+.genie-x-asset:hover {
+    border: 2px solid white
+}
+
+
+@media (max-height: 740px) {
+
+    .asset-grid-container {
+           
+            max-height: 78.8vh;
+        }
+}
+
+@media (min-height: 740px) and (max-height: 750px) {
+.asset-grid-container {
+
+        max-height: 79.4vh;
+    }
+
+
+}
+
+@media (min-height: 750px) and (max-height: 800px) {
+.asset-grid-container {
+
+        max-height: 80vh;
+    }
+}
+
+@media (min-height: 800px) and (max-height: 850px) {
+.asset-grid-container {
+
+        max-height: 81vh;
+    }
+}
+
+@media (min-height: 850px) and (max-height: 900px) {
+.asset-grid-container {
+
+        max-height: 81.5vh;
+    }
+}
+
+@media (min-height: 900px) {
+.asset-grid-container {
+
+        max-height: 80vh;
+    }
+    
+}

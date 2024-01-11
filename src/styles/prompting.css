@@ -44,6 +44,9 @@
 
 .preview-image {
     width: 100%;
+    /* min-height: 400px; */
+    
+
     /* background: transparent; */
     
     /* height: 100%; */
@@ -82,8 +85,10 @@
     padding: 1rem;
     overflow-y: auto;
     /* Makes vertical overflow scrollable */
-    max-height: 84.5vh;
+    max-height: 81.5vh;
     max-width: 100%;
+   
+    
     /* Set this to your desired maximum height */
 }
 
@@ -102,12 +107,13 @@
 
 
 .preview-images-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    /* display: grid; */
+    /* grid-template-columns: repeat(2, 1fr); */
+    /* grid-template-rows: repeat(2, 1fr); */
     gap: 1rem;
     /* background-color: red; */
-    width: 100%;
+    width: 380px;
+    height: 380px;
     /* Adjust this for space between the squares */
 }
 
@@ -117,9 +123,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 95%;
-    height: 0;
-    padding-bottom: 95%;
+    width: 380px;
+    height: 380px;
+    /* min-width: 380px; */
+    /* height: 100%; */
+    /* padding-bottom: 95%; */
     /* This creates the aspect ratio for the container */
     background-color: rgba(255, 255, 255, .3);;
     border-radius: 1rem;
@@ -137,6 +145,7 @@
     top: 0;
     left: 0;
     border-radius: 1rem;
+    /* min-height: 405px !important; */
 }
 
 .prompt-buttons-container{
@@ -191,6 +200,7 @@
     gap: .5rem;
     opacity: .8;
     width: 100%;
+    margin-bottom: 5px;
 }
 
 .keep-designing-btn {
@@ -279,9 +289,143 @@
     font-size: 40px;
     font-family: oatmeal-pro-regular;
     display: inline;
+    margin-bottom: .4rem;
 }
 
 .clickable {
     width: 100%;
 
+}
+
+
+
+
+
+
+
+
+@media (max-height: 740px) {
+
+    .preview-images-container,
+    .preview-image-container {
+        height: 300px;
+        width: 300px;
+    }
+
+    .madlibs-container {
+        font-size: 40px;
+    }
+
+    .prompt-content-container {
+        max-height: 78.5vh;
+    }
+
+    .preview-image {
+         max-height: 300px !important;
+    }
+}
+
+@media (min-height: 740px) and (max-height: 750px) {
+
+    .preview-images-container,
+    .preview-image-container {
+        /* Adjust width and padding-bottom to maintain aspect ratio */
+        height: 330px;
+        width: 330px;
+        /* Keep square aspect ratio */
+    }
+
+    .madlibs-container {
+        /* Adjust font size as needed */
+        font-size: 40px;
+    }
+
+    .prompt-content-container {
+        gap: .5rem;
+        max-height: 79.5vh;
+    }
+
+        
+}
+
+@media (min-height: 750px) and (max-height: 800px) {
+
+    .preview-images-container,
+    .preview-image-container {
+        /* Adjust width and padding-bottom to maintain aspect ratio */
+        height: 350px;
+            width: 350px;
+        /* Keep square aspect ratio */
+    }
+
+    .madlibs-container {
+        /* Adjust font size as needed */
+        font-size: 40px;
+    }
+
+    .prompt-content-container{
+        gap: .5rem;
+        max-height: 79.8vh;
+    }
+}
+
+@media (min-height: 800px) and (max-height: 850px)  {
+
+    .preview-images-container,
+    .preview-image-container {
+        /* Adjust width and padding-bottom to maintain aspect ratio */
+        height: 380px;
+        width: 380px;
+        /* Keep square aspect ratio */
+    }
+
+    .madlibs-container {
+        /* Adjust font size as needed */
+        font-size: 40px;
+    }
+
+    .prompt-content-container {
+        gap: 1rem;
+        max-height: 80.5vh;
+    }
+}
+
+@media (min-height: 850px) and (max-height: 900px) {
+
+    .preview-images-container,
+    .preview-image-container {
+        /* Adjust width and padding-bottom to maintain aspect ratio */
+        height: 400px;
+        width: 400px;
+        /* Keep square aspect ratio */
+    }
+
+    .madlibs-container {
+        /* Adjust font size as needed */
+        font-size: 40px;
+    }
+
+    .prompt-content-container {
+        gap: 1.5rem;
+    }
+}
+
+@media (min-height: 900px) {
+
+    .preview-images-container,
+    .preview-image-container {
+        /* Adjust width and padding-bottom to maintain aspect ratio */
+        height: 400px;
+        width: 400px;
+        /* Keep square aspect ratio */
+    }
+
+    .madlibs-container {
+        /* Adjust font size as needed */
+        font-size: 40px;
+    }
+
+    .prompt-content-container {
+        gap: 3rem;
+    }
 }
