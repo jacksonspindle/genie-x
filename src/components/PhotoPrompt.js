@@ -19,6 +19,8 @@ import { Ring } from "@uiball/loaders";
 // import { motion, AnimatePresence } from "framer-motion";
 // import ImageEditor from "./ImageEditor";
 import lockIcon from "../assets/lockIcon.png";
+import genieXLogo from "../assets/genieXLogo.png";
+import saveDesignIcon from "../assets/saveDesignIcon.png";
 import previewThumbnail from "../assets/previewThumbnail.png";
 import {
   getFirestore,
@@ -37,12 +39,13 @@ import {
 } from "firebase/storage";
 
 const PhotoPrompt = ({
+  triggerCounter,
   isFreeRange,
   setIsFreeRange,
   freeRangeInput,
   maskImage,
   editPrompt,
-  dalleImages,
+  dalleImages = [],
   setDalleImages,
   selectedImageIndex,
   setSelectedImageIndex,
@@ -66,17 +69,30 @@ const PhotoPrompt = ({
     Medium: "Photograph ",
   });
 
-  // useEffect(() => {
-  //   console.log("hoodie IMAGE:", hoodieImage);
-  // });
+  useEffect(() => {
+    console.log("donkey: ", hoodieImage);
+  }, [hoodieImage]);
 
   useEffect(() => {
-    if (freeRangePrompt === "a blue genie") {
-      return;
-    } else {
-      generateImage(isFreeRange);
+    if (triggerCounter > 0) {
+      // This check ensures that the effect runs only when the counter is updated
+      if (hoodieImage !== false) {
+        console.log("hoodie is defined");
+        console.log("trigger", triggerCounter);
+        if (isFreeRange) {
+          generateImage(isFreeRange);
+        }
+      } else {
+        console.log("free range test");
+        if (freeRangePrompt === "a blue genie") {
+          return;
+        } else {
+          generateImage(isFreeRange);
+          // setIsFreeRange(false);
+        }
+      }
     }
-  }, [isFreeRange]);
+  }, [triggerCounter]); // Depend on triggerCounter
 
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -96,6 +112,11 @@ const PhotoPrompt = ({
 
   const [placeholder, setPlaceholder] = useState("");
   const inputRef = useRef(null);
+  const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
+
+  useEffect(() => {
+    console.log("original hoodieImage", hoodieImage);
+  }, [hoodieImage]);
 
   const replacements = {
     Subject: [
@@ -456,9 +477,12 @@ const PhotoPrompt = ({
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
   const generateImageCheck = () => {
+    setHoodieImage("generate");
     setIsFreeRange(false);
     generateImage(false);
   };
+
+  const [tempHoodieImage, setTempHoodieImage] = useState("");
 
   const generateImage = useCallback(
     async (currentIsFreeRange) => {
@@ -475,6 +499,8 @@ const PhotoPrompt = ({
         style: "natural",
       });
 
+      console.log("isFreeRange", isFreeRange);
+
       console.log(dallePrompt);
 
       const generatedImages = res.data.data.map((img) => img.url);
@@ -484,11 +510,13 @@ const PhotoPrompt = ({
         setDalleImages([hoodieImage]); // Set to hoodieImage if empty
       } else {
         setDalleImages(generatedImages); // Store all image URLs
+        setTempHoodieImage(true);
         setHoodieImage(generatedImages[0]); // Set hoodieImage to the first dalleImage
       }
 
       setIsGenerating(false);
     },
+
     [
       dallePrompt,
       openai,
@@ -511,13 +539,18 @@ const PhotoPrompt = ({
   //   console.log(res.data.data.map((img) => img.url));
   // });
 
-  useEffect(() => {
-    if (dalleImages.length === 0) {
-      setDalleImages([hoodieImage]);
-      // Only generate if no images have been generated yet
-      // generateImage();
-    }
-  }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
+  // useEffect(() => {
+  //   if (hoodieImage !== false) {
+  //     return;
+  //   } else {
+  //     setDalleImages([]);
+  //     if (dalleImages.length === 0) {
+  //       setDalleImages([hoodieImage]);
+  //       // Only generate if no images have been generated yet
+  //       // generateImage();
+  //     }
+  //   }
+  // }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
 
   const applyImage = async () => {
     toast("Applying Design to Hoodie!");
@@ -549,10 +582,17 @@ const PhotoPrompt = ({
   };
 
   useEffect(() => {
-    if (dalleImages.length > 0) {
-      applyImage();
+    if (tempHoodieImage === true) {
+      console.log("new image generating");
+      if (dalleImages.length > 0) {
+        applyImage();
+      }
+    } else {
+      // setHoodieImage(tempHoodieImage);
+      console.log("apply image not working");
     }
-  }, [dalleImages, selectedImageIndex]);
+    setTempHoodieImage(false);
+  }, [dalleImages, selectedImageIndex, hoodieImage]);
 
   const handleImageClick = (src, index) => {
     setSelectedImage(src);
@@ -581,26 +621,21 @@ const PhotoPrompt = ({
       return;
     }
 
-    console.log(auth);
+    console.log("uploaded hoodieImage", hoodieImage);
 
     try {
-      // Convert base64 to Blob
-      const byteCharacters = atob(hoodieImage.split(",")[1]);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: "image/jpeg" });
+      // Fetch the Blob from the hoodieImage URL
+      const response = await fetch(hoodieImage);
+      const blob = await response.blob();
 
       // Upload to Firebase Storage
       const storage = getStorage();
       const storageReference = firebaseStorageRef(
         storage,
         `user_images/${auth.currentUser.uid}/${Date.now()}.jpg`
-      ); // Updated the path to be dynamic based on user and timestamp
+      );
 
-      await uploadBytes(storageReference, blob); // Upload the blob to Firebase Storage
+      await uploadBytes(storageReference, blob);
 
       // Get download URL and save to Firestore
       const downloadURL = await getDownloadURL(storageReference);
@@ -639,6 +674,59 @@ const PhotoPrompt = ({
     const newDallePrompt = `${words.Style} style ${words.Medium} of ${words.Subject} ${words.Verb} in ${words.Setting} with a ${words.ColorScheme} color scheme`;
     setDallePrompt(newDallePrompt);
   }, [words]); // This useEffect will run whenever the 'words' state changes
+
+  const saveDesign = async () => {
+    if (!hoodieImage) {
+      console.error("No design to save.");
+      return;
+    }
+
+    if (!auth.currentUser) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    setIsSaving(true); // Start saving
+
+    try {
+      // Use hoodieImage as it is already in base64 format or get the image Blob/File
+
+      // Convert base64 to Blob if needed (otherwise, use the file directly)
+      const byteCharacters = atob(hoodieImage.split(",")[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const imageBlob = new Blob([byteArray], { type: "image/jpeg" });
+
+      // Upload to Firebase Storage under 'saved-designs' folder
+      const storageRef = firebaseStorageRef(
+        storage,
+        `saved-designs/${auth.currentUser.uid}/${Date.now()}.jpg`
+      );
+      await uploadBytes(storageRef, imageBlob);
+
+      // Get download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Save the reference to Firestore
+      const designsRef = collection(
+        db,
+        "users",
+        auth.currentUser.uid,
+        "saved-designs"
+      );
+      await addDoc(designsRef, { imageUrl: downloadURL, savedAt: new Date() });
+
+      console.log("Design saved successfully!");
+    } catch (error) {
+      console.error("Error saving the design:", error);
+    }
+    setIsSaving(false); // Finish saving
+  };
+
+  console.log("dalleImages:", dalleImages[0]);
 
   return (
     <div ref={ref} className="prompt-content-container">
@@ -942,7 +1030,7 @@ const PhotoPrompt = ({
               />
             </div>
           ) : (
-            dalleImages[0] && (
+            dalleImages && (
               <div style={{ width: "100%", height: "100%" }}>
                 <button
                   className="edit-button"
@@ -953,17 +1041,34 @@ const PhotoPrompt = ({
                   Edit
                 </button>
 
-                <img
-                  src={hoodieImage}
-                  className="preview-image"
-                  alt={`previewImage-0`}
-                  style={{
-                    borderRadius: ".9rem",
-                    width: "100%",
-                    height: "100%", // Ensure the image takes up the entire div
-                  }}
-                  onClick={() => handleImageClick(dalleImages[0], 0)}
-                />
+                {hoodieImage !== false ? (
+                  <img
+                    key={hoodieImage}
+                    src={hoodieImage}
+                    className="preview-image"
+                    alt={`previewImage-0`}
+                    style={{
+                      borderRadius: ".9rem",
+                      width: "100%",
+                      height: "100%", // Ensure the image takes up the entire div
+                    }}
+                    onClick={() => handleImageClick(dalleImages[0], 0)}
+                  />
+                ) : (
+                  <img
+                    key="default-preview"
+                    src={genieXLogo}
+                    className="preview-image-test"
+                    alt="Default Preview"
+                    style={{
+                      borderRadius: ".9rem",
+                      width: "100%",
+                      marginTop: "30%",
+
+                      // height: "100%", // Ensure the image takes up the entire div
+                    }}
+                  />
+                )}
               </div>
             )
           )}
@@ -1064,11 +1169,38 @@ const PhotoPrompt = ({
               background: "white",
               boxShadow: "none",
               fontFamily: "oatmeal-pro-regular",
+              cursor: "pointer",
             }}
           >
             Add to Cart
           </button>
         </Link>
+        <button
+          className="save-design-button"
+          style={{
+            border: "none",
+            background: "white",
+            boxShadow: "none",
+            fontFamily: "oatmeal-pro-regular",
+            borderRadius: ".5rem",
+            marginTop: "1rem",
+            maxWidth: "50px",
+          }}
+          onClick={saveDesign}
+        >
+          {isSaving ? (
+            <Ring size={20} lineWeight={5} speed={2} color="black" />
+          ) : (
+            <img
+              src={saveDesignIcon}
+              alt="save"
+              style={{
+                height: "20px",
+                backgroundColor: "transparent",
+              }}
+            />
+          )}
+        </button>
       </div>
     </div>
   );

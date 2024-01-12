@@ -9,6 +9,7 @@ import "./styles/login.css";
 import "./styles/toast-notifications.css";
 import "./styles/image-editor.css";
 import "./styles/product-details.css";
+import "./styles/user-designs.css";
 import "./styles/asset-library.css";
 import "./styles/upload-image.css";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
@@ -32,9 +33,9 @@ function App() {
   const [toggleLogInPage, setToggleLogInPage] = useState(false);
   const [productDetails, setProductDetails] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(signedIn);
-  // });
+  useEffect(() => {
+    console.log("newHoodieImage:", hoodieImage);
+  }, [hoodieImage]);
 
   const ref = useRef();
 

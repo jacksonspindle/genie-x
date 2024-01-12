@@ -15,6 +15,7 @@ import GenieChat from "./GenieChat";
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase";
 import { getFirestore } from "firebase/firestore";
+import UserDesigns from "./UserDesigns";
 // import { motion } from "framer-motion";
 
 // import { Link } from "react-router-dom";
@@ -24,6 +25,10 @@ import infoIcon from "../assets/infoIcon.png";
 import genieXLogo from "../assets/genieXLogo.png";
 import arrowIcon from "../assets/arrowIcon.png";
 import xIcon from "../assets/xIcon.png";
+import uploadImageIcon from "../assets/uploadImageIcon.png";
+import genieXAssetsIcon from "../assets/genieXAssetsIcon.png";
+import starsIcon from "../assets/starsIcon.png";
+import savedDesignsIcon from "../assets/savedDesignsIcon.png";
 
 // import PhotoPrompt from "./PhotoPrompt";
 import PromptContainer from "./PromptContainer";
@@ -95,11 +100,16 @@ const DesignPortal = ({
   const [maskImage, setMaskImage] = useState("");
   const [editPrompt, setEditPrompt] = useState("");
   const [activeTab, setActiveTab] = useState("generate");
-  const tabs = ["generate", "upload", "assets"]; // Array to map buttons
+  const tabs = [
+    { name: "generate", icon: starsIcon },
+    { name: "upload", icon: uploadImageIcon },
+    { name: "assets", icon: genieXAssetsIcon },
+    { name: "designs", icon: savedDesignsIcon },
+  ]; // Array to map buttons with icons // Array to map buttons
   const underlineStyle = {
-    width: "33.33%", // Since there are three tabs
+    width: "25%", // Since there are three tabs
     transition: { duration: 0.2 },
-    x: `${tabs.indexOf(activeTab) * 100}%`,
+    x: `${tabs.findIndex((tab) => tab.name === activeTab) * 100}%`,
   };
 
   // const { camera } = useThree();
@@ -110,6 +120,10 @@ const DesignPortal = ({
   // useEffect(() => {
   //   console.log(hoodieImage);
   // }, [hoodieImage]);
+
+  useEffect(() => {
+    console.log("Hoodie image changes:");
+  }, [hoodieImage]);
 
   const saveHoodieDesign = async () => {
     console.log("saving hoodie design");
@@ -155,6 +169,7 @@ const DesignPortal = ({
   const [freeRangePrompt, setFreeRangePrompt] = useState("a blue genie");
 
   const [isFreeRange, setIsFreeRange] = useState(false);
+  const [triggerCounter, setTriggerCounter] = useState(0);
 
   const toggleSwitch = () => setFreeRangeToggle(!freeRangeToggle);
 
@@ -165,9 +180,11 @@ const DesignPortal = ({
   };
 
   const generateFreeRangeImage = () => {
+    setTriggerCounter((prev) => prev + 1); // Increment the counter
     setIsFreeRange(true);
     setFreeRangeInput(!freeRangeInput);
     console.log("testing image");
+    setHoodieImage(true);
   };
 
   return (
@@ -326,12 +343,19 @@ const DesignPortal = ({
           <div className="tab-container">
             {tabs.map((tab) => (
               <button
-                key={tab}
-                className={activeTab === tab ? "active" : ""}
-                onClick={() => setActiveTab(tab)}
+                key={tab.name}
+                className={activeTab === tab.name ? "active" : ""}
+                onClick={() => setActiveTab(tab.name)}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}{" "}
-                {/* Capitalize first letter */}
+                <img
+                  style={{
+                    width: "40px",
+
+                    padding: "2px",
+                  }}
+                  src={tab.icon}
+                  alt={tab.name}
+                />
               </button>
             ))}
           </div>
@@ -347,6 +371,7 @@ const DesignPortal = ({
           {activeTab === "generate" && (
             <TabContent key="generate">
               <PromptContainer
+                triggerCounter={triggerCounter}
                 isFreeRange={isFreeRange}
                 setIsFreeRange={setIsFreeRange}
                 freeRangeInput={freeRangeInput}
@@ -376,6 +401,12 @@ const DesignPortal = ({
           {activeTab === "assets" && (
             <TabContent key="assets">
               <AssetLibrary setHoodieImage={setHoodieImage} />
+            </TabContent>
+          )}
+
+          {activeTab === "designs" && (
+            <TabContent key="designs">
+              <UserDesigns setHoodieImage={setHoodieImage} />
             </TabContent>
           )}
         </AnimatePresence>

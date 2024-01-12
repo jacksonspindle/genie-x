@@ -27,14 +27,14 @@
 
     .asset-grid-container {
            
-            max-height: 78.8vh;
+            max-height: 75.8vh;
         }
 }
 
 @media (min-height: 740px) and (max-height: 750px) {
 .asset-grid-container {
 
-        max-height: 79.4vh;
+        max-height: 76.4vh;
     }
 
 
@@ -43,28 +43,28 @@
 @media (min-height: 750px) and (max-height: 800px) {
 .asset-grid-container {
 
-        max-height: 80vh;
+        max-height: 77vh;
     }
 }
 
 @media (min-height: 800px) and (max-height: 850px) {
 .asset-grid-container {
 
-        max-height: 81vh;
+        max-height: 78vh;
     }
 }
 
 @media (min-height: 850px) and (max-height: 900px) {
 .asset-grid-container {
 
-        max-height: 81.5vh;
+        max-height: 79vh;
     }
 }
 
 @media (min-height: 900px) {
 .asset-grid-container {
 
-        max-height: 80vh;
+        max-height: 77vh;
     }
     
 }

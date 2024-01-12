@@ -165,14 +165,14 @@
 .prompt-buttons-container button {
     /* margin: 1rem; */
     width: 11vw;
-    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3); */
 }
 
 .prompt-buttons-container>button:first-child {
     width: 11vw !important;
     /* padding: .5rem !important; */
     padding-top: .5rem !important;
-        padding-bottom: .5rem !important;
+        /* padding-bottom: .5rem !important; */
     background-color: #2685e3;
     border: none;
     color: white;
@@ -297,6 +297,15 @@
 
 }
 
+.save-design-button {
+    transition: .2s all ease-in-out;
+    cursor: pointer;
+}
+
+
+.save-design-button:hover {
+            transform: scale(1.1);
+}
 
 
 
@@ -317,7 +326,7 @@
     }
 
     .prompt-content-container {
-        max-height: 78.5vh;
+        max-height: 76.5vh;
     }
 
     .preview-image {
@@ -342,7 +351,7 @@
 
     .prompt-content-container {
         gap: .5rem;
-        max-height: 79.5vh;
+        max-height: 77.5vh;
     }
 
         
@@ -365,7 +374,7 @@
 
     .prompt-content-container{
         gap: .5rem;
-        max-height: 79.8vh;
+        max-height: 76.8vh;
     }
 }
 
@@ -386,7 +395,7 @@
 
     .prompt-content-container {
         gap: 1rem;
-        max-height: 80.5vh;
+        max-height: 77.3vh;
     }
 }
 
@@ -407,6 +416,7 @@
 
     .prompt-content-container {
         gap: 1.5rem;
+        max-height: 78.5vh;
     }
 }
 
