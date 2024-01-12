@@ -9,6 +9,8 @@ import axios from "axios";
 import { Ring } from "@uiball/loaders";
 import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
+import { NewHoodie } from "./NewGenieXHoodie";
+import { Box } from "@react-three/drei";
 
 const Cart = ({ setHoodieImage }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -142,6 +144,19 @@ const Cart = ({ setHoodieImage }) => {
     navigate("/design");
   };
 
+  useEffect(() => {
+    async function fetchImages() {
+      const imageUrls = await Promise.all(
+        cartItems.map((item) => fetchCartImage(item.imageUrl, item.token))
+      );
+      console.log("Image URLs:", imageUrls); // Log the image URLs here
+      setHoodieImageUrls(imageUrls);
+      setImagesLoading(false);
+    }
+
+    fetchImages();
+  }, [cartItems]);
+
   return (
     <div
       className={
@@ -170,123 +185,144 @@ const Cart = ({ setHoodieImage }) => {
               </div>
             )}
           </div>
-          {cartItems.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                <div
-                  style={{
-                    // backgroundColor: "aqua",
-                    width: "100%",
-                    display: "flex",
-                    gap: "8rem",
-                    // justifyContent: "center",
-                    // justifyContent: "space-between",
-                    // justifyContent: "space-around",
-                    // borderRadius: "2rem",
-                  }}
-                >
+          {imagesLoading ? (
+            <div>Loading images...</div>
+          ) : (
+            cartItems.map((item, index) => {
+              const dataUri = `data:image/jpeg;base64,${hoodieImageUrls[index]}`;
+
+              return (
+                <React.Fragment key={index}>
                   <div
-                    className="canvas-column"
                     style={{
+                      // backgroundColor: "aqua",
+                      width: "100%",
                       display: "flex",
-                      flexDirection: "column",
-                      flex: 1,
+                      gap: "8rem",
+                      // justifyContent: "center",
+                      // justifyContent: "space-between",
+                      // justifyContent: "space-around",
+                      // borderRadius: "2rem",
                     }}
                   >
                     <div
-                      className="cart-hoodie-canvas"
-                      onMouseDown={handleMouseDown}
-                      onMouseUp={() => handleMouseUp(hoodieImageUrls[index])}
-                    >
-                      <Canvas className="canvas-checkout">
-                        <SetupCamera />
-                        <Hoodie hoodieImage={hoodieImageUrls[index]} />
-                        <OrbitControls
-                          enablePan={true}
-                          target={[0, 0.8, 0]}
-                          zoomSpeed={0.5}
-                          maxDistance={13}
-                          minDistance={4}
-                        />
-                        <Environment preset="city" />
-                      </Canvas>
-                    </div>
-                    <div
+                      className="canvas-column"
                       style={{
                         display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        width: "100%",
-                        marginRight: "0%",
+                        flexDirection: "column",
+                        flex: 1,
                       }}
                     >
-                      <h1 style={{ opacity: ".6", fontStyle: "italic" }}>
-                        Infinity Hoodie / L / WHITE
-                      </h1>
+                      <div
+                        className="cart-hoodie-canvas"
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={() => handleMouseUp(hoodieImageUrls[index])}
+                      >
+                        {!imagesLoading && hoodieImageUrls.length > 0 && (
+                          <img
+                            src={hoodieImageUrls[index]}
+                            style={{ width: "100%" }}
+                          />
+                        )}
+                        {/* {!imagesLoading && hoodieImageUrls.length > 0 && (
+                          <Canvas className="canvas-checkout">
+                            {console.log(
+                              "Inside Canvas JSX:",
+                              hoodieImageUrls[0]
+                            )}
+
+                            <SetupCamera />
+                            <NewHoodie hoodieImage={hoodieImageUrls[0]} />
+
+                            <OrbitControls
+                              enablePan={true}
+                              target={[0, 0.8, 0]}
+                              zoomSpeed={0.5}
+                              maxDistance={13}
+                              minDistance={4}
+                            />
+                            <Environment preset="city" />
+                          </Canvas>
+                        )
+                        } */}
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "start",
+                          width: "100%",
+                          marginRight: "0%",
+                        }}
+                      >
+                        <h1 style={{ opacity: ".6", fontStyle: "italic" }}>
+                          Infinity Hoodie / L / WHITE
+                        </h1>
+                      </div>
+                    </div>
+
+                    <div className="cart-info-container" style={{ flex: 2 }}>
+                      <table className="cart-table-row-1">
+                        <thead>
+                          <tr>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Size</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr key={index}>
+                            <td
+                              style={{
+                                fontFamily: "oatmeal-pro-thin",
+                                opacity: ".5",
+                              }}
+                            >
+                              ${itemPrice}
+                            </td>
+                            <td
+                              style={{
+                                fontFamily: "oatmeal-pro-thin",
+                                opacity: ".5",
+                              }}
+                            >
+                              1
+                            </td>
+                            <td
+                              style={{
+                                fontFamily: "oatmeal-pro-thin",
+                                opacity: ".5",
+                              }}
+                            >
+                              L
+                            </td>
+                            <td
+                              style={{
+                                fontFamily: "oatmeal-pro-thin",
+                                opacity: ".5",
+                              }}
+                            >
+                              ${itemPrice}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
-
-                  <div className="cart-info-container" style={{ flex: 2 }}>
-                    <table className="cart-table-row-1">
-                      <thead>
-                        <tr>
-                          <th>Price</th>
-                          <th>Quantity</th>
-                          <th>Size</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr key={index}>
-                          <td
-                            style={{
-                              fontFamily: "oatmeal-pro-thin",
-                              opacity: ".5",
-                            }}
-                          >
-                            ${itemPrice}
-                          </td>
-                          <td
-                            style={{
-                              fontFamily: "oatmeal-pro-thin",
-                              opacity: ".5",
-                            }}
-                          >
-                            1
-                          </td>
-                          <td
-                            style={{
-                              fontFamily: "oatmeal-pro-thin",
-                              opacity: ".5",
-                            }}
-                          >
-                            L
-                          </td>
-                          <td
-                            style={{
-                              fontFamily: "oatmeal-pro-thin",
-                              opacity: ".5",
-                            }}
-                          >
-                            ${itemPrice}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <hr
-                  style={{
-                    // height: "2rem",
-                    color: "white",
-                    border: ".1rem solid gray",
-                    width: "100%",
-                  }}
-                ></hr>
-              </React.Fragment>
-            );
-          })}
+                  <hr
+                    style={{
+                      // height: "2rem",
+                      color: "white",
+                      border: ".1rem solid gray",
+                      width: "100%",
+                    }}
+                  ></hr>
+                </React.Fragment>
+              );
+            })
+          )}
 
           <div>
             <div className="lower-row-container" style={{ display: "flex" }}>
