@@ -6,6 +6,7 @@ import PhotoPrompt from "./PhotoPrompt";
 // import SculpturePrompt from "./SculpturePrompt";
 
 const PromptContainer = ({
+  triggerCounter,
   isFreeRange,
   setIsFreeRange,
   freeRangeInput,
@@ -55,6 +56,7 @@ const PromptContainer = ({
           {prompt === "Claymation" ? <ClaymationPrompt /> : null}
           {prompt === "Sculpture" ? <SculpturePrompt /> : null} */}
         <PhotoPrompt
+          triggerCounter={triggerCounter}
           isFreeRange={isFreeRange}
           setIsFreeRange={setIsFreeRange}
           freeRangeInput={freeRangeInput}

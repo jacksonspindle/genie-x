@@ -69,6 +69,8 @@ const ImageUpload = ({ setHoodieImage }) => {
         setImageSrc(reader.result);
         setImageJustLoaded(true); // Indicate that the image was just loaded
 
+        setHoodieImage(reader.result);
+
         // Log the UID of the currently logged-in user
         const user = auth.currentUser;
         if (user) {

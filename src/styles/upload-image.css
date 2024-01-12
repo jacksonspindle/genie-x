@@ -1,6 +1,6 @@
 .image-upload-container {
     padding: 2rem;
-    max-height: 78vh;
+    max-height: 76vh;
         /* Set a max-height for your container */
         overflow-y: auto;
 }
@@ -69,4 +69,42 @@
     width: 100%;
     height: auto;
     border-radius: 8px; 
+}
+
+
+
+@media (max-height: 740px) {
+.image-upload-container {
+        max-height: 71vh;
+    }
+  
+}
+
+@media (min-height: 740px) and (max-height: 750px) {
+
+.image-upload-container {
+        max-height: 72vh;
+    }
+}
+
+@media (min-height: 750px) and (max-height: 800px) {
+.image-upload-container {
+        max-height: 73vh;
+    }
+}
+
+@media (min-height: 800px) and (max-height: 850px) {
+.image-upload-container {
+        max-height: 74vh;
+    }
+}
+
+@media (min-height: 850px) and (max-height: 900px) {
+.image-upload-container {
+        max-height: 75vh;
+    }
+}
+
+@media (min-height: 900px) {
+
 }
