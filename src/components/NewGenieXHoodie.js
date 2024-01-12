@@ -11,21 +11,59 @@ import { BoxHelper, Box3, Vector3, AxesHelper } from "three";
 import { useFrame } from "@react-three/fiber";
 
 export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
+  console.log("Rendering NewHoodie component");
+  console.log("hoodieImage prop:", hoodieImage);
+  // console.log("majorTest", hoodieImage);
   const group = useRef();
   const { nodes, materials } = useGLTF("/newGenieXHoodie.gltf");
 
   const [texture, setTexture] = useState(null);
+
   const textureScaleX = 0.88; // Repeat twice along X
   const textureScaleY = 0.88; // Repeat twice along Y
-  const textureOffsetX = -1.07; // Shift half way along X
-  const textureOffsetY = -0.08;
+  const textureOffsetX = -1.0; // Shift half way along X
+  const textureOffsetY = -0;
   const [rotation, setRotation] = useState(0);
   const [startAnimation, setStartAnimation] = useState(false);
+  // console.log("majorTest", hoodieImage);
 
   const [logoTexture] = useTexture([genieXLogo]);
+  console.log("majorTest", hoodieImage);
+
   console.log(logoTexture);
 
+  // useEffect(() => {
+  //   console.log("step 1");
+  //   if (hoodieImage) {
+  //     console.log("step 2");
+  //     const image = new Image();
+  //     image.onload = () => {
+  //       const texture = new THREE.Texture(image);
+  //       texture.flipY = false;
+  //       // ...additional texture configuration...
+  //       texture.needsUpdate = true;
+  //       setTexture(texture);
+  //     };
+  //     image.onerror = (error) => {
+  //       console.error("Error loading image:", error);
+  //     };
+  //     image.src = hoodieImage;
+  //   }
+  //   console.log("step 3");
+  // }, [hoodieImage]);
+
+  console.log("hoodie image", hoodieImage);
+
   useEffect(() => {
+    console.log("hoodie image", hoodieImage);
+
+    if (!hoodieImage) {
+      console.log("the hoodie image is undefined");
+      // Handle the case when hoodieImage is undefined
+      return;
+    }
+
+    console.log("the function got this far");
     const loader = new THREE.TextureLoader();
     loader.load(
       hoodieImage,
@@ -36,11 +74,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         loadedTexture.encoding = THREE.sRGBEncoding;
         loadedTexture.needsUpdate = true;
         loadedTexture.wrapS = loadedTexture.wrapT = THREE.RepeatWrapping;
-        // loadedTexture.repeat.set(1 / textureScaleX, 1 / textureScaleY);
         loadedTexture.offset.set(textureOffsetX, textureOffsetY);
 
-        // loadedTexture.wrapS = THREE.ClampToEdgeWrapping;
-        loadedTexture.wrapT = THREE.ClampToEdgeWrapping;
         setTexture(loadedTexture);
       },
       undefined,
