@@ -1,5 +1,8 @@
 .image-upload-container {
     padding: 2rem;
+    max-height: 78vh;
+        /* Set a max-height for your container */
+        overflow-y: auto;
 }
 
 .uploaded-image-container {
@@ -7,13 +10,21 @@
     border: 2px dashed rgb(83, 0, 255);
     border-radius: 1rem;
     display: flex;
+    flex-wrap: wrap;
+    /* Allow items to wrap within the container */
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: 367px;
+    max-height: 600px;
+    /* Set a max-height for your container */
+    overflow-y: auto;
+    /* Enable scrolling when content overflows */
 }
 
-
+.uploaded-image {
+    width: 100% !important;
+    border-radius: 1rem;
+}
 
 .custom-upload-button {
     background-color: #2685e3;
@@ -34,4 +45,28 @@
 
 .upload-image-input {
     /* Style adjustments if needed */
+}
+
+
+.slider-container {
+    width: 100%;
+    justify-content: center;
+    
+}
+
+.zoom-slider {
+    width: 100%;
+}
+
+.user-designs-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 2rem;
+}
+
+.user-design img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; 
 }
