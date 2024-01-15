@@ -30,6 +30,7 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   getStorage,
@@ -630,9 +631,10 @@ const PhotoPrompt = ({
 
       // Upload to Firebase Storage
       const storage = getStorage();
+      const imageName = `${Date.now()}.jpg`; // Using the timestamp as part of the image name
       const storageReference = firebaseStorageRef(
         storage,
-        `user_images/${auth.currentUser.uid}/${Date.now()}.jpg`
+        `user_images/${auth.currentUser.uid}/${imageName}`
       );
 
       await uploadBytes(storageReference, blob);
@@ -640,9 +642,16 @@ const PhotoPrompt = ({
       // Get download URL and save to Firestore
       const downloadURL = await getDownloadURL(storageReference);
 
+      // Create a unique ID for the cart item, could also use a UUID library
+      const uniqueCartItemId = uuidv4();
+
       const hoodieData = {
+        id: uniqueCartItemId,
         imageUrl: downloadURL,
         addedAt: new Date(),
+        size: "L",
+        price: 120,
+        quantity: 1, // Start with a quantity of 1 when added to the cart
       };
 
       const userCartRef = doc(db, "carts", auth.currentUser.uid);
@@ -651,9 +660,20 @@ const PhotoPrompt = ({
       if (docSnapshot.exists()) {
         let data = docSnapshot.data();
         let currentItems = data ? data.items || [] : [];
-        currentItems.push(hoodieData);
+        // Check if the item already exists in the cart based on imageUrl
+        const existingItemIndex = currentItems.findIndex(
+          (item) => item.imageUrl === hoodieData.imageUrl
+        );
+        if (existingItemIndex !== -1) {
+          // If item exists, update the quantity
+          currentItems[existingItemIndex].quantity += 1;
+        } else {
+          // If item is new, add it to the cart
+          currentItems.push(hoodieData);
+        }
         await setDoc(userCartRef, { items: currentItems }, { merge: true });
       } else {
+        // If the cart does not exist, create it with the new item
         await setDoc(userCartRef, { items: [hoodieData] });
       }
 

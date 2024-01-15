@@ -4,13 +4,16 @@ import Hoodie from "./Hoodie";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Link } from "react-router-dom";
 import { auth, db } from "../config/firebase"; // Import Firebase auth and db
-import { getDoc, doc, onSnapshot } from "firebase/firestore"; // Import Firestore functions
+import { getDoc, doc, onSnapshot, updateDoc } from "firebase/firestore"; // Import Firestore functions
 import axios from "axios";
 import { Ring } from "@uiball/loaders";
 import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import { NewHoodie } from "./NewGenieXHoodie";
 import { Box } from "@react-three/drei";
+import frontHoodie from "../assets/frontHoodie.png";
+import { loadStripe } from "@stripe/stripe-js";
+import { getAuth } from "firebase/auth";
 
 const Cart = ({ setHoodieImage }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -25,6 +28,74 @@ const Cart = ({ setHoodieImage }) => {
   const [mouseUpTime, setMouseUpTime] = useState(0);
 
   const itemPrice = 120; // Price per item
+  const [quantities, setQuantities] = useState({});
+  const [sizes, setSizes] = useState({});
+
+  useEffect(() => {
+    const initialSizes = {};
+    cartItems.forEach((item) => {
+      initialSizes[item.id] = "L"; // default size
+    });
+    setSizes(initialSizes);
+  }, [cartItems]);
+
+  const handleSizeChange = (itemId, newSize) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === itemId
+          ? { ...item, size: newSize } // Keep the existing quantity
+          : item
+      )
+    );
+  };
+
+  useEffect(() => {
+    // Initialize quantities for each item in the cart
+    const initialQuantities = {};
+    cartItems.forEach((item) => {
+      initialQuantities[item.id] = 1; // Assuming each item has a unique 'id'. Adjust as per your data structure.
+    });
+    setQuantities(initialQuantities);
+  }, [cartItems]);
+
+  // Function to increment quantity
+  const incrementQuantity = (itemId) => {
+    setCartItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  // Function to decrement quantity
+  const decrementQuantity = (itemId) => {
+    setCartItems((currentItems) =>
+      currentItems.map((item) =>
+        item.id === itemId
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item
+      )
+    );
+  };
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      const userCartRef = doc(db, "carts", auth.currentUser.uid);
+
+      // Update Firestore with the current cartItems state
+      const updateFirestoreCart = async () => {
+        try {
+          await updateDoc(userCartRef, {
+            items: cartItems,
+          });
+        } catch (error) {
+          console.error("Error updating cart in Firestore: ", error);
+        }
+      };
+
+      updateFirestoreCart();
+    }
+  }, [cartItems]);
 
   const handleMouseDown = () => {
     setMouseDownTime(Date.now());
@@ -157,6 +228,78 @@ const Cart = ({ setHoodieImage }) => {
     fetchImages();
   }, [cartItems]);
 
+  const calculateSubtotal = () => {
+    let subtotal = 0;
+    cartItems.forEach((item) => {
+      // Use item.quantity directly instead of quantities[item.id]
+      subtotal += itemPrice * (item.quantity || 1);
+    });
+    return subtotal;
+  };
+
+  const handleCheckout = async () => {
+    // Load Stripe
+    const stripe = await loadStripe(
+      "pk_test_51OYtFvFs3ewrexUmlZdpAb34FAOhSwucgKnjwpOLTrNUOs6TE3wdo2lhV9EbTsVuQcgmWHJ27R1bPEvK6cEKE56L00vnxw3Fmq"
+    );
+
+    // Get the current user's UID
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      // Handle the case where the user is not authenticated
+      console.error("User not authenticated.");
+      return;
+    }
+
+    console.log("user id", auth.currentUser.uid);
+
+    try {
+      // Call your Firebase Function to create a checkout session
+      const response = await fetch(
+        "https://us-central1-geniex-1d1e3.cloudfunctions.net/createCheckoutSession",
+        {
+          method: "POST",
+          body: JSON.stringify({ uid: auth.currentUser.uid }), // Send the UID in the request body
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const session = await response.json();
+
+        // Redirect to the Stripe checkout page
+        const result = await stripe.redirectToCheckout({
+          sessionId: session.sessionId,
+        });
+
+        if (result.error) {
+          console.error(
+            "Stripe redirectToCheckout error:",
+            result.error.message
+          );
+        }
+      } else {
+        // Handle HTTP errors
+        console.error("HTTP error status:", response.status);
+        const errorText = await response.text();
+        console.error("Error response text:", errorText);
+        // Parse and log JSON error object if possible
+        try {
+          const errorObj = JSON.parse(errorText);
+          console.error("Parsed error object:", errorObj);
+        } catch (e) {
+          console.error("Error parsing error text as JSON.");
+        }
+      }
+    } catch (error) {
+      // Handle fetch errors
+      console.error("Fetch error:", error.message);
+    }
+  };
+
   return (
     <div
       className={
@@ -190,10 +333,12 @@ const Cart = ({ setHoodieImage }) => {
           ) : (
             cartItems.map((item, index) => {
               const dataUri = `data:image/jpeg;base64,${hoodieImageUrls[index]}`;
-
+              const itemId = cartItems;
+              console.log("itemID", itemId);
               return (
                 <React.Fragment key={index}>
                   <div
+                    className="line-item-container"
                     style={{
                       // backgroundColor: "aqua",
                       width: "100%",
@@ -219,10 +364,18 @@ const Cart = ({ setHoodieImage }) => {
                         onMouseUp={() => handleMouseUp(hoodieImageUrls[index])}
                       >
                         {!imagesLoading && hoodieImageUrls.length > 0 && (
-                          <img
-                            src={hoodieImageUrls[index]}
-                            style={{ width: "100%" }}
-                          />
+                          <div className="cart-images-container">
+                            <img
+                              src={frontHoodie}
+                              className="cart-image-1"
+                              alt="image1"
+                            />
+                            <img
+                              className="cart-image-2"
+                              src={hoodieImageUrls[index]}
+                              alt="image2"
+                            />
+                          </div>
                         )}
                         {/* {!imagesLoading && hoodieImageUrls.length > 0 && (
                           <Canvas className="canvas-checkout">
@@ -288,7 +441,17 @@ const Cart = ({ setHoodieImage }) => {
                                 opacity: ".5",
                               }}
                             >
-                              1
+                              <button
+                                onClick={() => decrementQuantity(item.id)}
+                              >
+                                -
+                              </button>
+                              <span>{item.quantity || 1}</span>
+                              <button
+                                onClick={() => incrementQuantity(item.id)}
+                              >
+                                +
+                              </button>
                             </td>
                             <td
                               style={{
@@ -296,7 +459,16 @@ const Cart = ({ setHoodieImage }) => {
                                 opacity: ".5",
                               }}
                             >
-                              L
+                              <select
+                                value={item.size}
+                                onChange={(e) =>
+                                  handleSizeChange(item.id, e.target.value)
+                                }
+                              >
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                              </select>
                             </td>
                             <td
                               style={{
@@ -304,7 +476,7 @@ const Cart = ({ setHoodieImage }) => {
                                 opacity: ".5",
                               }}
                             >
-                              ${itemPrice}
+                              ${itemPrice * (item.quantity || 1)}
                             </td>
                           </tr>
                         </tbody>
@@ -350,7 +522,7 @@ const Cart = ({ setHoodieImage }) => {
                           opacity: ".5",
                         }}
                       >
-                        ${itemPrice * cartItems.length}
+                        ${calculateSubtotal()}
                       </th>
                     </tr>
                   </thead>
@@ -417,6 +589,7 @@ const Cart = ({ setHoodieImage }) => {
                       color: "white",
                       border: "none",
                     }}
+                    onClick={handleCheckout}
                   >
                     Checkout
                   </button>
