@@ -184,7 +184,7 @@ const DesignPortal = ({
     setIsFreeRange(true);
     setFreeRangeInput(!freeRangeInput);
     console.log("testing image");
-    setHoodieImage(true);
+    setHoodieImage("free");
   };
 
   return (
@@ -265,7 +265,6 @@ const DesignPortal = ({
               <SetupCamera />
               {/* <Hoodie hoodieImage={hoodieImage} /> */}
               <NewHoodie genieXLogo={genieXLogo} hoodieImage={hoodieImage} />
-
               <OrbitControls
                 enablePan={true}
                 target={[0, 0.8, 0]}
