@@ -87,7 +87,6 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        livemode: true,
         success_url: success_url,
         cancel_url: `http://localhost:3000/cart`,
         shipping_address_collection: {
