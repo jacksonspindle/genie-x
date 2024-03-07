@@ -240,7 +240,7 @@ const Cart = ({ setHoodieImage }) => {
   const handleCheckout = async () => {
     // Load Stripe
     const stripe = await loadStripe(
-      "pk_test_51OYtFvFs3ewrexUmlZdpAb34FAOhSwucgKnjwpOLTrNUOs6TE3wdo2lhV9EbTsVuQcgmWHJ27R1bPEvK6cEKE56L00vnxw3Fmq"
+      "pk_live_51OYtFvFs3ewrexUmStoMBu1TFkaRi3y0BMJ2C3dc4SZ4Vq622LrhfvdxWltmpaVTNTHkuxrTyTgFuWjzaaHDX3th00j8Qj9t85"
     );
 
     // Get the current user's UID
