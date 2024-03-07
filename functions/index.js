@@ -6,6 +6,14 @@ admin.initializeApp();
 const stripe = require("stripe")(functions.config().stripe.secret_key);
 const db = admin.firestore();
 
+console.log(
+  `Stripe mode: ${
+    functions.config().stripe.secret_key.startsWith("sk_live_")
+      ? "live"
+      : "test"
+  }`
+);
+
 const baseUrl =
   process.env.NODE_ENV === "production"
     ? "https://geniexbeta.xyz"

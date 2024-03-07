@@ -269,6 +269,8 @@ const Cart = ({ setHoodieImage }) => {
 
       if (response.ok) {
         const session = await response.json();
+        console.log("this is logging");
+        console.log("session", session);
 
         // Redirect to the Stripe checkout page
         const result = await stripe.redirectToCheckout({
