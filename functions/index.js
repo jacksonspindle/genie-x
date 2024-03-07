@@ -95,8 +95,9 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
         },
       });
 
-      console.log(`Checkout session created with ID: ${session.id}`);
       console.log("sessionID", session.id);
+      console.log(`Checkout session created with ID: ${session.id}`);
+
       res.json({ sessionId: session.id });
     } catch (error) {
       console.error("Error creating checkout session:", error);
