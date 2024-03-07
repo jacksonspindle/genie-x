@@ -280,9 +280,11 @@ const Cart = ({ setHoodieImage }) => {
             "Stripe redirectToCheckout error:",
             result.error.message
           );
+          console.log("session", session);
         }
       } else {
         // Handle HTTP errors
+
         console.error("HTTP error status:", response.status);
         const errorText = await response.text();
         console.error("Error response text:", errorText);
