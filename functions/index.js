@@ -87,6 +87,7 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
+        livemode: true,
         success_url: success_url,
         cancel_url: `http://localhost:3000/cart`,
         shipping_address_collection: {
@@ -96,6 +97,7 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
 
       console.log(`Checkout session created with ID: ${session.id}`);
       res.json({ sessionId: session.id });
+      console.log("sessionID", session.id);
     } catch (error) {
       console.error("Error creating checkout session:", error);
       res.status(500).json({ error: error.message });
