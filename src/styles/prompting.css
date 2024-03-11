@@ -153,8 +153,8 @@
     /* justify-content: left; */
     align-items: start;
     /* background-color: red; */
-    width: 100%;
-    gap: 1rem;
+    width: 93%;
+    gap: 1vw;
     justify-content: center;
     justify-content: space-between;
     /* gap: 2rem; */
@@ -169,13 +169,13 @@
 }
 
 .prompt-buttons-container>button:first-child {
-    width: 11vw !important;
+    width:10vw !important;
     /* padding: .5rem !important; */
     padding-top: .5rem !important;
         /* padding-bottom: .5rem !important; */
-    background-color: #2685e3;
+    /* background-color: #2685e3; */
     border: none;
-    color: white;
+    color: black;
 
 }
 
@@ -192,6 +192,7 @@
     display: flex;
     justify-content: center;
     text-decoration: none;
+    border-radius: .5rem;
 }
 
 .info-icon-container {
