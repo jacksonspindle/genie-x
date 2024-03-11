@@ -184,6 +184,9 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                   backgroundColor: "transparent",
                   color: "white",
                   fontSize: 20,
+                  position: "absolute",
+                  top: 30,
+                  right: 50,
                 }}
                 onClick={() => {
                   setToggleLogInPage(true);
