@@ -8,13 +8,21 @@ import actofcreationlogo from "../assets/actofcreationlogo.svg";
 import actofcreationicon from "../assets/actofcreationicon.svg";
 import { getAuth, signOut } from "firebase/auth";
 import defaultProfile from "../assets/defaultProfile.webp";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 const dropdownVariants = {
-  hidden: { opacity: 0, y: -10 },
+  hidden: { opacity: 0, y: 0 },
   visible: { opacity: 1, y: 10 },
 };
 
-const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
+const Nav = ({
+  setToggleLogInPage,
+  signedIn,
+  setSignedIn,
+  setCurrentProfilePic,
+  currentProfilePic,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const accountRef = useRef(null);
@@ -32,16 +40,69 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
   }, [isHovered]);
 
   const handleLogout = async () => {
+    clearTimeout(hoverTimeoutRef.current);
     const auth = getAuth();
     try {
       await signOut(auth);
       setSignedIn(false); // Update the signedIn state
-      //  toast("Signed Out!"); // Provide a message to the user
     } catch (error) {
       console.error("Logout failed", error);
-      //  toast("Logout failed. Please try again.");
     }
   };
+
+  const hoverTimeoutRef = useRef();
+
+  const handleMouseEnter = () => {
+    clearTimeout(hoverTimeoutRef.current);
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(false);
+    }, 100);
+  };
+
+  useEffect(() => {
+    const checkIfOutsideBounds = (e) => {
+      if (!isHovered) return;
+
+      const profilePic = document.querySelector('img[alt="profile-pic"]');
+      const dropdownMenu = document.querySelector(".drop-down-menu");
+
+      if (!profilePic || !dropdownMenu) {
+        setIsHovered(false);
+        return;
+      }
+
+      const profilePicRect = profilePic.getBoundingClientRect();
+      const dropdownRect = dropdownMenu.getBoundingClientRect();
+
+      const outsideProfilePic =
+        e.clientX < profilePicRect.left ||
+        e.clientX > profilePicRect.right ||
+        e.clientY < profilePicRect.top ||
+        e.clientY > profilePicRect.bottom + 30;
+
+      const outsideDropdown =
+        e.clientX < dropdownRect.left ||
+        e.clientX > dropdownRect.right ||
+        e.clientY < dropdownRect.top ||
+        e.clientY > dropdownRect.bottom;
+
+      if (outsideProfilePic && outsideDropdown) {
+        setIsHovered(false);
+      }
+    };
+
+    if (isHovered) {
+      window.addEventListener("mousemove", checkIfOutsideBounds);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", checkIfOutsideBounds);
+    };
+  }, [isHovered]);
 
   return (
     <div>
@@ -114,16 +175,15 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                 ref={accountRef}
               >
                 <Link
+                  to="/account"
                   style={{
                     backgroundColor: "transparent",
                     color: "white",
                   }}
-                  to="/account"
                 >
                   <img
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    src={defaultProfile}
+                    onMouseEnter={handleMouseEnter}
+                    src={currentProfilePic}
                     alt="profile-pic"
                     style={{
                       width: "50px",
@@ -131,49 +191,31 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                       top: 3,
                       right: window.innerWidth < 1600 ? 15 : 40,
                       borderRadius: "50%",
+                      zIndex: "10",
                     }}
                   />
                 </Link>
                 <AnimatePresence>
                   {isHovered && (
                     <motion.div
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
                       initial="hidden"
                       animate="visible"
                       exit="hidden"
                       variants={dropdownVariants}
-                      style={{
-                        zIndex: "100",
-                        position: "absolute",
-                        top: `${position.top}px`,
-                        right: `${position.right}px`,
-                        transform: "translateX(-50%)", // centering dropdown
-                        backgroundColor: "rgba(255, 255, 255, .9)",
-                        color: "black",
-                        borderRadius: "5px",
-                        padding: "10px",
-                        boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        gap: ".7rem",
-                      }}
+                      className="drop-down-menu"
+                      // Your styling here
                     >
-                      <Link
-                        to="/orders"
-                        style={{
-                          width: "100%",
-                          background: "transparent",
-                        }}
-                      >
-                        Orders
-                      </Link>
-                      <Link
-                        style={{ width: "100%", background: "transparent" }}
-                        // onClick={() => setSignedIn(false)}
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Link>
+                      <li>
+                        <Link>Orders</Link>
+                      </li>
+                      <li>
+                        <Link to={"/account"}>Account</Link>
+                      </li>
+                      <li>
+                        <Link onClick={handleLogout}>Signout</Link>
+                      </li>
                     </motion.div>
                   )}
                 </AnimatePresence>
