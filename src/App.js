@@ -7,6 +7,7 @@ import "./styles/cart.css";
 import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
+import "./styles/account.css";
 import "./styles/image-editor.css";
 import "./styles/product-details.css";
 import "./styles/user-designs.css";
@@ -20,9 +21,13 @@ import { Gradient } from "./Gradient";
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
 import { AnimatePresence } from "framer-motion";
+import Account from "./components/Account";
+import defaultProfile from "./assets/defaultProfile.webp";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import MyImageEditor from "./components/MyImageEditor";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { db } from "./config/firebase";
 
 // import Login from "./components/Login";
 
@@ -32,6 +37,8 @@ function App() {
   const [signedIn, setSignedIn] = useState(false);
   const [toggleLogInPage, setToggleLogInPage] = useState(false);
   const [productDetails, setProductDetails] = useState(false);
+  const [currentProfilePic, setCurrentProfilePic] = useState(defaultProfile);
+  const [triggerProfilePicChange, setTriggerProfilePicChange] = useState(1);
 
   useEffect(() => {
     console.log("newHoodieImage:", hoodieImage);
@@ -61,6 +68,27 @@ function App() {
     // eslint-disable-next-line no-unused-vars
   }, [ref]);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+
+      const unsubscribe = onSnapshot(userRef, (doc) => {
+        const userData = doc.data();
+        const currentPic = userData.currentProfilePic;
+        console.log(currentPic, "currentPic");
+        if (currentPic) {
+          setCurrentProfilePic(currentPic);
+        } else {
+          setCurrentProfilePic(defaultProfile); // Set default if no profile pic found
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [currentProfilePic]);
+
   return (
     <div className="App" ref={ref}>
       <AnimatePresence>
@@ -83,6 +111,8 @@ function App() {
       ) : null}
       <Router>
         <Nav
+          currentProfilePic={currentProfilePic}
+          setCurrentProfilePic={setCurrentProfilePic}
           setToggleLogInPage={setToggleLogInPage}
           signedIn={signedIn}
           setSignedIn={setSignedIn}
@@ -133,6 +163,11 @@ function App() {
             element={
               <Cart setHoodieImage={setHoodieImage} hoodieImage={hoodieImage} />
             }
+          />
+          <Route
+            exact
+            path="/account"
+            element={<Account setCurrentProfilePic={setCurrentProfilePic} />}
           />
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
