@@ -178,7 +178,7 @@ export const CreateAccount = ({
         <div className="signup-option" style={{ color: "white" }}>
           Already have an account?
           <span
-            style={{ color: "blue", cursor: "pointer" }}
+            style={{ color: "#4a90e2", cursor: "pointer" }}
             // href="javascript:void(0)" /* eslint-enable no-unused-vars */
             onClick={(e) => {
               /* eslint-enable no-unused-vars */

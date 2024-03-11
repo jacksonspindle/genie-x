@@ -135,7 +135,7 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
         <div className="signup-option" style={{ color: "white" }}>
           Don't have an account?{" "}
           <span
-            style={{ color: "blue", cursor: "pointer" }}
+            style={{ color: "#4a90e2", cursor: "pointer" }}
             onClick={() => setToggleCreateAccount(false)}
           >
             Create one
