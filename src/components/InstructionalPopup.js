@@ -3,6 +3,8 @@ import { auth, googleProvider } from "../config/firebase";
 
 import { motion } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
+import actofcreationlogo from "../assets/actofcreationlogo.svg";
+import actofcreationicon from "../assets/actofcreationicon.svg";
 import { AnimatePresence } from "framer-motion";
 import madLibsDemo from "../assets/madLibsDemo.mp4";
 import freeRangeDemo from "../assets/freeRangeDemo.mp4";
@@ -54,8 +56,8 @@ const InstructionalPopup = ({
           }}
           className="slide1"
         >
-          <h1 style={{ fontSize: "40px", color: "white" }}>
-            Welcome to the GenieX App!
+          <h1 style={{ fontSize: "50px", color: "white", paddingTop: "40px" }}>
+            Welcome to <br></br> Act of Creation
           </h1>
           <div
             style={{
@@ -68,12 +70,24 @@ const InstructionalPopup = ({
               boxShadow: "none",
             }}
           >
-            <img
-              src={genieXLogo}
+            {/* <img
+              src={actofcreationlogo}
               width={"80%"}
               alt="welcomeImage"
               style={{ backgroundColor: "transparent" }}
+            /> */}
+            <img
+              src={actofcreationicon}
+              width={"35%"}
+              alt="welcomeImage"
+              style={{ backgroundColor: "transparent" }}
             />
+            {/* <img
+              src={actofcreationlogo}
+              width={"80%"}
+              alt="welcomeImage"
+              style={{ backgroundColor: "transparent" }}
+            /> */}
           </div>
         </div>
       ),
@@ -198,63 +212,63 @@ const InstructionalPopup = ({
         </div>
       ),
     },
-    {
-      id: 3,
-      content: (
-        <div
-          style={{
-            borderRadius: "1rem",
-            width: "100%",
-            padding: "1rem",
-            display: "flex",
-            flexDirection: "column",
-            boxSizing: "border-box", // Add this line
-            // justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            boxShadow: "none",
-            backgroundColor: "transparent",
+    // {
+    //   id: 3,
+    //   content: (
+    //     <div
+    //       style={{
+    //         borderRadius: "1rem",
+    //         width: "100%",
+    //         padding: "1rem",
+    //         display: "flex",
+    //         flexDirection: "column",
+    //         boxSizing: "border-box", // Add this line
+    //         // justifyContent: "center",
+    //         alignItems: "center",
+    //         height: "100%",
+    //         boxShadow: "none",
+    //         backgroundColor: "transparent",
 
-            // backgroundColor: "red",
-          }}
-          className="slide1"
-        >
-          <h1 style={{ fontSize: "40px", color: "white", marginBottom: "0" }}>
-            Image Editor
-          </h1>
-          <p
-            style={{
-              fontSize: "22px",
-              padding: "0 4rem 0 4rem",
-              textAlign: "center",
-            }}
-          >
-            Use the image editor to refine details in your designs.
-          </p>
-          <div
-            style={{
-              backgroundColor: "transparent",
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              boxShadow: "none",
-            }}
-          >
-            <video
-              src={imageEditorDemo}
-              width={"90%"}
-              autoPlay
-              loop
-              muted
-              alt="welcomeImage"
-              style={{ backgroundColor: "transparent", borderRadius: "1rem" }}
-            />
-          </div>
-        </div>
-      ),
-    },
+    //         // backgroundColor: "red",
+    //       }}
+    //       className="slide1"
+    //     >
+    //       <h1 style={{ fontSize: "40px", color: "white", marginBottom: "0" }}>
+    //         Image Editor
+    //       </h1>
+    //       <p
+    //         style={{
+    //           fontSize: "22px",
+    //           padding: "0 4rem 0 4rem",
+    //           textAlign: "center",
+    //         }}
+    //       >
+    //         Use the image editor to refine details in your designs.
+    //       </p>
+    //       <div
+    //         style={{
+    //           backgroundColor: "transparent",
+    //           width: "100%",
+    //           height: "100%",
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           boxShadow: "none",
+    //         }}
+    //       >
+    //         <video
+    //           src={imageEditorDemo}
+    //           width={"90%"}
+    //           autoPlay
+    //           loop
+    //           muted
+    //           alt="welcomeImage"
+    //           style={{ backgroundColor: "transparent", borderRadius: "1rem" }}
+    //         />
+    //       </div>
+    //     </div>
+    //   ),
+    // },
     {
       id: 4,
       content: (
@@ -536,6 +550,7 @@ const InstructionalPopup = ({
             height: "90%",
             boxShadow: "none",
             backgroundColor: "transparent",
+            // backgroundColor: "red",
           }}
         >
           {createAccountPopUp ? (

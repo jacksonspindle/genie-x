@@ -70,6 +70,10 @@ body {
   --gradient-color-2: #47bcff;
   --gradient-color-3: #e2d6ff;
   --gradient-color-4: #0011ff;
+  /* --gradient-color-1: #000000; */
+  /* --gradient-color-2: #FF0000; */
+  /* --gradient-color-3: black; */
+  /* --gradient-color-4: black; */
 }
 
 
@@ -122,4 +126,29 @@ body {
 
 .nav-container a {
   font-size: 20px;
+}
+
+.act-of-creation-logo{
+  transition: all ease-in-out .55s;
+}
+
+.act-of-creation-logo:hover {
+  filter: invert(1);
+} 
+
+.cartIcon {
+  position: absolute;
+  top:14px;
+  right: 135px;
+  transition: all ease-in-out .55s;
+}
+
+.cartIcon:hover {
+    filter: invert(1);
+}
+
+.nav-container a {
+  margin: 0;
+  padding: 0;
+  width: 3px;
 }

@@ -20,6 +20,7 @@ import { Ring } from "@uiball/loaders";
 // import ImageEditor from "./ImageEditor";
 import lockIcon from "../assets/lockIcon.png";
 import genieXLogo from "../assets/genieXLogo.png";
+import actofcreationicon from "../assets/actofcreationicon.svg";
 import saveDesignIcon from "../assets/saveDesignIcon.png";
 import previewThumbnail from "../assets/previewThumbnail.png";
 import {
@@ -40,6 +41,10 @@ import {
 } from "firebase/storage";
 
 const PhotoPrompt = ({
+  words,
+  setWords,
+  isSaving,
+  setIsSaving,
   triggerCounter,
   isFreeRange,
   setIsFreeRange,
@@ -57,18 +62,20 @@ const PhotoPrompt = ({
   freeRangeToggle,
   setFreeRangeToggle,
   freeRangePrompt,
+  isGenerating,
+  setIsGenerating,
 }) => {
   const [selectedWord, setSelectedWord] = useState(null);
-  const [words, setWords] = useState({
-    Subject: "Subject",
-    Adjective: "Adjective",
-    Setting: "Setting",
-    Verb: "Verb",
-    Style: "Style",
-    Composition: "Composition",
-    ColorScheme: "Color",
-    Medium: "Photograph ",
-  });
+  // const [words, setWords] = useState({
+  //   Subject: "Subject",
+  //   Adjective: "Adjective",
+  //   Setting: "Setting",
+  //   Verb: "Verb",
+  //   Style: "Style",
+  //   Composition: "Composition",
+  //   ColorScheme: "Color",
+  //   Medium: "Painting ",
+  // });
 
   useEffect(() => {
     console.log("donkey: ", hoodieImage);
@@ -95,7 +102,7 @@ const PhotoPrompt = ({
     }
   }, [triggerCounter]); // Depend on triggerCounter
 
-  const [isGenerating, setIsGenerating] = useState(false);
+  // const [isGenerating, setIsGenerating] = useState(false);
 
   const portalRoot = document.getElementById("portal-root");
   const dropdownRef = useRef(null);
@@ -113,7 +120,7 @@ const PhotoPrompt = ({
 
   const [placeholder, setPlaceholder] = useState("");
   const inputRef = useRef(null);
-  const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
+  // const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
 
   useEffect(() => {
     console.log("original hoodieImage", hoodieImage);
@@ -1077,13 +1084,14 @@ const PhotoPrompt = ({
                 ) : (
                   <img
                     key="default-preview"
-                    src={genieXLogo}
+                    src={actofcreationicon}
                     className="preview-image-test"
                     alt="Default Preview"
                     style={{
                       borderRadius: ".9rem",
-                      width: "100%",
-                      marginTop: "30%",
+                      width: "70%",
+                      marginTop: "18%",
+                      marginLeft: "15%",
 
                       // height: "100%", // Ensure the image takes up the entire div
                     }}
@@ -1093,6 +1101,7 @@ const PhotoPrompt = ({
             )
           )}
         </div>
+        <div style={{ height: "50px", width: "100%" }}></div>
       </div>
       {/* <div className="preview-images-container">
         {Array(4)
@@ -1174,22 +1183,31 @@ const PhotoPrompt = ({
           ))}
       </div> */}
 
-      <div className="prompt-buttons-container">
+      {/* <div className="prompt-buttons-container">
         <button
           className="apply-image-btn"
           onClick={generateImageCheck}
           disabled={dallePrompt === "genie"}
         >
-          Generate Image
+          Generate
         </button>
-        <Link to={"/cart"} className="apply-image-btn" onClick={addToCart}>
+        <Link
+          to={"/cart"}
+          // className="apply-image-btn"
+          onClick={addToCart}
+          style={{ backgroundColor: "black", marginTop: "1rem" }}
+        >
           <button
             style={{
               border: "none",
-              background: "white",
+              backgroundColor: "black",
               boxShadow: "none",
               fontFamily: "oatmeal-pro-regular",
               cursor: "pointer",
+              color: "white",
+              fontFamily: "oatmeal-pro-bold",
+              fontSize: "15px",
+              borderRadius: "1rem",
             }}
           >
             Add to Cart
@@ -1221,7 +1239,7 @@ const PhotoPrompt = ({
             />
           )}
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

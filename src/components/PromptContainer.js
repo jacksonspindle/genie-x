@@ -6,6 +6,12 @@ import PhotoPrompt from "./PhotoPrompt";
 // import SculpturePrompt from "./SculpturePrompt";
 
 const PromptContainer = ({
+  setWords,
+  words,
+  isGenerating,
+  setIsGenerating,
+  isSaving,
+  setIsSaving,
   triggerCounter,
   isFreeRange,
   setIsFreeRange,
@@ -56,6 +62,12 @@ const PromptContainer = ({
           {prompt === "Claymation" ? <ClaymationPrompt /> : null}
           {prompt === "Sculpture" ? <SculpturePrompt /> : null} */}
         <PhotoPrompt
+          setWords={setWords}
+          words={words}
+          isGenerating={isGenerating}
+          setIsGenerating={setIsGenerating}
+          isSaving={isSaving}
+          setIsSaving={setIsSaving}
           triggerCounter={triggerCounter}
           isFreeRange={isFreeRange}
           setIsFreeRange={setIsFreeRange}
