@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { useTexture, Decal } from "@react-three/drei";
 import { BoxHelper, Box3, Vector3, AxesHelper } from "three";
 import { useFrame } from "@react-three/fiber";
+import actOfCreationLogo from "../assets/actofcreationlogoHoodie.svg";
 
 export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
   console.log("Rendering NewHoodie component");
@@ -27,7 +28,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
   const [startAnimation, setStartAnimation] = useState(false);
   // console.log("majorTest", hoodieImage);
 
-  const [logoTexture] = useTexture([genieXLogo]);
+  // const [logoTexture] = useTexture([genieXLogo]);
+  const [logoTexture] = useTexture([actOfCreationLogo]);
   console.log("majorTest", hoodieImage);
 
   console.log(logoTexture);
@@ -133,9 +135,9 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
             wireframe
           /> */}
           <Decal
-            position={[0.09, 0.15, 0.1]}
+            position={[0.0, 0.09, 0.1]}
             rotation={[0, 0, 0]}
-            scale={[0.12, 0.07, 0.1]}
+            scale={[0.1 * 3, 0.05 * 3, 0.1 * 3]}
             map={logoTexture}
             map-anisotropy={16}
             transparent={true}

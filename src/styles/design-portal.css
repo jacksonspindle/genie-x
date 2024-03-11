@@ -304,7 +304,7 @@ border-bottom-right-radius: .5rem;
     /* background-color: blue; */
     width: 55%;
     /* background-color: rgba(20, 20, 20, .3)  !important; */
-        /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); */
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
         border-radius: 1rem;
         color: white;
             /* backdrop-filter: blur(10px); */
@@ -314,8 +314,9 @@ border-bottom-right-radius: .5rem;
 .carousel-container {
     width: 100% !important;
     height: 100% !important;
-        background-color: rgba(20, 20, 20, 1)  !important;
-}
+        background-color: rgba(20, 20, 20, .6)  !important;
+                backdrop-filter: blur(12px);
+    }
 
 
 .carousel-item {
@@ -398,3 +399,7 @@ border-bottom-right-radius: .5rem;
 }
 
 
+
+.prompt-button:hover {
+transform: scale(1.05);
+}
