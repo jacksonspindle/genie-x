@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import productImageTest from "../assets/productImageTest.jpg";
 import xIcon from "../assets/xIcon.png";
+import sampleHoodie from "../assets/sampleHoodie.webp";
 
 const ProductDetailsNavigation = () => {
   const tabs = [
@@ -14,12 +15,18 @@ const ProductDetailsNavigation = () => {
       content: (
         <div>
           <p>
-            The Mascot Hoodie in Vintage Grey is crafted from luxury heavyweight
-            cotton, with an oversized fit. It features our tonal puff detailed
-            Bellerophon graphic to the front and back. The hoodie has ribbed
-            hems and cuffs and is finished with a Represent metal bar to the
-            pocket and cobrax popper to the hood.
+            The Friends and Family Infinity Hoodie is crafted from luxury
+            heavyweight 100% Primafiber Cotton, with a slightly oversized fit.
+            Featuring a tonal puff print of the Act of Creation emblem on the
+            front and a customized-to-order direct to garment print on the back.
           </p>
+          <ul className="product-details-bullets">
+            <li style={{ textAlign: "right" }}>• 12 oz. 400 GSM +/-</li>
+            <li>• Heavy Duty Puff Print</li>
+            <li>• Double Self-Lined Hood</li>
+            <li>• Pockets Secured With Bar Tacks</li>
+            <li>• Clean Finished Ribbed Cuffs and Waistband</li>
+          </ul>
         </div>
       ),
     },
@@ -28,22 +35,19 @@ const ProductDetailsNavigation = () => {
       label: "Shipping & Returns",
       content: (
         <div>
-          <h1>UK SHIPPING</h1>
+          <h1 style={{ textAlign: "left" }}>US Shipping</h1>
           <nav>
-            <ul>
-              <li>Royal Mail Tracked 24 (1-2 business days) - FREE.</li>
-              <li>
-                DPD Next Day (24 Hour) - £5.00 or FREE if order is £200 or
-                above.
-              </li>
-            </ul>
+            Each order will be shipped with USPS Ground within 3 weeks of order
+            placement.
           </nav>
-          <h1>FREE UK RETURNS</h1>
+          <br></br>
+          <br></br>
+          <br></br>
+          <h1 style={{ textAlign: "left" }}>Return Policy</h1>
           <p>
-            If something is not quite right you’ve got 14 days to send back your
-            items for FREE for a full refund. All we ask is that items are in an
-            unused, unaltered condition and returned with their tags and
-            packaging.
+            Due to the nature of our product being 1:1, we do not offer returns.
+            All sales are final, however if you do not recieve the hoodie within
+            3 weeks then we guarantee your money back.
           </p>
         </div>
       ),
@@ -53,22 +57,34 @@ const ProductDetailsNavigation = () => {
       label: "Product FAQ",
       content: (
         <div>
-          <h1>How does this Hoodie fit?</h1>
+          <h1 style={{ textAlign: "left" }}>How does this Hoodie fit?</h1>
           <p>
-            This product follows the signature oversized fit at Represent. This
-            style falls wide and square. Fits large to size but for a regular
-            fit, please take a size down.
+            The Infinity Hoodie follows the signature oversized fit at Act of
+            Creation. The Hoodie fits slightly wide and square.
           </p>
-          <h1>What are Represent Hoodies made from?</h1>
+          <br></br>
+          <br></br>
+          <h1 style={{ textAlign: "left" }}>
+            What are Represent Hoodies made from?
+          </h1>
           <p>
-            Most of our hoodies are made from 100% heavy-weight jersey cotton.
-            Compositions and GSM can be found within the product description.
+            The Friends and Family Infinity Hoodie is crafted from luxury
+            heavyweight 100% Primafiber Cotton, with a slightly oversized fit.
           </p>
-          <h1>How do you wash Represent Hoodies?</h1>
+          <br></br>
+          <br></br>
+          <h1 style={{ textAlign: "left" }}>
+            How do you wash Represent Hoodies?
+          </h1>
           <p>
-            We recommend you wash your hoodies inside out at 30 degrees Celsius.
+            We recommend you wash your hoodies inside out inside out on cold
+            setting.
           </p>
-          <h1>Can you tumble-dry Represent Hoodies?</h1>
+          <br></br>
+          <br></br>
+          <h1 style={{ textAlign: "left" }}>
+            Can you tumble-dry Represent Hoodies?
+          </h1>
           <p>We do not recommend that you tumble dry our hoodies.</p>
         </div>
       ),
@@ -132,11 +148,7 @@ const ProductDetails = ({ setProductDetails }) => {
         <ProductDetailsNavigation />
       </div>
       <div className="product-images-side">
-        <img
-          src={productImageTest}
-          className="product-image"
-          alt="productImage"
-        />
+        <img src={sampleHoodie} className="product-image" alt="productImage" />
       </div>
     </motion.div>
   );

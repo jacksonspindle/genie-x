@@ -14,6 +14,7 @@ import { Box } from "@react-three/drei";
 import frontHoodie from "../assets/frontHoodie.png";
 import { loadStripe } from "@stripe/stripe-js";
 import { getAuth } from "firebase/auth";
+import { motion } from "framer-motion";
 
 const Cart = ({ setHoodieImage }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -305,7 +306,9 @@ const Cart = ({ setHoodieImage }) => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: "-30px", x: "0" }}
+      animate={{ opacity: 1, y: "0", x: 0 }}
       className={
         overallLoading ? "cart-container-outer-loading" : "cart-container-outer"
       }
@@ -430,7 +433,10 @@ const Cart = ({ setHoodieImage }) => {
                         </thead>
 
                         <tbody>
-                          <tr key={index}>
+                          <tr
+                            key={index}
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
                             <td
                               style={{
                                 fontFamily: "oatmeal-pro-thin",
@@ -443,19 +449,24 @@ const Cart = ({ setHoodieImage }) => {
                               style={{
                                 fontFamily: "oatmeal-pro-thin",
                                 opacity: ".5",
+                                // marginLeft: "20px",
                               }}
                             >
-                              <button
-                                onClick={() => decrementQuantity(item.id)}
-                              >
-                                -
-                              </button>
-                              <span>{item.quantity || 1}</span>
-                              <button
-                                onClick={() => incrementQuantity(item.id)}
-                              >
-                                +
-                              </button>
+                              <div className="quantity-button-container">
+                                <button
+                                  className="quantity-button"
+                                  onClick={() => decrementQuantity(item.id)}
+                                >
+                                  -
+                                </button>
+                                <span>{item.quantity || 1}</span>
+                                <button
+                                  className="quantity-button"
+                                  onClick={() => incrementQuantity(item.id)}
+                                >
+                                  +
+                                </button>
+                              </div>
                             </td>
                             <td
                               style={{
@@ -464,6 +475,7 @@ const Cart = ({ setHoodieImage }) => {
                               }}
                             >
                               <select
+                                className="size-select"
                                 value={item.size}
                                 onChange={(e) =>
                                   handleSizeChange(item.id, e.target.value)
@@ -618,7 +630,7 @@ const Cart = ({ setHoodieImage }) => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

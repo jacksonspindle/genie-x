@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
 import genieXLogo2 from "../assets/genieXLogo2.png";
+import cart from "../assets/cart.svg";
+import actofcreationlogo from "../assets/actofcreationlogo.svg";
+import actofcreationicon from "../assets/actofcreationicon.svg";
 import { getAuth, signOut } from "firebase/auth";
 import defaultProfile from "../assets/defaultProfile.webp";
 
@@ -46,14 +49,29 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
         <ul className="nav-container">
           <div>
             <Link
+              to={"/"}
+              style={{
+                backgroundColor: "transparent",
+                position: "absolute",
+                top: 2,
+              }}
+            >
+              <img src={actofcreationicon} width={70} />
+            </Link>
+            <Link
               style={{ backgroundColor: "transparent", color: "white" }}
               to="/"
             >
               <img
-                src={genieXLogo2}
+                src={actofcreationlogo}
                 alt="logo"
-                width={190}
-                style={{ position: "absolute", top: 0 }}
+                className="act-of-creation-logo"
+                width={490}
+                style={{
+                  position: "absolute",
+                  top: 20,
+                  left: window.innerWidth < 1600 ? "34vw" : "38vw",
+                }}
               />
             </Link>
             {/* <Link
@@ -63,37 +81,55 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
               Design
             </Link> */}
           </div>
-          <div>
+          <div style={{ height: 50, width: 200 }}>
+            {/*{" "}
             <Link
               style={{ backgroundColor: "transparent", color: "white" }}
               to="/design"
             >
               Design
             </Link>
+            */}
             <Link
+              className="testlink"
               to={"/cart"}
-              style={{ backgroundColor: "transparent", color: "white" }}
+              style={{
+                backgroundColor: "transparent",
+                color: "white",
+                width: "35px",
+                position: "absolute",
+                zIndex: "10",
+                top: 8,
+                right: "1vh",
+              }}
             >
-              Cart
+              <img src={cart} width={35} className="cartIcon" />
             </Link>
             {signedIn ? (
               <div
-                style={{ position: "relative" }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  position: "relative",
+                  width: "400px",
+                }}
                 ref={accountRef}
               >
                 <Link
-                  style={{ backgroundColor: "transparent", color: "white" }}
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "white",
+                  }}
                   to="/account"
                 >
                   <img
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
                     src={defaultProfile}
                     alt="profile-pic"
                     style={{
                       width: "50px",
                       position: "absolute",
-                      top: -5,
+                      top: 3,
+                      right: window.innerWidth < 1600 ? 15 : 40,
                       borderRadius: "50%",
                     }}
                   />
@@ -107,7 +143,7 @@ const Nav = ({ setToggleLogInPage, signedIn, setSignedIn }) => {
                       variants={dropdownVariants}
                       style={{
                         zIndex: "100",
-                        position: "fixed",
+                        position: "absolute",
                         top: `${position.top}px`,
                         right: `${position.right}px`,
                         transform: "translateX(-50%)", // centering dropdown
