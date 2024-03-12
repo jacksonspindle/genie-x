@@ -22,7 +22,11 @@ import {
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
-const Account = ({ setCurrentProfilePic, setTriggerProfileChange }) => {
+const Account = ({
+  setCurrentProfilePic,
+  setTriggerProfileChange,
+  currentProfilePic,
+}) => {
   const apiKey = process.env.REACT_APP_OPENAI_KEY;
   const configuration = useMemo(() => new Configuration({ apiKey }), [apiKey]);
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
@@ -163,38 +167,39 @@ const Account = ({ setCurrentProfilePic, setTriggerProfileChange }) => {
     }
   }, [openai, profilePicPrompt, uploadImageToFirebase, fetchProfilePics]);
 
-  useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  //   useEffect(() => {
+  //     const auth = getAuth();
+  //     const user = auth.currentUser;
 
-    if (user) {
-      console.log(
-        "User is logged in, setting up real-time listener for current profile pic..."
-      );
-      const userRef = doc(db, "users", user.uid);
+  //     if (user) {
+  //       console.log(
+  //         "User is logged in, setting up real-time listener for current profile pic..."
+  //       );
+  //       const userRef = doc(db, "users", user.uid);
 
-      const unsubscribe = onSnapshot(userRef, (doc) => {
-        const userData = doc.data();
-        const currentProfilePic = userData.currentProfilePic;
-        setGeneratedProfilePic(currentProfilePic);
-        // setCurrentProfilePic(currentProfilePic); // Update parent state
-        // setTriggerProfileChange(2);
-        console.log("Current profile pic updated in real-time.");
-      });
+  //       const unsubscribe = onSnapshot(userRef, (doc) => {
+  //         const userData = doc.data();
+  //         const currentProfilePic = userData.currentProfilePic;
+  //         setGeneratedProfilePic(currentProfilePic);
+  //         // setCurrentProfilePic(currentProfilePic); // Update parent state
+  //         // setTriggerProfileChange(2);
+  //         console.log("Current profile pic updated in real-time.");
+  //       });
 
-      return () => unsubscribe();
-    } else {
-      console.log(
-        "No user logged in, cannot set up real-time listener for current profile pic."
-      );
-    }
-  }, []);
+  //       return () => unsubscribe();
+  //     } else {
+  //       console.log(
+  //         "No user logged in, cannot set up real-time listener for current profile pic."
+  //       );
+  //     }
+  //   }, []);
 
   const changeProfilePic = async (imageUrl) => {
     const userRef = doc(db, "users", user.uid);
     try {
       await setDoc(userRef, { currentProfilePic: imageUrl }, { merge: true });
       console.log("Current profile pic updated successfully.");
+      setCurrentProfilePic(imageUrl); // Update profile pic in App component
     } catch (error) {
       console.error("Error updating current profile pic:", error);
     }
@@ -212,7 +217,7 @@ const Account = ({ setCurrentProfilePic, setTriggerProfileChange }) => {
               <Ring size={30} lineWeight={5} speed={2} color="white" />
             ) : (
               <img
-                src={generatedProfilePic}
+                src={currentProfilePic}
                 className="account-profile-pic"
                 alt="Profile"
               />
