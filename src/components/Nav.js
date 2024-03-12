@@ -26,6 +26,12 @@ const Nav = ({
   const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const accountRef = useRef(null);
+  const [profilePic, setProfilePic] = useState(currentProfilePic);
+
+  useEffect(() => {
+    setProfilePic(currentProfilePic);
+    console.log(profilePic, "profilepic");
+  }, [currentProfilePic]);
 
   useEffect(() => {
     // console.log("isHovered:", isHovered); // Debugging line
@@ -183,7 +189,7 @@ const Nav = ({
                 >
                   <img
                     onMouseEnter={handleMouseEnter}
-                    src={currentProfilePic}
+                    src={profilePic}
                     alt="profile-pic"
                     style={{
                       width: "50px",

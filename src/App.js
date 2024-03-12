@@ -47,20 +47,6 @@ function App() {
   const ref = useRef();
 
   useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setSignedIn(true);
-      } else {
-        // User is signed out
-        setSignedIn(false);
-      }
-    });
-    return () => unsubscribe(); // Make sure to unsubscribe on component unmount
-  }, []);
-
-  useEffect(() => {
     if (ref.current) {
       // console.log(ref);
       gradient.initGradient("#gradient-canvas");
@@ -70,24 +56,25 @@ function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is logged in, fetching current profile pic...");
 
-      const unsubscribe = onSnapshot(userRef, (doc) => {
-        const userData = doc.data();
-        const currentPic = userData.currentProfilePic;
-        console.log(currentPic, "currentPic");
-        if (currentPic) {
+        const userRef = doc(db, "users", user.uid);
+        const unsubscribe = onSnapshot(userRef, (doc) => {
+          const userData = doc.data();
+
+          const currentPic = userData.currentProfilePic || defaultProfile;
+          console.log("this is running", currentPic);
+
           setCurrentProfilePic(currentPic);
-        } else {
-          setCurrentProfilePic(defaultProfile); // Set default if no profile pic found
-        }
-      });
-
-      return () => unsubscribe();
-    }
-  }, [currentProfilePic]);
+        });
+        return () => unsubscribe();
+      } else {
+        console.log("No user logged in.");
+      }
+    });
+  }, []);
 
   return (
     <div className="App" ref={ref}>
@@ -167,7 +154,13 @@ function App() {
           <Route
             exact
             path="/account"
-            element={<Account setCurrentProfilePic={setCurrentProfilePic} />}
+            element={
+              <Account
+                setTriggerProfilePicChange={setTriggerProfilePicChange}
+                setCurrentProfilePic={setCurrentProfilePic}
+                currentProfilePic={currentProfilePic}
+              />
+            }
           />
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
