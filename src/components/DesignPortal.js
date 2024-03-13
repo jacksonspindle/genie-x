@@ -370,7 +370,7 @@ const DesignPortal = ({
         imageUrl: downloadURL,
         addedAt: new Date(),
         size: "L",
-        price: 170,
+        price: 120,
         quantity: 1, // Start with a quantity of 1 when added to the cart
       };
 

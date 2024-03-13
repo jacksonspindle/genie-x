@@ -66,12 +66,12 @@ body {
   z-index: -1;
   width: 100%;
   height: 100%;
-  /* --gradient-color-1: #1495ff;
+  --gradient-color-1: #1495ff;
   --gradient-color-2: #47bcff;
   --gradient-color-3: #e2d6ff;
-  --gradient-color-4: #0011ff; */
-  --gradient-color-1: #000000;
-  --gradient-color-2:  #0011ff;
+  --gradient-color-4: #0011ff;
+  /* --gradient-color-1: #000000; */
+  /* --gradient-color-2:  #0011ff; */
   /* --gradient-color-3: #FF00FF; */
   /* --gradient-color-4: black; */
 }

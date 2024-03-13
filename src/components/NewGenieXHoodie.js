@@ -130,8 +130,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
       <group scale={[10, 10, 10]}>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node001.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
         >
           {/* <meshBasicMaterial
             attach="material"
@@ -142,8 +142,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
             position={[0.0, 0.09, 0.1]}
             rotation={[0, 0, 0]}
             scale={[0.1 * 3, 0.05 * 3, 0.1 * 3]}
-            // map={logoTexture}
-            map={logoTextureWhite}
+            map={logoTexture}
+            // map={logoTextureWhite}
             map-anisotropy={16}
             transparent={true}
             alphaTest={0.5}
@@ -151,8 +151,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node002.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
           position={[0, -0.004, 0]}
           scale={1.002}
         />
@@ -172,8 +172,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node004.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
         />
       </group>
     </group>
