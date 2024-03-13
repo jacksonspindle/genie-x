@@ -10,6 +10,7 @@ import { useTexture, Decal } from "@react-three/drei";
 import { BoxHelper, Box3, Vector3, AxesHelper } from "three";
 import { useFrame } from "@react-three/fiber";
 import actOfCreationLogo from "../assets/actofcreationlogoHoodie.svg";
+import actOfCreationLogoWhite from "../assets/actofcreationlogowhite.svg";
 
 export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
   console.log("Rendering NewHoodie component");
@@ -30,9 +31,11 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
 
   // const [logoTexture] = useTexture([genieXLogo]);
   const [logoTexture] = useTexture([actOfCreationLogo]);
+  const [logoTextureWhite] = useTexture([actOfCreationLogoWhite]);
   console.log("majorTest", hoodieImage);
 
   console.log(logoTexture);
+  // const blackMaterial = new THREE.MeshBasicMaterial({ color: "black" }); // Define black material
 
   // useEffect(() => {
   //   console.log("step 1");
@@ -90,7 +93,7 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
     );
   }, [hoodieImage]);
 
-  const blackMaterial = new THREE.MeshBasicMaterial({ color: "#989898" });
+  const blackMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
   const decalPosition = new Vector3(0.5, 1, 0.1); // Adjust x, y, and z accordingly
   const decalRotation = new Vector3(0, 0, 0); // May need to rotate the decal
@@ -127,7 +130,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
       <group scale={[10, 10, 10]}>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node001.geometry}
-          material={materials.body}
+          // material={materials.body}
+          material={blackMaterial}
         >
           {/* <meshBasicMaterial
             attach="material"
@@ -138,7 +142,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
             position={[0.0, 0.09, 0.1]}
             rotation={[0, 0, 0]}
             scale={[0.1 * 3, 0.05 * 3, 0.1 * 3]}
-            map={logoTexture}
+            // map={logoTexture}
+            map={logoTextureWhite}
             map-anisotropy={16}
             transparent={true}
             alphaTest={0.5}
@@ -146,7 +151,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node002.geometry}
-          material={materials.body}
+          // material={materials.body}
+          material={blackMaterial}
           position={[0, -0.004, 0]}
           scale={1.002}
         />
@@ -166,7 +172,8 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node004.geometry}
-          material={materials.body}
+          // material={materials.body}
+          material={blackMaterial}
         />
       </group>
     </group>

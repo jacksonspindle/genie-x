@@ -37,6 +37,8 @@ const Account = ({
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [profilePicsUrls, setProfilePicsUrls] = useState([]);
   const [userProfilePics, setUserProfilePics] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const storage = getStorage();
   const auth = getAuth();
@@ -108,6 +110,7 @@ const Account = ({
 
   useEffect(() => {
     fetchProfilePics();
+    fetchUserInfo();
   }, []);
 
   const generateProfilePic = useCallback(async () => {
@@ -154,6 +157,9 @@ const Account = ({
 
       // Upload the blob to Firebase
       const firebaseURL = await uploadImageToFirebase(imageBlob);
+
+      // Update Firestore with the new profile picture URL
+      await changeProfilePic(firebaseURL);
 
       // Fetch the updated profile pictures
       fetchProfilePics();
@@ -205,6 +211,23 @@ const Account = ({
     }
   };
 
+  const fetchUserInfo = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      console.log("User is logged in, fetching user info...");
+      try {
+        setUserName(user.displayName || "N/A");
+        setUserEmail(user.email || "N/A");
+        console.log("User info fetched successfully.");
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    } else {
+      console.log("No user logged in, cannot fetch user info.");
+    }
+  };
+
   return (
     <div className="account-container-outer">
       <div className="account-container">
@@ -228,13 +251,19 @@ const Account = ({
             value={profilePicPrompt}
             onChange={(e) => setProfilePicPrompt(e.target.value)}
           />
-          <button onClick={generateProfilePic}>Generate</button>
+          <button onClick={generateProfilePic} className="generate-btn">
+            Generate
+          </button>
         </div>
         <div className="account-info-container">
           <div className="personal-info-container">
             <h3>Personal Info</h3>
-            <h4>Email:</h4>
-            <h4>Name:</h4>
+            <h4>
+              Email:<i style={{ opacity: ".6" }}> {userEmail}</i>
+            </h4>
+            <h4>
+              Name: <i style={{ opacity: ".6" }}>{userName}</i>
+            </h4>
             <button className="reset-password-btn">Reset Password</button>
           </div>
           <div className="profile-pics-container">
