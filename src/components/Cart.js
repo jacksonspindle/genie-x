@@ -28,7 +28,7 @@ const Cart = ({ setHoodieImage }) => {
   const [mouseDownTime, setMouseDownTime] = useState(0);
   const [mouseUpTime, setMouseUpTime] = useState(0);
 
-  const itemPrice = 120; // Price per item
+  const itemPrice = 170; // Price per item
   const [quantities, setQuantities] = useState({});
   const [sizes, setSizes] = useState({});
 
