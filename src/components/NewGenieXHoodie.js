@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { useTexture, Decal } from "@react-three/drei";
 import { BoxHelper, Box3, Vector3, AxesHelper } from "three";
 import { useFrame } from "@react-three/fiber";
-import actOfCreationLogo from "../assets/actofcreationlogoHoodie.svg";
+import actOfCreationLogo from "../assets/actofcreationFamilyFriendsLogo.svg";
 import actOfCreationLogoWhite from "../assets/actofcreationlogowhite.svg";
 
 export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
@@ -139,9 +139,9 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
             wireframe
           /> */}
           <Decal
-            position={[0.0, 0.09, 0.1]}
+            position={[0.0, 0.16, 0.1]}
             rotation={[0, 0, 0]}
-            scale={[0.1 * 3, 0.05 * 3, 0.1 * 3]}
+            scale={[0.1 * 1.5, 0.02 * 1.5, 0.1 * 1.5]}
             map={logoTexture}
             // map={logoTextureWhite}
             map-anisotropy={16}

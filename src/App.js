@@ -7,8 +7,10 @@ import "./styles/cart.css";
 import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
+import "./styles/gallery.css";
 import "./styles/account.css";
 import "./styles/image-editor.css";
+import "./styles/image-editor-2.css";
 import "./styles/product-details.css";
 import "./styles/user-designs.css";
 import "./styles/asset-library.css";
@@ -28,6 +30,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import MyImageEditor from "./components/MyImageEditor";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase";
+import Gallery from "./components/Gallery";
+import ImageEditor2 from "./components/ImageEditor2";
 
 // import Login from "./components/Login";
 
@@ -162,6 +166,9 @@ function App() {
               />
             }
           />
+          <Route exact path="/gallery" element={<Gallery />} />
+          <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
+          {/* <Route exact path="/orders" element={<Account />} /> */}
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
       </Router>

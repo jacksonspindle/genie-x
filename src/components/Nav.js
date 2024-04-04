@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
 import genieXLogo2 from "../assets/genieXLogo2.png";
 import cart from "../assets/cart.svg";
-import actofcreationlogo from "../assets/actofcreationlogo.svg";
+import actofcreationlogo from "../assets/actofcreationLogo.svg";
 import actofcreationicon from "../assets/actofcreationicon.svg";
 import { getAuth, signOut } from "firebase/auth";
 import defaultProfile from "../assets/defaultProfile.webp";
@@ -138,6 +138,7 @@ const Nav = ({
                   position: "absolute",
                   top: 20,
                   left: window.innerWidth < 1600 ? "34vw" : "38vw",
+                  filter: "invert(1)",
                 }}
               />
             </Link>
@@ -214,10 +215,13 @@ const Nav = ({
                       // Your styling here
                     >
                       <li>
-                        <Link>Orders</Link>
+                        <Link to="/orders">Orders</Link>
                       </li>
                       <li>
                         <Link to={"/account"}>Account</Link>
+                      </li>
+                      <li>
+                        <Link to={"/Gallery"}>Gallery</Link>
                       </li>
                       <li>
                         <Link onClick={handleLogout}>Signout</Link>
