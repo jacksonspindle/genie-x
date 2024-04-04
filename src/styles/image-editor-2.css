@@ -1,0 +1,25 @@
+.unique-canvas-class {
+    position: relative;
+    z-index: 10;
+}
+
+#toolbar {
+    background-color: rgb(0, 0, 0, 0.6);
+    position: absolute;
+    z-index: 1000;
+    border-radius: .5rem;
+    padding: .5rem;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 1rem;
+}
+
+#toolbar button {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    font-family: oatmeal-pro-regular;
+    color: white;
+    cursor: pointer;
+    padding: .3rem;
+}
