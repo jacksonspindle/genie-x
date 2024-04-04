@@ -124,6 +124,8 @@ const Nav = ({
               }}
             >
               <img src={actofcreationicon} width={70} />
+              {/* <img src={actofcreationicon} width={70} /> */}
+              {/* <img src={actofcreationicon} width={70} /> */}
             </Link>
             <Link
               style={{ backgroundColor: "transparent", color: "white" }}
