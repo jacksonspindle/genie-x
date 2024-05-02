@@ -3,7 +3,7 @@ import { auth, googleProvider } from "../config/firebase";
 
 import { motion } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
-import actofcreationlogo from "../assets/actofcreationLogo.svg";
+// import actofcreationlogo from "../assets/actofcreationLogo.svg";
 import actofcreationicon from "../assets/actofcreationicon.svg";
 import { AnimatePresence } from "framer-motion";
 import madLibsDemo from "../assets/madLibsDemo.mp4";
