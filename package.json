@@ -21,6 +21,7 @@
     "file-saver": "^2.0.5",
     "firebase": "^9.22.2",
     "framer-motion": "^10.16.4",
+    "framer-motion-3d": "^11.1.9",
     "fs": "^0.0.1-security",
     "openai": "^3.3.0",
     "react": "^18.2.0",
