@@ -12,7 +12,7 @@ import { useFrame } from "@react-three/fiber";
 import actOfCreationLogo from "../assets/actofcreationFamilyFriendsLogo.svg";
 import actOfCreationLogoWhite from "../assets/actofcreationlogowhite.svg";
 
-export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
+export function NewHoodie({ onClick, hoodieImage, genieXLogo, ...props }) {
   console.log("Rendering NewHoodie component");
   console.log("hoodieImage prop:", hoodieImage);
   // console.log("majorTest", hoodieImage);
@@ -126,12 +126,18 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
   });
 
   return (
-    <group {...props} dispose={null} ref={group} rotation={[0, rotation, 0]}>
+    <group
+      {...props}
+      dispose={null}
+      ref={group}
+      rotation={[0, rotation, 0]}
+      onClick={onClick}
+    >
       <group scale={[10, 10, 10]}>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node001.geometry}
-          material={materials.body}
-          // material={blackMaterial}
+          // material={materials.body}
+          material={blackMaterial}
         >
           {/* <meshBasicMaterial
             attach="material"
@@ -151,14 +157,14 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node002.geometry}
-          material={materials.body}
-          // material={blackMaterial}
+          // material={materials.body}
+          material={blackMaterial}
           position={[0, -0.004, 0]}
           scale={1.002}
         />
         <mesh
           geometry={nodes.Pattern2D_1116363_Node003.geometry}
-          // material={blackMaterial}
+          material={blackMaterial}
           position={[0, 0, 0.001]}
         >
           {texture && (
@@ -166,14 +172,14 @@ export function NewHoodie({ hoodieImage, genieXLogo, ...props }) {
               attach="material"
               map={texture}
               transparent={true}
-              // alphaMap={texture}
+              alphaMap={texture}
             />
           )}
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node004.geometry}
-          material={materials.body}
-          // material={blackMaterial}
+          // material={materials.body}
+          material={blackMaterial}
         />
       </group>
     </group>

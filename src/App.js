@@ -15,7 +15,13 @@ import "./styles/product-details.css";
 import "./styles/user-designs.css";
 import "./styles/asset-library.css";
 import "./styles/upload-image.css";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import "./styles/big-hoodie-live-feed.css";
+import {
+  Route,
+  Routes,
+  BrowserRouter as Router,
+  useLocation,
+} from "react-router-dom";
 import HoodieCollection from "./components/Collection";
 import { useEffect, useState, useRef } from "react";
 import Nav from "./components/Nav";
@@ -32,6 +38,7 @@ import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase";
 import Gallery from "./components/Gallery";
 import ImageEditor2 from "./components/ImageEditor2";
+import BigHoodieLiveFeed from "./components/BigHoodieLiveFeed";
 
 // import Login from "./components/Login";
 
@@ -80,6 +87,23 @@ function App() {
     });
   }, []);
 
+  function ConditionalNav() {
+    const location = useLocation(); // Access current location
+    // Check if the current route is '/big-hoodie-live-feed'
+    if (location.pathname === "/big-hoodie-live-feed") {
+      return null; // Do not render Nav if on big-hoodie-live-feed
+    }
+    return (
+      <Nav
+        currentProfilePic={currentProfilePic}
+        setCurrentProfilePic={setCurrentProfilePic}
+        setToggleLogInPage={setToggleLogInPage}
+        signedIn={signedIn}
+        setSignedIn={setSignedIn}
+      />
+    );
+  }
+
   return (
     <div className="App" ref={ref}>
       <AnimatePresence>
@@ -101,13 +125,14 @@ function App() {
         />
       ) : null}
       <Router>
-        <Nav
+        <ConditionalNav />
+        {/* <Nav
           currentProfilePic={currentProfilePic}
           setCurrentProfilePic={setCurrentProfilePic}
           setToggleLogInPage={setToggleLogInPage}
           signedIn={signedIn}
           setSignedIn={setSignedIn}
-        />
+        /> */}
         {/* {!signedIn ? <Auth setSignedIn={setSignedIn} /> : null} */}
         <Routes>
           <Route
@@ -167,6 +192,11 @@ function App() {
             }
           />
           <Route exact path="/gallery" element={<Gallery />} />
+          <Route
+            exact
+            path="/big-hoodie-live-feed"
+            element={<BigHoodieLiveFeed />}
+          />
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
           {/* <Route exact path="/orders" element={<Account />} /> */}
           <Route path="/test-image-editor" element={<MyImageEditor />} />
