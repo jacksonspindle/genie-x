@@ -136,8 +136,8 @@ export function NewHoodie({ onClick, hoodieImage, genieXLogo, ...props }) {
       <group scale={[10, 10, 10]}>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node001.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
         >
           {/* <meshBasicMaterial
             attach="material"
@@ -157,14 +157,14 @@ export function NewHoodie({ onClick, hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node002.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
           position={[0, -0.004, 0]}
           scale={1.002}
         />
         <mesh
           geometry={nodes.Pattern2D_1116363_Node003.geometry}
-          material={blackMaterial}
+          // material={blackMaterial}
           position={[0, 0, 0.001]}
         >
           {texture && (
@@ -178,8 +178,8 @@ export function NewHoodie({ onClick, hoodieImage, genieXLogo, ...props }) {
         </mesh>
         <mesh
           geometry={nodes.Pattern2D_1116363_Node004.geometry}
-          // material={materials.body}
-          material={blackMaterial}
+          material={materials.body}
+          // material={blackMaterial}
         />
       </group>
     </group>
