@@ -171,8 +171,8 @@ export function NewHoodie({ onClick, hoodieImage, genieXLogo, ...props }) {
             <meshStandardMaterial
               attach="material"
               map={texture}
-              transparent={true}
-              alphaMap={texture}
+              // transparent={true}
+              // alphaMap={texture}
             />
           )}
         </mesh>

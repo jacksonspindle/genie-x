@@ -19,6 +19,7 @@ import { Table } from "./big_hoodie_live_feed_components/Table";
 import { Rug } from "./big_hoodie_live_feed_components/Rug";
 import { Lights } from "./big_hoodie_live_feed_components/Lights";
 import { Piano } from "./big_hoodie_live_feed_components/Piano";
+import { PuzzleHoodie } from "./big_hoodie_live_feed_components/PuzzleHoodie";
 import { MotionCanvas, LayoutCamera } from "framer-motion-3d";
 
 const CameraController = () => {
@@ -90,7 +91,8 @@ const BigHoodieLiveFeed = () => {
         <ambientLight intensity={0.3} />
         <spotLight position={[10, 15, 10]} angle={0.3} />
         <CameraController />
-        <NewHoodie position={[0, 1, -4]} scale={[0.5, 0.5, 0.5]} />
+        <PuzzleHoodie scale={[3, 3, 3]} />
+        {/* <NewHoodie position={[0, 1, -4]} scale={[0.5, 0.5, 0.5]} /> */}
         <Couch scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3.5]} />
         <Table scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3]} />
         <Rug scale={[1.5, 1.5, 1.5]} position={[0.8, -0.8, 3.2]} />
@@ -118,13 +120,13 @@ const BigHoodieLiveFeed = () => {
         <Box args={[0.1, 10, 10]} position={[7.45, 1.5, 0]}>
           <meshStandardMaterial color="#001BFF" />
         </Box>
-        {/* <OrbitControls
+        <OrbitControls
           enablePan={true}
           target={[0, 0.8, 0]}
           zoomSpeed={0.5}
           maxDistance={13}
           minDistance={4}
-        /> */}
+        />
       </Canvas>
     </div>
   );
