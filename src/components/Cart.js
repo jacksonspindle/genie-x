@@ -259,7 +259,7 @@ const Cart = ({ setHoodieImage }) => {
     );
     // Load Stripe
     const stripeKey =
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "development"
         ? process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
         : process.env.REACT_APP_STRIPE_TEST_PUBLIC_KEY;
 
