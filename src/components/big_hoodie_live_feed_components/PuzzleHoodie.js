@@ -28,6 +28,7 @@ function PuzzlePiece({
   isAssigned,
   texture,
   index,
+
   ...props
 }) {
   const mesh = useRef();
@@ -75,14 +76,17 @@ function PuzzlePiece({
   );
 }
 
-export function PuzzleHoodie(props) {
+export function PuzzleHoodie({ handleHover, handleLeave, ...props }) {
   const { nodes, materials } = useGLTF("/puzzleHoodie.gltf");
   const [assignedPieces, setAssignedPieces] = useState([]);
 
   useEffect(() => {
     const ordersRef = collection(db, "orders");
     const unsubscribe = onSnapshot(ordersRef, async (snapshot) => {
-      const fetchedOrders = snapshot.docs.map((doc) => doc.data());
+      const fetchedOrders = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return { ...data, id: doc.id };
+      });
 
       // Extract assigned puzzle piece IDs and their image URLs
       const assigned = await Promise.all(
@@ -98,6 +102,7 @@ export function PuzzleHoodie(props) {
             return {
               puzzlePieceId: order.puzzlePieceId,
               imageUrl: proxyImageUrl,
+              user: order.userName || "Unknown",
             };
           }
           return null;
@@ -143,6 +148,8 @@ export function PuzzleHoodie(props) {
             isAssigned={!!assignedPiece}
             texture={texture}
             index={index}
+            assignedPiece={assignedPiece}
+            user={assignedPiece ? assignedPiece.user : "Unknown"}
           />
         );
       })}
