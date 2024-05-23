@@ -221,6 +221,15 @@ const Cart = ({ setHoodieImage }) => {
       const imageUrls = await Promise.all(
         cartItems.map((item) => fetchCartImage(item.imageUrl, item.token))
       );
+      console.log("NODE_ENV:", process.env.NODE_ENV);
+      console.log(
+        "REACT_APP_STRIPE_TEST_PUBLIC_KEY:",
+        process.env.REACT_APP_STRIPE_TEST_PUBLIC_KEY
+      );
+      console.log(
+        "REACT_APP_STRIPE_LIVE_PUBLIC_KEY:",
+        process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
+      );
       console.log("Image URLs:", imageUrls); // Log the image URLs here
       setHoodieImageUrls(imageUrls);
       setImagesLoading(false);
