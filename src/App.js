@@ -193,11 +193,12 @@ function App() {
             }
           />
           <Route exact path="/gallery" element={<Gallery />} />
-          <Route
+          <Route exact path="/LiveFeed" element={<BigHoodieLiveFeed />} />
+          {/* <Route
             exact
             path="/big-hoodie-live-feed"
             element={<BigHoodieLiveFeed />}
-          />
+          /> */}
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
           <Route exact path="/orders" element={<Orders />} />
           <Route path="/test-image-editor" element={<MyImageEditor />} />

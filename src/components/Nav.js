@@ -226,6 +226,9 @@ const Nav = ({
                         <Link to={"/Gallery"}>Gallery</Link>
                       </li>
                       <li>
+                        <Link to={"/LiveFeed"}>Live Feed</Link>
+                      </li>
+                      <li>
                         <Link onClick={handleLogout}>Signout</Link>
                       </li>
                     </motion.div>

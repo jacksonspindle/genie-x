@@ -89,9 +89,9 @@ const BigHoodieLiveFeed = () => {
           animate={{ fov: 45 }}
           transition={{ duration: 2 }}
         /> */}
-        <ambientLight intensity={4.3} />
-        <spotLight position={[10, 15, 45]} angle={0.3} />
-        <spotLight position={[-10, 15, 45]} angle={0.3} />
+        <ambientLight intensity={0.3} />
+        <spotLight position={[10, 15, 45]} angle={0.3} intensity={0.4} />
+        <spotLight position={[-10, 15, 45]} angle={0.3} intensity={0.4} />
         <CameraController />
         <PuzzleHoodie scale={[13, 13, 13]} position={[0, -10, 0]} />
         {/* <NewHoodie position={[0, 1, -4]} scale={[0.5, 0.5, 0.5]} /> */}
