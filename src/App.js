@@ -16,6 +16,7 @@ import "./styles/user-designs.css";
 import "./styles/asset-library.css";
 import "./styles/upload-image.css";
 import "./styles/big-hoodie-live-feed.css";
+import Orders from "./components/Orders";
 import {
   Route,
   Routes,
@@ -198,7 +199,7 @@ function App() {
             element={<BigHoodieLiveFeed />}
           />
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
-          {/* <Route exact path="/orders" element={<Account />} /> */}
+          <Route exact path="/orders" element={<Orders />} />
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
       </Router>

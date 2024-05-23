@@ -24,6 +24,7 @@
     "framer-motion-3d": "^11.1.9",
     "fs": "^0.0.1-security",
     "openai": "^3.3.0",
+    "raw-body": "^2.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.4",
