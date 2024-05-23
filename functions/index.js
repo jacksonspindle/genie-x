@@ -1,7 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors")({ origin: true });
-<<<<<<< HEAD
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -23,27 +22,6 @@ const baseUrl = isProduction
 const success_url = isProduction
   ? "https://geniexbeta.xyz"
   : "http://localhost:3000/success"; // Ensure this is appropriate for testing
-=======
-
-admin.initializeApp();
-const stripe = require("stripe")(functions.config().stripe.secret_key);
-const db = admin.firestore();
-
-console.log(
-  `Stripe mode: ${
-    functions.config().stripe.secret_key.startsWith("sk_live_")
-      ? "live"
-      : "test"
-  }`
-);
-
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://geniexbeta.xyz"
-    : "http://localhost:3000"; // Your local development URL
-
-const success_url = `https://geniexbeta.xyz`;
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
 
 const getCartDataFromFirestore = async (userId) => {
   try {
@@ -69,32 +47,15 @@ const getCartDataFromFirestore = async (userId) => {
 exports.createCheckoutSession = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
-<<<<<<< HEAD
       const userId = req.body.uid;
       console.log("request user id", req.body.uid);
 
       const cartData = await getCartDataFromFirestore(userId);
 
-=======
-      //   console.log("key", functions.config().stripe.secret_key);
-      //   console.log("request body", req.body);
-      // Retrieve the user's UID from the request
-      const userId = req.body.uid;
-      console.log("request user id", req.body.uid);
-      // Retrieve cart data from Firestore
-      const cartData = await getCartDataFromFirestore(userId);
-
-      // Log the cart data and verify it before attempting to create a session
-      console.log("Cart data:", cartData);
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
       if (!cartData || cartData.length === 0) {
         throw new Error("Cart is empty");
       }
 
-<<<<<<< HEAD
-=======
-      // Ensure all prices are integers
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
       const lineItems = cartData.map((item) => {
         if (!item.price || isNaN(item.price)) {
           throw new Error(`Invalid price for item ${item.id}`);
@@ -117,16 +78,11 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
       });
       console.log("Line items to be sent to Stripe:", lineItems);
 
-<<<<<<< HEAD
-=======
-      // Create a Stripe Checkout session
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
         success_url: success_url,
-<<<<<<< HEAD
         cancel_url: `${baseUrl}/cart`,
         shipping_address_collection: {
           allowed_countries: ["US", "CA", "GB", "AU"], // List of allowed countries
@@ -137,17 +93,6 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
       });
 
       console.log(`Checkout session created with ID: ${session.id}`);
-=======
-        cancel_url: `http://localhost:3000/cart`,
-        shipping_address_collection: {
-          allowed_countries: ["US", "CA", "GB", "AU"], // List of allowed countries
-        },
-      });
-
-      console.log("sessionID", session.id);
-      console.log(`Checkout session created with ID: ${session.id}`);
-
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
       res.json({ sessionId: session.id });
     } catch (error) {
       console.error("Error creating checkout session:", error);
@@ -155,7 +100,6 @@ exports.createCheckoutSession = functions.https.onRequest((req, res) => {
     }
   });
 });
-<<<<<<< HEAD
 
 // Webhook handler function
 exports.handleStripeWebhook = functions.https.onRequest(async (req, res) => {
@@ -239,5 +183,3 @@ exports.handleStripeWebhook = functions.https.onRequest(async (req, res) => {
 
   res.sendStatus(200);
 });
-=======
->>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
