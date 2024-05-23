@@ -239,11 +239,20 @@ const Cart = ({ setHoodieImage }) => {
   };
 
   const handleCheckout = async () => {
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log(
+      "REACT_APP_STRIPE_TEST_PUBLIC_KEY:",
+      process.env.REACT_APP_STRIPE_TEST_PUBLIC_KEY
+    );
+    console.log(
+      "REACT_APP_STRIPE_LIVE_PUBLIC_KEY:",
+      process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
+    );
     // Load Stripe
     const stripeKey =
       process.env.NODE_ENV === "production"
-        ? process.env.STRIPE_LIVE_SECRET_KEY
-        : process.env.REACT_APP_STRIPE_PUBLIC_KEY;
+        ? process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
+        : process.env.REACT_APP_STRIPE_TEST_PUBLIC_KEY;
 
     const stripe = await loadStripe(stripeKey);
 

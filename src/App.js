@@ -30,7 +30,7 @@ import Nav from "./components/Nav";
 import { Gradient } from "./Gradient";
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Account from "./components/Account";
 import defaultProfile from "./assets/defaultProfile.webp";
 
@@ -41,8 +41,6 @@ import { db } from "./config/firebase";
 import Gallery from "./components/Gallery";
 import ImageEditor2 from "./components/ImageEditor2";
 import BigHoodieLiveFeed from "./components/BigHoodieLiveFeed";
-
-// import Login from "./components/Login";
 
 function App() {
   const gradient = new Gradient();
@@ -61,10 +59,8 @@ function App() {
 
   useEffect(() => {
     if (ref.current) {
-      // console.log(ref);
       gradient.initGradient("#gradient-canvas");
     }
-    // eslint-disable-next-line no-unused-vars
   }, [ref]);
 
   useEffect(() => {
@@ -76,7 +72,6 @@ function App() {
         const userRef = doc(db, "users", user.uid);
         const unsubscribe = onSnapshot(userRef, (doc) => {
           const userData = doc.data();
-
           const currentPic = userData.currentProfilePic || defaultProfile;
           console.log("this is running", currentPic);
 
@@ -90,10 +85,9 @@ function App() {
   }, []);
 
   function ConditionalNav() {
-    const location = useLocation(); // Access current location
-    // Check if the current route is '/big-hoodie-live-feed'
+    const location = useLocation();
     if (location.pathname === "/big-hoodie-live-feed") {
-      return null; // Do not render Nav if on big-hoodie-live-feed
+      return null;
     }
     return (
       <Nav
@@ -115,27 +109,24 @@ function App() {
       </AnimatePresence>
       <canvas id="gradient-canvas" data-js-darken-top data-transition-in />
 
-      {/* <Nav
-        setToggleLogInPage={setToggleLogInPage}
-        signedIn={signedIn}
-        setSignedIn={setSignedIn}
-      /> */}
-      {toggleLogInPage ? (
-        <Auth
-          setSignedIn={setSignedIn}
-          setToggleLogInPage={setToggleLogInPage}
-        />
-      ) : null}
+      <AnimatePresence>
+        {toggleLogInPage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Auth
+              setSignedIn={setSignedIn}
+              setToggleLogInPage={setToggleLogInPage}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Router>
         <ConditionalNav />
-        {/* <Nav
-          currentProfilePic={currentProfilePic}
-          setCurrentProfilePic={setCurrentProfilePic}
-          setToggleLogInPage={setToggleLogInPage}
-          signedIn={signedIn}
-          setSignedIn={setSignedIn}
-        /> */}
-        {/* {!signedIn ? <Auth setSignedIn={setSignedIn} /> : null} */}
         <Routes>
           <Route
             exact
@@ -208,8 +199,6 @@ function App() {
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
       </Router>
-
-      <style></style>
     </div>
   );
 }
