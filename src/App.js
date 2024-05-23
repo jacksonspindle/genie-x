@@ -40,7 +40,7 @@ import { db } from "./config/firebase";
 import Gallery from "./components/Gallery";
 import ImageEditor2 from "./components/ImageEditor2";
 import BigHoodieLiveFeed from "./components/BigHoodieLiveFeed";
-
+import { Suspense } from "react";
 // import Login from "./components/Login";
 
 function App() {
@@ -193,7 +193,15 @@ function App() {
             }
           />
           <Route exact path="/gallery" element={<Gallery />} />
-          <Route exact path="/LiveFeed" element={<BigHoodieLiveFeed />} />
+          <Route
+            exact
+            path="/LiveFeed"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <BigHoodieLiveFeed />
+              </Suspense>
+            }
+          />
           {/* <Route
             exact
             path="/big-hoodie-live-feed"
