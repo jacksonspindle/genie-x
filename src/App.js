@@ -25,7 +25,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import HoodieCollection from "./components/Collection";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import Nav from "./components/Nav";
 import { Gradient } from "./Gradient";
 import Cart from "./components/Cart";
@@ -194,7 +194,15 @@ function App() {
             }
           />
           <Route exact path="/gallery" element={<Gallery />} />
-          <Route exact path="/LiveFeed" element={<BigHoodieLiveFeed />} />
+          <Route
+            exact
+            path="/LiveFeed"
+            element={
+              <Suspense>
+                <BigHoodieLiveFeed />
+              </Suspense>
+            }
+          />
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
           <Route exact path="/orders" element={<Orders />} />
           <Route path="/test-image-editor" element={<MyImageEditor />} />
