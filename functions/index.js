@@ -9,10 +9,17 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Determine environment
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "development";
+// const stripeSecretKey = isProduction
+//   ? functions.config().stripe.live_secret_key
+//   : functions.config().stripe.test_secret_key;
+
 const stripeSecretKey = isProduction
-  ? functions.config().stripe.live_secret_key
-  : functions.config().stripe.test_secret_key;
+  ? process.env.STRIPE_LIVE_SECRET_KEY ||
+    functions.config().stripe.live_secret_key
+  : process.env.STRIPE_TEST_SECRET_KEY ||
+    functions.config().stripe.test_secret_key;
+
 const stripe = require("stripe")(stripeSecretKey);
 
 const baseUrl = isProduction
