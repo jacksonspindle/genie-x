@@ -240,10 +240,12 @@ const Cart = ({ setHoodieImage }) => {
 
   const handleCheckout = async () => {
     // Load Stripe
-    const stripe = await loadStripe(
-      // "pk_live_51OYtFvFs3ewrexUmStoMBu1TFkaRi3y0BMJ2C3dc4SZ4Vq622LrhfvdxWltmpaVTNTHkuxrTyTgFuWjzaaHDX3th00j8Qj9t85"
-      process.env.REACT_APP_STRIPE_PUBLIC_KEY
-    );
+    const stripeKey =
+      process.env.NODE_ENV === "production"
+        ? process.env.STRIPE_LIVE_SECRET_KEY
+        : process.env.REACT_APP_STRIPE_PUBLIC_KEY;
+
+    const stripe = await loadStripe(stripeKey);
 
     // Get the current user's UID
     const auth = getAuth();
