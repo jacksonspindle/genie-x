@@ -109,7 +109,7 @@ const DesignPortal = ({
   const [dalleImages, setDalleImages] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [freeRangeInput, setFreeRangeInput] = useState(false);
-  const [instructionsOpen, setInstructionsOpen] = useState(true);
+  const [instructionsOpen, setInstructionsOpen] = useState(false); // set to true to turn instructional popup back on
   const [createAccountPopUp, setCreateAccountPopUp] = useState(false);
 
   const [maskImage, setMaskImage] = useState("");
