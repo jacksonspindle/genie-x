@@ -1,7 +1,6 @@
 .cart-container-outer {
     margin: 2rem 4rem 4rem 4rem;
     padding: 2rem;
-    /* border-radius: 2rem; */
     border-radius: 10px;
     background: rgba(255, 255, 255, .6);
     /* max-height: 70vh; */
@@ -93,7 +92,7 @@ height: 83vh !important;
     width: 100%;
         margin: 2rem 4rem 4rem 4rem;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 2rem;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 }
 

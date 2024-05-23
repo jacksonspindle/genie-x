@@ -6,9 +6,9 @@ import "./styles/genie-chat.css";
 import "./styles/cart.css";
 import "./styles/prompting.css";
 import "./styles/login.css";
+import "./styles/orders.css";
 import "./styles/toast-notifications.css";
 import "./styles/gallery.css";
-import "./styles/orders.css";
 import "./styles/account.css";
 import "./styles/image-editor.css";
 import "./styles/image-editor-2.css";
@@ -41,7 +41,7 @@ import { db } from "./config/firebase";
 import Gallery from "./components/Gallery";
 import ImageEditor2 from "./components/ImageEditor2";
 import BigHoodieLiveFeed from "./components/BigHoodieLiveFeed";
-import { Suspense } from "react";
+
 // import Login from "./components/Login";
 
 function App() {
@@ -194,20 +194,7 @@ function App() {
             }
           />
           <Route exact path="/gallery" element={<Gallery />} />
-          <Route
-            exact
-            path="/LiveFeed"
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <BigHoodieLiveFeed />
-              </Suspense>
-            }
-          />
-          {/* <Route
-            exact
-            path="/big-hoodie-live-feed"
-            element={<BigHoodieLiveFeed />}
-          /> */}
+          <Route exact path="/LiveFeed" element={<BigHoodieLiveFeed />} />
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
           <Route exact path="/orders" element={<Orders />} />
           <Route path="/test-image-editor" element={<MyImageEditor />} />
