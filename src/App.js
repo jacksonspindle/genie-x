@@ -16,7 +16,10 @@ import "./styles/user-designs.css";
 import "./styles/asset-library.css";
 import "./styles/upload-image.css";
 import "./styles/big-hoodie-live-feed.css";
+<<<<<<< HEAD
 import Orders from "./components/Orders";
+=======
+>>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
 import {
   Route,
   Routes,
@@ -199,7 +202,11 @@ function App() {
             element={<BigHoodieLiveFeed />}
           />
           <Route exact path="/image-editor-2" element={<ImageEditor2 />} />
+<<<<<<< HEAD
           <Route exact path="/orders" element={<Orders />} />
+=======
+          {/* <Route exact path="/orders" element={<Account />} /> */}
+>>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
           <Route path="/test-image-editor" element={<MyImageEditor />} />
         </Routes>
       </Router>

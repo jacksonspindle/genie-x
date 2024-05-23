@@ -77,7 +77,10 @@ const BigHoodieLiveFeed = () => {
     <div style={{ height: "100vh", backgroundColor: "white", padding: 0 }}>
       <Clock />
       <Canvas
+<<<<<<< HEAD
         // shadows={false}
+=======
+>>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
         // camera={{ position: [1, 1, 1] }}
         className="live-hoodie-feed-canvas"
         camera={{
@@ -89,11 +92,18 @@ const BigHoodieLiveFeed = () => {
           animate={{ fov: 45 }}
           transition={{ duration: 2 }}
         /> */}
+<<<<<<< HEAD
         <ambientLight intensity={4.3} />
         <spotLight position={[10, 15, 45]} angle={0.3} />
         <spotLight position={[-10, 15, 45]} angle={0.3} />
         <CameraController />
         <PuzzleHoodie scale={[13, 13, 13]} position={[0, -10, 0]} />
+=======
+        <ambientLight intensity={0.3} />
+        <spotLight position={[10, 15, 10]} angle={0.3} />
+        <CameraController />
+        <PuzzleHoodie scale={[3, 3, 3]} />
+>>>>>>> ed894918d3ced52a7917e06a757c5eec1d2c2783
         {/* <NewHoodie position={[0, 1, -4]} scale={[0.5, 0.5, 0.5]} /> */}
         <Couch scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3.5]} />
         <Table scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3]} />
