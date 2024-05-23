@@ -57,15 +57,17 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: -1;
+
 }
 
 #gradient-canvas {
   position: absolute;
+  position: fixed;
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
   --gradient-color-1: #1495ff;
   --gradient-color-2: #47bcff;
   --gradient-color-3: #e2d6ff;

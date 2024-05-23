@@ -12,15 +12,14 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
-
 import {
   getStorage,
   ref as storageRef,
   uploadBytes,
   getDownloadURL,
-  listAll,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 
 const Account = ({
   setCurrentProfilePic,
@@ -173,33 +172,6 @@ const Account = ({
     }
   }, [openai, profilePicPrompt, uploadImageToFirebase, fetchProfilePics]);
 
-  //   useEffect(() => {
-  //     const auth = getAuth();
-  //     const user = auth.currentUser;
-
-  //     if (user) {
-  //       console.log(
-  //         "User is logged in, setting up real-time listener for current profile pic..."
-  //       );
-  //       const userRef = doc(db, "users", user.uid);
-
-  //       const unsubscribe = onSnapshot(userRef, (doc) => {
-  //         const userData = doc.data();
-  //         const currentProfilePic = userData.currentProfilePic;
-  //         setGeneratedProfilePic(currentProfilePic);
-  //         // setCurrentProfilePic(currentProfilePic); // Update parent state
-  //         // setTriggerProfileChange(2);
-  //         console.log("Current profile pic updated in real-time.");
-  //       });
-
-  //       return () => unsubscribe();
-  //     } else {
-  //       console.log(
-  //         "No user logged in, cannot set up real-time listener for current profile pic."
-  //       );
-  //     }
-  //   }, []);
-
   const changeProfilePic = async (imageUrl) => {
     const userRef = doc(db, "users", user.uid);
     try {
@@ -229,59 +201,65 @@ const Account = ({
   };
 
   return (
-    <div className="account-container-outer">
-      <div className="account-container">
-        <h1>My Account</h1>
-        <div className="generate-profile-container">
-          <div className="loader-container">
-            {" "}
-            {/* Use the same container for loading and image */}
-            {isLoading ? (
-              <Ring size={30} lineWeight={5} speed={2} color="white" />
-            ) : (
-              <img
-                src={currentProfilePic}
-                className="account-profile-pic"
-                alt="Profile"
-              />
-            )}
-          </div>
-          <input
-            placeholder="Generate a profile picture"
-            value={profilePicPrompt}
-            onChange={(e) => setProfilePicPrompt(e.target.value)}
-          />
-          <button onClick={generateProfilePic} className="generate-btn">
-            Generate
-          </button>
-        </div>
-        <div className="account-info-container">
-          <div className="personal-info-container">
-            <h3>Personal Info</h3>
-            <h4>
-              Email:<i style={{ opacity: ".6" }}> {userEmail}</i>
-            </h4>
-            <h4>
-              Name: <i style={{ opacity: ".6" }}>{userName}</i>
-            </h4>
-            <button className="reset-password-btn">Reset Password</button>
-          </div>
-          <div className="profile-pics-container">
-            <h3>My Profile Pics</h3>
-            <div className="users-profile-pics">
-              {userProfilePics.map((url, index) => (
+    <AnimatePresence>
+      <motion.div
+        className="account-container-outer"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="account-container">
+          <h1>My Account</h1>
+          <div className="generate-profile-container">
+            <div className="loader-container">
+              {isLoading ? (
+                <Ring size={30} lineWeight={5} speed={2} color="white" />
+              ) : (
                 <img
-                  key={index}
-                  src={url}
-                  alt={`Profile pic ${index}`}
-                  onClick={() => changeProfilePic(url)}
+                  src={currentProfilePic}
+                  className="account-profile-pic"
+                  alt="Profile"
                 />
-              ))}
+              )}
+            </div>
+            <input
+              placeholder="Generate a profile picture"
+              value={profilePicPrompt}
+              onChange={(e) => setProfilePicPrompt(e.target.value)}
+            />
+            <button onClick={generateProfilePic} className="generate-btn">
+              Generate
+            </button>
+          </div>
+          <div className="account-info-container">
+            <div className="personal-info-container">
+              <h3>Personal Info</h3>
+              <h4>
+                Email:<i style={{ opacity: ".6" }}> {userEmail}</i>
+              </h4>
+              <h4>
+                Name: <i style={{ opacity: ".6" }}>{userName}</i>
+              </h4>
+              <button className="reset-password-btn">Reset Password</button>
+            </div>
+            <div className="profile-pics-container">
+              <h3>My Profile Pics</h3>
+              <div className="users-profile-pics">
+                {userProfilePics.map((url, index) => (
+                  <img
+                    key={index}
+                    src={url}
+                    alt={`Profile pic ${index}`}
+                    onClick={() => changeProfilePic(url)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

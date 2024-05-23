@@ -1,8 +1,8 @@
-// src/Orders.js
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../config/firebase"; // Import Firebase auth and db
 import { collection, query, where, getDocs } from "firebase/firestore"; // Import Firestore functions
-// import "./Orders.css"; // Optional: Add CSS for styling
+import { motion } from "framer-motion"; // Import Framer Motion
+import { Ring } from "@uiball/loaders";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -41,11 +41,15 @@ const Orders = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading orders...</div>;
+    return (
+      <div className="loading">
+        <Ring size={30} lineWeight={5} speed={2} color="white" />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   return (
@@ -55,32 +59,95 @@ const Orders = () => {
         <p>No orders found</p>
       ) : (
         <ul className="order-list">
-          {orders.map((order) => (
-            <li key={order.id} className="order-item">
-              <div className="order-details">
-                <img
-                  width={99}
-                  src={order.items[0].imageUrl}
-                  alt="Order Item"
-                  className="order-image"
-                />
-                <div className="order-info">
-                  <p>Puzzle Piece Number: {order.puzzlePieceId}</p>
-                  <p>Size: {order.items[0].size}</p>
-                  <p>
-                    Date:{" "}
-                    {new Date(
-                      order.createdAt.seconds * 1000
-                    ).toLocaleDateString()}
-                  </p>
+          {orders.map((order) => {
+            const createdAtDate = order.createdAt?.seconds
+              ? new Date(order.createdAt.seconds * 1000).toLocaleDateString()
+              : "Unknown date";
+            const estimatedDeliveryDate = order.estimatedDelivery?.seconds
+              ? new Date(
+                  order.estimatedDelivery.seconds * 1000
+                ).toLocaleDateString()
+              : "Unknown date";
+
+            return (
+              <motion.li
+                key={order.id}
+                className="order-item"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="order-details">
+                  <img
+                    width={100}
+                    src={order.items[0].imageUrl}
+                    alt="Order Item"
+                    className="order-image"
+                  />
+                  <div className="order-info">
+                    <p>
+                      <strong>Puzzle Piece Number:</strong>{" "}
+                      {order.puzzlePieceId}
+                    </p>
+                    <p>
+                      <strong>Size:</strong> {order.items[0].size}
+                    </p>
+                    <p>
+                      <strong>Date:</strong> {createdAtDate}
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {order.status}
+                    </p>
+                    <p>
+                      <strong>Total:</strong> ${order.total}
+                    </p>
+                    <p>
+                      <strong>Shipping Address:</strong> {order.shippingAddress}
+                    </p>
+                    <p>
+                      <strong>Estimated Delivery:</strong>{" "}
+                      {estimatedDeliveryDate}
+                    </p>
+                    <p>
+                      <strong>Tracking Number:</strong>{" "}
+                      <a
+                        href={`https://trackingservice.com/${order.trackingNumber}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {order.trackingNumber}
+                      </a>
+                    </p>
+                    <p>
+                      <strong>Order Notes:</strong> {order.notes}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+                <div className="order-actions">
+                  <button onClick={() => handleCancelOrder(order.id)}>
+                    Cancel Order
+                  </button>
+                  <button onClick={() => handleContactSupport(order.id)}>
+                    Contact Support
+                  </button>
+                </div>
+              </motion.li>
+            );
+          })}
         </ul>
       )}
     </div>
   );
+};
+
+const handleCancelOrder = (orderId) => {
+  // Implement cancel order functionality here
+  console.log("Cancel order", orderId);
+};
+
+const handleContactSupport = (orderId) => {
+  // Implement contact support functionality here
+  console.log("Contact support for order", orderId);
 };
 
 export default Orders;

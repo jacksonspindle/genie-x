@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, startTransition } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Vector3 } from "three";
 import { Canvas, useLoader, useThree } from "@react-three/fiber";
 import {
@@ -20,7 +20,8 @@ import { Rug } from "./big_hoodie_live_feed_components/Rug";
 import { Lights } from "./big_hoodie_live_feed_components/Lights";
 import { Piano } from "./big_hoodie_live_feed_components/Piano";
 import { PuzzleHoodie } from "./big_hoodie_live_feed_components/PuzzleHoodie";
-import { MotionCanvas, LayoutCamera } from "framer-motion-3d";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import { Ring } from "@uiball/loaders";
 
 const CameraController = () => {
   const { camera } = useThree();
@@ -55,8 +56,40 @@ const Clock = () => {
   );
 };
 
+const LoadingOverlay = () => (
+  <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontSize: "24px",
+        zIndex: 1000,
+        fontFamily: "oatmeal-pro-bold",
+        flexDirection: "column",
+        gap: "40px",
+      }}
+    >
+      Loading 3D elements...
+      <Ring size={40} lineWeight={5} speed={2} color="white" />
+    </motion.div>
+  </AnimatePresence>
+);
+
 const BigHoodieLiveFeed = () => {
   const [textures, setTextures] = useState(null);
+  const [isSceneLoaded, setIsSceneLoaded] = useState(false); // Track if the full scene is loaded
   const canvasRef = useRef();
 
   // Load textures using useLoader hook inside the component
@@ -79,9 +112,7 @@ const BigHoodieLiveFeed = () => {
         map.encoding = sRGBEncoding;
       });
 
-      startTransition(() => {
-        setTextures({ colorMap, normalMap, roughnessMap, aoMap });
-      });
+      setTextures({ colorMap, normalMap, roughnessMap, aoMap });
     }
   }, [textureLoaderResults]);
 
@@ -116,54 +147,64 @@ const BigHoodieLiveFeed = () => {
     }
   }, [canvasRef]);
 
-  if (!textures) {
-    return <div>Loading...</div>; // Show a loading indicator while textures are loading
-  }
-
-  const { colorMap, normalMap, roughnessMap, aoMap } = textures;
+  // Mark the scene as loaded once all assets have been added to the scene
+  useEffect(() => {
+    if (textures) {
+      const timeout = setTimeout(() => setIsSceneLoaded(true), 1000); // Simulate loading time
+      return () => clearTimeout(timeout); // Cleanup timeout on unmount
+    }
+  }, [textures]);
 
   return (
-    <div style={{ height: "100vh", backgroundColor: "white", padding: 0 }}>
-      <Clock />
+    <div
+      style={{ height: "100vh", backgroundColor: "transparent", padding: 0 }}
+    >
+      {!isSceneLoaded && <LoadingOverlay />}
+      {isSceneLoaded ? <Clock /> : null}
       <Canvas
         ref={canvasRef}
         className="live-hoodie-feed-canvas"
         camera={{
           fov: 51, // Optional: Field of view
         }}
+        onCreated={() => setIsSceneLoaded(true)} // Set scene as loaded when Canvas is created
       >
         <ambientLight intensity={0.3} />
         <spotLight position={[10, 15, 45]} angle={0.3} intensity={0.4} />
         <spotLight position={[-10, 15, 45]} angle={0.3} intensity={0.4} />
         <CameraController />
-        <PuzzleHoodie scale={[13, 13, 13]} position={[0, -10, 0]} />
-        <Couch scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3.5]} />
-        <Table scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3]} />
-        <Rug scale={[1.5, 1.5, 1.5]} position={[0.8, -0.8, 3.2]} />
-        <Lights scale={[1.5, 1.5, 1.5]} position={[0, -1.33, 2]} />
-        <Piano scale={[1.5, 1.5, 1.5]} position={[0, -0.8, 2.5]} />
-        <Plane
-          args={[15, 10]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -1.5, 0]}
-          receiveShadow
-        >
-          <meshStandardMaterial
-            map={colorMap}
-            normalMap={normalMap}
-            roughnessMap={roughnessMap}
-            aoMap={aoMap}
-          />
-        </Plane>
-        <Box args={[15, 10, 0.1]} position={[0, 1.5, -5]}>
-          <meshStandardMaterial color="#001BFF" />
-        </Box>
-        <Box args={[0.1, 10, 10]} position={[-7.45, 1.5, 0]}>
-          <meshStandardMaterial color="#001BFF" />
-        </Box>
-        <Box args={[0.1, 10, 10]} position={[7.45, 1.5, 0]}>
-          <meshStandardMaterial color="#001BFF" />
-        </Box>
+        {textures && (
+          <>
+            <PuzzleHoodie scale={[13, 13, 13]} position={[0, -10, 0]} />
+            <Couch scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3.5]} />
+            <Table scale={[1.5, 1.5, 1.5]} position={[1, -0.8, 3]} />
+            <Rug scale={[1.5, 1.5, 1.5]} position={[0.8, -0.8, 3.2]} />
+            <Lights scale={[1.5, 1.5, 1.5]} position={[0, -1.33, 2]} />
+            <Piano scale={[1.5, 1.5, 1.5]} position={[0, -0.8, 2.5]} />
+            <Plane
+              args={[15, 10]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[0, -1.5, 0]}
+              receiveShadow
+            >
+              <meshStandardMaterial
+                map={textures.colorMap}
+                normalMap={textures.normalMap}
+                roughnessMap={textures.roughnessMap}
+                aoMap={textures.aoMap}
+              />
+            </Plane>
+            <Box args={[15, 10, 0.1]} position={[0, 1.5, -5]}>
+              <meshStandardMaterial color="#001BFF" />
+            </Box>
+            <Box args={[0.1, 10, 10]} position={[-7.45, 1.5, 0]}>
+              <meshStandardMaterial color="#001BFF" />
+            </Box>
+            <Box args={[0.1, 10, 10]} position={[7.45, 1.5, 0]}>
+              <meshStandardMaterial color="#001BFF" />
+            </Box>
+          </>
+        )}
         <OrbitControls
           enablePan={true}
           target={[0, 0.8, 0]}

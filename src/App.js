@@ -8,6 +8,7 @@ import "./styles/prompting.css";
 import "./styles/login.css";
 import "./styles/toast-notifications.css";
 import "./styles/gallery.css";
+import "./styles/orders.css";
 import "./styles/account.css";
 import "./styles/image-editor.css";
 import "./styles/image-editor-2.css";

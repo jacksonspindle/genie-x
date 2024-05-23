@@ -1,0 +1,81 @@
+.orders {
+    max-width: 1000px;
+    width: 80vw;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: oatmeal-pro-regular;
+}
+
+.orders h1 {
+    text-align: center;
+    color: #333;
+}
+
+.loading,
+.error {
+    text-align: center;
+    color: #555;
+    height: 99vh;
+}
+
+.order-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-item {
+    background: rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        height: 250px;
+}
+
+.order-details {
+    display: flex;
+    align-items: center;
+}
+
+.order-image {
+    border-radius: 5px;
+    margin-right: 15px;
+    width: 200px;
+}
+
+.order-info {
+    flex: 1;
+}
+
+.order-info p {
+    margin: 5px 0;
+    color: darkslategray;
+}
+
+.order-info strong {
+    color: #333;
+}
+
+.order-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -30px;
+}
+
+.order-actions button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: oatmeal-pro-regular;
+}
+
+.order-actions button:hover {
+    background-color: #0056b3;
+}
