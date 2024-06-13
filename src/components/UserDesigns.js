@@ -43,7 +43,13 @@ const UserDesigns = ({ setHoodieImage }) => {
   return (
     <div
       className="user-designs-container"
-      style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "10px",
+        overflowY: "scroll",
+        height: "37vh",
+      }}
     >
       {designs.map((design) => (
         <div

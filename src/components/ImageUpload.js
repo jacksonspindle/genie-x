@@ -281,7 +281,10 @@ const ImageUpload = ({ setHoodieImage }) => {
   };
 
   return (
-    <div className="image-upload-container">
+    <div
+      className="image-upload-container"
+      style={{ maxWidth: "280px", height: "33vh" }}
+    >
       <input
         ref={fileInputRef}
         className="upload-image-input"
