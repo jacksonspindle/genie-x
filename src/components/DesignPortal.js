@@ -658,7 +658,7 @@ const DesignPortal = ({
                 panelStages === "prompting"
                   ? {
                       x: isIphoneMax ? "0%" : "0%",
-                      y: isIphoneMax ? "-1020%" : "-890%",
+                      y: isIphoneMax ? "-1020%" : "-59vh",
                     }
                   : panelStages === "product"
                   ? {
@@ -667,7 +667,7 @@ const DesignPortal = ({
                     }
                   : {
                       x: isIphoneMax ? "0%" : "0%",
-                      y: isIphoneMax ? "-100%" : "-100%",
+                      y: isIphoneMax ? "-100%" : "-20px",
                       transition: {
                         type: "spring",
                         stiffness: 100,
