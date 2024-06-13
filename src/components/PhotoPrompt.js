@@ -996,7 +996,7 @@ const PhotoPrompt = ({
             )
           )}
         </div>
-        <div style={{ height: "50px", width: "100%" }}></div>
+        {/* <div style={{ height: "50px", width: "100%" }}></div> */}
       </div>
       {/* <div className="preview-images-container">
         {Array(4)

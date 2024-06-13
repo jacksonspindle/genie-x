@@ -180,6 +180,9 @@ const Main = ({
 }) => {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
+  const [isIphoneMax, setIsIphoneMax] = useState(
+    window.innerWidth >= 425 && window.innerWidth < 500
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -271,6 +274,7 @@ const Main = ({
             element={
               <PageTransition>
                 <DesignPortal
+                  isIphoneMax={isIphoneMax}
                   isMobile={isMobile}
                   productDetails={productDetails}
                   setProductDetails={setProductDetails}

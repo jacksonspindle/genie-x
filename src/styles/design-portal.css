@@ -113,7 +113,6 @@
 
 .prompt-container {
     /* position: relative; */
-    height: 480px;
     flex: .75;
     justify-content: start;
     z-index: 16;

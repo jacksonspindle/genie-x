@@ -100,6 +100,7 @@ function SetupCamera() {
 }
 
 const DesignPortal = ({
+  isIphoneMax,
   isMobile,
   productDetails,
   setProductDetails,
@@ -126,8 +127,13 @@ const DesignPortal = ({
   const [tempHoodieImage, setTempHoodieImage] = useState("");
   const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
   const [promptContainerOpen, setPromptContainerOpen] = useState(false);
+  const [productDetailsContainer, setproductDetailsContainer] = useState(false);
 
   console.log(isMobile, "isMobile");
+
+  useEffect(() => {
+    console.log("isIphoneMax", isIphoneMax);
+  });
 
   const tabs = [
     { name: "generate", icon: starsIcon },
@@ -482,9 +488,10 @@ const DesignPortal = ({
   }, [words]); // This useEffect will run whenever the 'words' state changes
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+  const [panelStages, setPanelStages] = useState("closed");
 
   return (
-    <div className="design-portal-container">
+    <div className="design-portal-container" style={{ maxHeight: "100vh" }}>
       <AnimatePresence>
         {instructionsOpen || editPopup ? (
           <motion.div
@@ -546,7 +553,7 @@ const DesignPortal = ({
 
       <div className="hoodie_canvas">
         <div className="hoodie-canvas-left">
-          <h3
+          {/* <h3
             onClick={() => {
               setProductDetails(true);
               console.log(productDetails);
@@ -555,7 +562,7 @@ const DesignPortal = ({
           >
             <img width={20} src={infoIcon} alt="info" />
             Product Details{" "}
-          </h3>
+          </h3> */}
           <div className="hoodie-scene">
             <Canvas>
               <SetupCamera />
@@ -572,19 +579,67 @@ const DesignPortal = ({
               <ambientLight intensity={0.2} />
               {/* <directionalLightHelper /> */}
             </Canvas>
-            <div
+            <motion.div
               className="free-range-input-container"
-              style={{
-                transition: "ease-in-out all .5s",
-                bottom: isMobile
-                  ? promptContainerOpen
-                    ? "38rem"
-                    : "10rem"
-                  : "9.1rem",
-                right: isMobile ? "1.2rem" : "auto",
+              // style={{
+              //   transition: "ease-in-out all .6s",
+              //   bottom: isMobile
+              //     ? panelStages === "prompting"
+              //       ? isIphoneMax
+              //         ? "80%"
+              //         : "79.5%"
+              //       : panelStages === "product"
+              //       ? isIphoneMax
+              //         ? "105%"
+              //         : "100.5%"
+              //       : "10rem"
+              //     : "9.1rem",
+              //   right: isMobile ? "1.2rem" : "auto",
+              // }}
+              initial={{ x: "0%", y: "-20%" }}
+              animate={
+                panelStages === "prompting"
+                  ? {
+                      x: isIphoneMax ? "0%" : "0%",
+                      y: isIphoneMax ? "-950%" : "-890%",
+                    }
+                  : panelStages === "product"
+                  ? {
+                      x: isIphoneMax ? "0%" : "0%",
+                      y: isIphoneMax ? "-1300%" : "-1200%",
+                    }
+                  : {
+                      x: isIphoneMax ? "0%" : "0%",
+                      y: isIphoneMax ? "-100%" : "-100%",
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20,
+                        duration: 0.5,
+                        delay: 0.07, // Delay on entrance
+                      },
+                    }
+              }
+              exit={{
+                x: "0%",
+                transition: {
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  duration: 0.5,
+                  delay: 2, // No delay on exit
+                },
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 20,
+                duration: 0.5,
+                delay: 0.15,
               }}
             >
               <input
+                // onClick={() => setPanelStages("prompting")}
                 className="free-range-input"
                 placeholder="Type in a detailed description..."
                 // disabled={!freeRangeToggle}
@@ -599,12 +654,15 @@ const DesignPortal = ({
               ></input>
               <button
                 className="generate-image-free-range-btn"
-                onClick={generateFreeRangeImage}
+                onClick={() => {
+                  generateFreeRangeImage();
+                  setPanelStages("prompting");
+                }}
                 // disabled={dallePrompt === "genie"}
               >
                 Generate
               </button>
-            </div>
+            </motion.div>
 
             {/* <div
               className="switch"
@@ -620,27 +678,31 @@ const DesignPortal = ({
             >
               <motion.div className="handle" layout transition={spring} />
             </div> */}
-            <div
-              style={{
-                position: "absolute",
-                left: 10,
-                bottom: 0,
-                // padding: "2rem",
-              }}
-            >
-              <p>
-                <em>
-                  <b>Orbit</b>
-                </em>{" "}
-                - Click + Drag
-              </p>
-              <p>
-                <em>
-                  <b>Zoom</b>
-                </em>{" "}
-                - Scroll
-              </p>
-            </div>
+            {!isMobile ? (
+              <div
+                style={{
+                  position: "absolute",
+                  left: 10,
+                  bottom: 0,
+                  // padding: "2rem",
+                }}
+              >
+                <p>
+                  <em>
+                    <b>Orbit</b>
+                  </em>{" "}
+                  - Click + Drag
+                </p>
+                <p>
+                  <em>
+                    <b>Zoom</b>
+                  </em>{" "}
+                  - Scroll
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
@@ -880,13 +942,21 @@ const DesignPortal = ({
       ) : (
         <motion.div
           className="prompt-container"
-          initial={{ x: "100%", y: 0 }}
+          initial={{ x: "0%", y: "5%" }}
           animate={
-            promptContainerOpen
-              ? { x: -30, y: 180 }
+            panelStages === "prompting"
+              ? {
+                  x: isIphoneMax ? "-9%" : "-5%",
+                  y: isIphoneMax ? "47%" : "44%",
+                }
+              : panelStages === "product"
+              ? {
+                  x: isIphoneMax ? "-8%" : "-4%",
+                  y: isIphoneMax ? "-100%" : "-100%", // Adjust values as needed
+                }
               : {
-                  x: -30,
-                  y: "139%",
+                  x: isIphoneMax ? "-10%" : "-5%",
+                  y: isIphoneMax ? "154%" : "155%",
                   transition: {
                     type: "spring",
                     stiffness: 100,
@@ -897,7 +967,7 @@ const DesignPortal = ({
                 }
           }
           exit={{
-            x: "100%",
+            x: "0%",
             transition: {
               type: "spring",
               stiffness: 100,
@@ -922,6 +992,8 @@ const DesignPortal = ({
             // width: "440px",
             // background: "white",
             zIndex: 1001,
+            height: isIphoneMax ? "440px" : "430px",
+            minWidth: "350px",
           }}
         >
           <div className="tab-buttons">
@@ -1041,6 +1113,250 @@ const DesignPortal = ({
                   transition: "all .2s ease-in-out",
                   cursor: "pointer",
                   fontSize: "15px",
+                  color: "white",
+                }}
+              >
+                Generate
+              </button>
+              <Link
+                className="prompt-button"
+                to={"/cart"}
+                onClick={addToCart}
+                style={{
+                  backgroundColor: "black",
+                  transition: "all .2s ease-in-out ",
+                }}
+              >
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "black",
+                    fontFamily: "oatmeal-pro-regular",
+                    cursor: "pointer",
+                    color: "white",
+                    fontFamily: "oatmeal-pro-bold",
+                    fontSize: "15px",
+                    borderRadius: "1rem",
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </Link>
+              <button
+                className="save-design-button"
+                style={{
+                  border: "none",
+                  background: "white",
+                  boxShadow: "none",
+                  fontFamily: "oatmeal-pro-regular",
+                  borderRadius: ".5rem",
+                  maxWidth: "50px",
+                }}
+                onClick={saveDesign}
+              >
+                {isSaving ? (
+                  <Ring size={20} lineWeight={5} speed={2} color="black" />
+                ) : (
+                  <img
+                    src={saveDesignIcon}
+                    alt="save"
+                    style={{
+                      height: "20px",
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                )}
+              </button>
+            </div>
+          </div>
+          <div
+            className="prompt-panel-toggle"
+            onClick={() => {
+              if (panelStages === "closed") {
+                setPanelStages("prompting");
+              } else if (panelStages === "prompting") {
+                setPanelStages("closed");
+              }
+            }}
+            style={{
+              position: "absolute",
+              top: "-12px",
+              left: "125px",
+              transform: "translateY(-50%)",
+              width: "100px",
+              height: "25px",
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "act-of-creation",
+              // fontFamily: "oatmeal-pro-bold",
+              fontSize: "25px",
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              borderTopLeftRadius: ".75rem",
+              borderTopRightRadius: ".75rem",
+            }}
+          >
+            <img
+              width={30}
+              src={promptingArrow}
+              style={{
+                transition: "all ease-in-out .3s",
+                transform: panelStages === "prompting" ? "scaleY(-1)" : "",
+              }}
+            ></img>
+          </div>
+        </motion.div>
+      )}
+
+      {/* THIS IS A BREAK */}
+
+      {!isMobile ? (
+        <motion.div
+          className="prompt-container"
+          initial={{ x: "100%" }}
+          animate={promptContainerOpen ? { x: 0 } : { x: "100%" }}
+          exit={{ x: "100%" }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            duration: 0.5,
+          }}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            borderBottomLeftRadius: "1rem",
+            // height: "100vh",
+            // width: "440px",
+            // background: "white",
+            zIndex: 1001,
+          }}
+        >
+          <div className="tab-buttons">
+            <div className="tab-container">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.name}
+                  className={activeTab === tab.name ? "active" : ""}
+                  onClick={() => setActiveTab(tab.name)}
+                >
+                  <img
+                    style={{
+                      width: "40px",
+                      padding: "2px",
+                    }}
+                    src={tab.icon}
+                    alt={tab.name}
+                  />
+                </button>
+              ))}
+            </div>
+            <motion.div
+              className="underline-2"
+              initial={false}
+              animate={underlineStyle}
+            />
+          </div>
+
+          {/* <button
+          style={{ position: "absolute", zIndex: "1000" }}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          Toggle Dropdown
+        </button> */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial="closed"
+              animate={isDropdownOpen ? "open" : "closed"}
+              exit="closed"
+              variants={dropdownVariants}
+              transition={{ duration: 0.5 }}
+              style={{ overflow: "hidden" }}
+            >
+              {activeTab === "generate" && (
+                <TabContent key="generate">
+                  <PromptContainer
+                    setWords={setWords}
+                    words={words}
+                    isGenerating={isGenerating}
+                    setIsGenerating={setIsGenerating}
+                    isSaving={isSaving}
+                    setIsSaving={setIsSaving}
+                    triggerCounter={triggerCounter}
+                    isFreeRange={isFreeRange}
+                    setIsFreeRange={setIsFreeRange}
+                    freeRangeInput={freeRangeInput}
+                    editPrompt={editPrompt}
+                    maskImage={maskImage}
+                    hoodieImage={hoodieImage}
+                    dalleImages={dalleImages}
+                    setDalleImages={setDalleImages}
+                    selectedImageIndex={selectedImageIndex}
+                    setSelectedImageIndex={setSelectedImageIndex}
+                    setEditPopup={setEditPopup}
+                    editPopup={editPopup}
+                    setHoodieImage={setHoodieImage}
+                    freeRangeToggle={freeRangeToggle}
+                    setFreeRangeToggle={setFreeRangeToggle}
+                    freeRangePrompt={freeRangePrompt}
+                  />
+                </TabContent>
+              )}
+
+              {activeTab === "upload" && (
+                <TabContent key="upload">
+                  <ImageUpload setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+
+              {activeTab === "designs" && (
+                <TabContent key="designs">
+                  <UserDesigns setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+            </motion.div>
+          </AnimatePresence>
+          <div
+            className="testing-this-out"
+            style={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              backgroundColor: "rgba(255, 255, 255, .6)",
+              borderBottomLeftRadius: "1rem",
+              borderBottomRightRadius: "1rem",
+              height: "36px",
+              paddingTop: ".5rem",
+              paddingBottom: ".5rem",
+              borderRadius: "1rem",
+            }}
+          >
+            <div
+              className="prompt-buttons-container"
+              style={{
+                position: "absolute",
+                zIndex: 10000,
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+              }}
+            >
+              <button
+                onClick={generateImageCheck}
+                className="prompt-button"
+                style={{
+                  marginTop: "0",
+                  width: "10px",
+                  fontFamily: "oatmeal-pro-bold",
+                  padding: ".7rem",
+                  borderRadius: ".5rem",
+                  transition: "all .2s ease-in-out",
+                  cursor: "pointer",
+                  fontSize: "15px",
                 }}
               >
                 Generate
@@ -1101,8 +1417,132 @@ const DesignPortal = ({
             onClick={() => setPromptContainerOpen(!promptContainerOpen)}
             style={{
               position: "absolute",
+              top: "50%",
+              left: "-40px",
+              transform: "translateY(-50%)",
+              width: "40px",
+              height: "100px",
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "act-of-creation",
+              // fontFamily: "oatmeal-pro-bold",
+              fontSize: "25px",
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              borderTopLeftRadius: "1rem",
+              borderBottomLeftRadius: "1rem",
+            }}
+          >
+            <img
+              width={40}
+              src={promptingArrow}
+              style={{
+                transition: "all ease-in-out .3s",
+                transform: panelStages === "prompting" ? "scaleX(-1)" : "",
+              }}
+            ></img>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          className="prompt-container"
+          initial={{ x: "0%", y: "5%" }}
+          animate={
+            panelStages === "prompting"
+              ? {
+                  x: isIphoneMax ? "0%" : "0%",
+                  y: isIphoneMax ? "88%" : "85%",
+                }
+              : panelStages === "product"
+              ? {
+                  x: isIphoneMax ? "0%" : "0%",
+                  y: isIphoneMax ? "18%" : "18%", // Adjust values as needed
+                }
+              : {
+                  x: isIphoneMax ? "-10%" : "-5%",
+                  y: isIphoneMax ? "254%" : "255%",
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
+                    duration: 0.5,
+                    delay: 0.07, // Delay on entrance
+                  },
+                }
+          }
+          exit={{
+            x: "0%",
+            transition: {
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              duration: 0.5,
+              delay: 0, // No delay on exit
+            },
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            duration: 0.5,
+            delay: 0.15,
+          }}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            // borderTopLeftRadius: "1rem",
+            // height: "100vh",
+            // width: "440px",
+            // background: "white",
+            zIndex: 1001,
+            height: isIphoneMax ? "780px" : "780px",
+            // minWidth: "350px",
+            minWidth: "100%",
+          }}
+        >
+          <div>
+            <h1
+              style={{
+                color: "black",
+                filter: "invert(1)",
+                fontFamily: "act-of-creation",
+                fontSize: "35px",
+              }}
+            >
+              PRODUCT DETAILS
+            </h1>
+            <div>
+              <ul
+                className="product-details-bullets"
+                style={{ maxWidth: "250px" }}
+              >
+                <li style={{ textAlign: "right" }}>• 12 oz. 400 GSM +/-</li>
+                <li>Heavy Duty Puff Print</li>
+                <li>Double Self-Lined Hood</li>
+                <li>Pockets Secured With Bar Tacks</li>
+                <li>Clean Finished Ribbed Cuffs and Waistband</li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="prompt-panel-toggle"
+            onClick={() => {
+              if (panelStages === "prompting") {
+                setPanelStages("product");
+              } else if (panelStages === "product") {
+                setPanelStages("prompting");
+              }
+            }}
+            style={{
+              position: "absolute",
               top: "-12px",
-              left: "110px",
+              left: "39%",
               transform: "translateY(-50%)",
               width: "100px",
               height: "25px",
@@ -1117,8 +1557,8 @@ const DesignPortal = ({
               fontSize: "25px",
               writingMode: "vertical-rl",
               textOrientation: "mixed",
-              borderTopLeftRadius: "1rem",
-              borderTopRightRadius: "1rem",
+              borderTopLeftRadius: ".75rem",
+              borderTopRightRadius: ".75rem",
             }}
           >
             <img
@@ -1126,7 +1566,7 @@ const DesignPortal = ({
               src={promptingArrow}
               style={{
                 transition: "all ease-in-out .3s",
-                transform: promptContainerOpen ? "scaleY(-1)" : "",
+                transform: panelStages === "product" ? "scaleY(-1)" : "",
               }}
             ></img>
           </div>
