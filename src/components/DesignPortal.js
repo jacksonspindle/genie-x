@@ -27,6 +27,8 @@ import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
 import { auth } from "../config/firebase";
 import { getFirestore } from "firebase/firestore";
 import UserDesigns from "./UserDesigns";
+import { useLocation } from "react-router-dom";
+
 // import { motion } from "framer-motion";
 
 // import { Link } from "react-router-dom";
@@ -128,6 +130,15 @@ const DesignPortal = ({
   const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
   const [promptContainerOpen, setPromptContainerOpen] = useState(false);
   const [productDetailsContainer, setproductDetailsContainer] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/design") {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    }
+  }, [location]);
 
   console.log(isMobile, "isMobile");
 
@@ -490,8 +501,54 @@ const DesignPortal = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [panelStages, setPanelStages] = useState("closed");
 
+  const inputRef = useRef(null);
+
+  // useEffect(() => {
+  //   // setPanelStages("prompting");
+  //   inputRef.current.onfocus = () => {
+  //     setPanelStages("prompting");
+  //     window.scrollTo(0, 0);
+  //     document.body.scrollTop = 0;
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     window.scrollTo(1, 0);
+  //   };
+
+  //   // Set initial scroll position to 0
+
+  //   setTimeout(() => {
+  //     handleScroll();
+  //   }, 2000);
+
+  //   // Add scroll event listener
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     // Remove scroll event listener on cleanup
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+
+  // const handleInputClick = () => {
+  //   setPanelStages("prompting");
+
+  //   // Scroll to the top of the page
+  //   window.scrollTo(0, 0);
+  //   document.body.scrollTop = 0;
+
+  //   // Use requestAnimationFrame to ensure the scroll completes before focusing the input
+  //   requestAnimationFrame(() => {
+  //     if (inputRef.current) {
+  //       inputRef.current.readOnly = false;
+  //       inputRef.current.focus();
+  //     }
+  //   });
+  // };
+
   return (
-    <div className="design-portal-container" style={{ maxHeight: "100vh" }}>
+    <div className="design-portal-container">
       <AnimatePresence>
         {instructionsOpen || editPopup ? (
           <motion.div
@@ -601,12 +658,12 @@ const DesignPortal = ({
                 panelStages === "prompting"
                   ? {
                       x: isIphoneMax ? "0%" : "0%",
-                      y: isIphoneMax ? "-950%" : "-890%",
+                      y: isIphoneMax ? "-1020%" : "-890%",
                     }
                   : panelStages === "product"
                   ? {
                       x: isIphoneMax ? "0%" : "0%",
-                      y: isIphoneMax ? "-1300%" : "-1200%",
+                      y: isIphoneMax ? "-1400%" : "-1200%",
                     }
                   : {
                       x: isIphoneMax ? "0%" : "0%",
@@ -639,8 +696,15 @@ const DesignPortal = ({
               }}
             >
               <input
-                // onClick={() => setPanelStages("prompting")}
+                // onClick={() => {
+                //   // handleInputClick();
+                //   setPanelStages("prompting");
+                // }}
+                ref={inputRef}
                 className="free-range-input"
+                // focus={false}
+                // readOnly={true}
+
                 placeholder="Type in a detailed description..."
                 // disabled={!freeRangeToggle}
                 style={{
@@ -956,7 +1020,7 @@ const DesignPortal = ({
                 }
               : {
                   x: isIphoneMax ? "-10%" : "-5%",
-                  y: isIphoneMax ? "154%" : "155%",
+                  y: isIphoneMax ? "169%" : "155%",
                   transition: {
                     type: "spring",
                     stiffness: 100,

@@ -12,6 +12,7 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { AmbientLight } from "three";
 import HomeMobile from "./HomeMobile";
 import HomeNavMobile from "./HomeNavMobile";
+import { useLocation } from "react-router-dom";
 
 // Helper function to split text into words
 const splitTextIntoWords = (text, scrollingUp) => {
@@ -298,6 +299,15 @@ const Home = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [scrollingUp, setScrollingUp] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      document.body.style.overflow = "scroll";
+      document.documentElement.style.overflow = "scroll";
+    }
+  }, [location]);
 
   const smoothScrollToTop = () => {
     setScrollingUp(true);

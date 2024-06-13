@@ -130,6 +130,7 @@ function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: TRANSITION_DURATION }}
+            // style={{ overflow: "hidden" }}
           />
         )}
       </AnimatePresence>
