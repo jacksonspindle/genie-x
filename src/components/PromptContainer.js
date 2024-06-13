@@ -30,10 +30,9 @@ const PromptContainer = ({
 }) => {
   // const [prompt, setPrompt] = useState(null);
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {/* <div className="prompt-container"> */}
-      <div className="prompt-container-content">
-        {/* {prompt === null ? (
+      {/* {prompt === null ? (
             <>
               <h1 style={{ fontSize: "24px" }}>Select Your Medium</h1>
               <div className="prompt-medium-options">
@@ -61,30 +60,29 @@ const PromptContainer = ({
           {prompt === "3D Render" ? <ThreeDRender /> : null}
           {prompt === "Claymation" ? <ClaymationPrompt /> : null}
           {prompt === "Sculpture" ? <SculpturePrompt /> : null} */}
-        <PhotoPrompt
-          setWords={setWords}
-          words={words}
-          isGenerating={isGenerating}
-          setIsGenerating={setIsGenerating}
-          isSaving={isSaving}
-          setIsSaving={setIsSaving}
-          triggerCounter={triggerCounter}
-          isFreeRange={isFreeRange}
-          setIsFreeRange={setIsFreeRange}
-          freeRangeInput={freeRangeInput}
-          hoodieImage={hoodieImage}
-          dalleImages={dalleImages}
-          setDalleImages={setDalleImages}
-          selectedImageIndex={selectedImageIndex}
-          setSelectedImageIndex={setSelectedImageIndex}
-          setHoodieImage={setHoodieImage}
-          setEditPopup={setEditPopup}
-          editPopup={editPopup}
-          freeRangeToggle={freeRangeToggle}
-          setFreeRangeToggle={setFreeRangeToggle}
-          freeRangePrompt={freeRangePrompt}
-        />
-      </div>
+      <PhotoPrompt
+        setWords={setWords}
+        words={words}
+        isGenerating={isGenerating}
+        setIsGenerating={setIsGenerating}
+        isSaving={isSaving}
+        setIsSaving={setIsSaving}
+        triggerCounter={triggerCounter}
+        isFreeRange={isFreeRange}
+        setIsFreeRange={setIsFreeRange}
+        freeRangeInput={freeRangeInput}
+        hoodieImage={hoodieImage}
+        dalleImages={dalleImages}
+        setDalleImages={setDalleImages}
+        selectedImageIndex={selectedImageIndex}
+        setSelectedImageIndex={setSelectedImageIndex}
+        setHoodieImage={setHoodieImage}
+        setEditPopup={setEditPopup}
+        editPopup={editPopup}
+        freeRangeToggle={freeRangeToggle}
+        setFreeRangeToggle={setFreeRangeToggle}
+        freeRangePrompt={freeRangePrompt}
+      />
       {/* </div> */}
     </div>
   );

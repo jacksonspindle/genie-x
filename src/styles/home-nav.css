@@ -1,0 +1,351 @@
+.home-nav-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 3rem;
+    background-color: black !important;
+    background: linear-gradient(270deg, #843fff, #00b3ff);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* cursor: pointer; */
+    z-index: 1100;
+    overflow: hidden;
+    transform-origin: center;
+    outline: 2px solid white;
+
+    width: 300px;
+    height: 300px;
+    /* border-radius: 50%; */
+    box-shadow:
+        inset 0 0 50px #fff,
+        0 0 50px #fff,
+        10px 0 80px #0ff;
+
+    animation: boxShadowAnimation 3s ease-in-out infinite;
+
+    background: linear-gradient(270deg, #001BFF, #0ff, #001BFF, #0ff);
+    background-size: 800% 800%;
+    -webkit-animation: gradientAnimation 8s ease infinite;
+    -moz-animation: gradientAnimation 8s ease infinite;
+    animation: gradientAnimation 8s ease infinite;
+
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    /* Start with fully transparent */
+    z-index: 999;
+    /* Ensure the overlay is above other elements */
+    transition: background 0.5s ease;
+    /* Smooth transition for the background */
+}
+
+.overlay.visible {
+    background: rgba(0, 0, 0, 0.5);
+    /* Darken the overlay when visible */
+}
+
+
+.home-nav-container-no-glow {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 3rem;
+    background-color: black !important;
+    background: linear-gradient(270deg, #843fff, #00b3ff);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* cursor: pointer; */
+    z-index: 1100;
+    overflow: hidden;
+    transform-origin: center;
+
+
+    width: 300px;
+    height: 300px;
+    /* border-radius: 50%; */
+    /* box-shadow:
+            inset 0 0 50px #fff,
+            0 0 50px #fff,
+            10px 0 80px #0ff;
+     */
+
+    /* background: linear-gradient(270deg, #001BFF, #0ff, #001BFF, #0ff); */
+    background-size: 800% 800%;
+    -webkit-animation: gradientAnimation 8s ease infinite;
+    -moz-animation: gradientAnimation 8s ease infinite;
+    animation: gradientAnimation 8s ease infinite;
+}
+
+@keyframes boxShadowAnimation {
+    0% {
+        box-shadow:
+            inset 0 0 50px #fff,
+            0 0 50px #fff,
+            10px 0 80px #0ff;
+    }
+
+    50% {
+        box-shadow:
+            inset 0 0 80px #fff,
+            0 0 80px #fff,
+            10px 0 120px #0ff;
+    }
+
+    100% {
+        box-shadow:
+            inset 0 0 50px #fff,
+            0 0 50px #fff,
+            100px 0 80px #0ff;
+    }
+}
+
+@-webkit-keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@-moz-keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.home-nav-container a {
+    background-color: none !important;
+}
+
+.home-nav-container {
+    background: linear-gradient(270deg, #843fff, #00b3ff);
+    background-size: 400% 400%;
+
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 5s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@-moz-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+
+
+.nav-item {
+    color: #fff !important;
+    cursor: pointer;
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-20px);
+    /* transition: opacity 0.3s ease, transform 0.3s ease; */
+    font-family: oatmeal-pro-bold
+}
+
+.nav-container.open .nav-item {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: all;
+    transform: translateX(0);
+}
+
+/* .nav-item:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.nav-item:nth-child(3) {
+    transition-delay: 0.2s;
+}
+
+.nav-item:nth-child(4) {
+    transition-delay: 0.3s;
+} */
+
+.nav-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.a-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-left: 40px;
+    cursor: pointer;
+}
+
+
+
+
+.small-text {
+    font-size: 16px;
+    margin-right: 1rem;
+    /* Adjust the font size as needed */
+}
+
+.home-nav-container {
+    position: relative;
+    /* max-width: 370px; */
+    padding: 0;
+}
+
+.home-nav-container-no-glow-mobile {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 1.5rem;
+    background-color: black !important;
+    background: linear-gradient(270deg, #843fff, #00b3ff);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* cursor: pointer; */
+    z-index: 1100;
+    overflow: hidden;
+    transform-origin: center;
+
+
+    width: 300px;
+    height: 300px;
+    /* border-radius: 50%; */
+    /* box-shadow:
+            inset 0 0 50px #fff,
+            0 0 50px #fff,
+            10px 0 80px #0ff;
+     */
+
+    /* background: linear-gradient(270deg, #001BFF, #0ff, #001BFF, #0ff); */
+    background-size: 800% 800%;
+    -webkit-animation: gradientAnimation 8s ease infinite;
+    -moz-animation: gradientAnimation 8s ease infinite;
+    animation: gradientAnimation 8s ease infinite;
+}
+
+.home-nav-container-mobile {
+   
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            gap: 3rem;
+            background-color: black !important;
+            background: linear-gradient(270deg, #843fff, #00b3ff);
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            /* cursor: pointer; */
+            z-index: 1100;
+            overflow: hidden;
+            transform-origin: center;
+            outline: 2px solid white;
+            width: 300px;
+            height: 300px;
+            /* border-radius: 50%; */
+            box-shadow:
+                inset 0 0 50px #fff,
+                0 0 50px #fff,
+                10px 0 80px #0ff;
+    
+            animation: boxShadowAnimation 3s ease-in-out infinite;
+    
+            background: linear-gradient(270deg, #001BFF, #0ff, #001BFF, #0ff);
+            background-size: 800% 800%;
+            -webkit-animation: gradientAnimation 8s ease infinite;
+            -moz-animation: gradientAnimation 8s ease infinite;
+            animation: gradientAnimation 8s ease infinite;
+}
+
+.home-nav-container-mobile > nav {
+    margin-left: 2rem;
+}

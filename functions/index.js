@@ -9,7 +9,8 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Determine environment
-const isProduction = process.env.NODE_ENV === "production";
+// const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "development";
 // const stripeSecretKey = functions.config().stripe.test_secret_key;
 
 const stripeSecretKey = isProduction

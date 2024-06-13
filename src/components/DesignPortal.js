@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import infoIcon from "../assets/infoIcon.png";
 import genieXLogo from "../assets/genieXLogo.png";
+import promptingArrow from "../assets/promptingArrow.png";
 import arrowIcon from "../assets/arrowIcon.png";
 import xIcon from "../assets/xIcon.png";
 import uploadImageIcon from "../assets/uploadImageIcon.png";
@@ -71,12 +72,17 @@ import { NewHoodie } from "./NewGenieXHoodie";
 
 // import GenieChatFreeRange from "./GenieChatFreeRange";
 
+const dropdownVariants = {
+  open: { height: 500 },
+  closed: { height: 10 },
+};
+
 const TabContent = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: 10 }}
-    transition={{ type: "spring", stiffness: 300, damping: 30, duration: 2 }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ type: "spring", stiffness: 300, damping: 30 }}
   >
     {children}
   </motion.div>
@@ -94,6 +100,7 @@ function SetupCamera() {
 }
 
 const DesignPortal = ({
+  isMobile,
   productDetails,
   setProductDetails,
   hoodieImage,
@@ -118,15 +125,18 @@ const DesignPortal = ({
   const [dallePrompt, setDallePrompt] = useState("genie");
   const [tempHoodieImage, setTempHoodieImage] = useState("");
   const [isSaving, setIsSaving] = useState(false); // Add this state for tracking saving status
+  const [promptContainerOpen, setPromptContainerOpen] = useState(false);
+
+  console.log(isMobile, "isMobile");
 
   const tabs = [
     { name: "generate", icon: starsIcon },
     { name: "upload", icon: uploadImageIcon },
-    { name: "assets", icon: genieXAssetsIcon },
+    // { name: "assets", icon: genieXAssetsIcon },
     { name: "designs", icon: savedDesignsIcon },
   ]; // Array to map buttons with icons // Array to map buttons
   const underlineStyle = {
-    width: "25%", // Since there are three tabs
+    width: "33.3%", // Since there are three tabs
     transition: { duration: 0.2 },
     x: `${tabs.findIndex((tab) => tab.name === activeTab) * 100}%`,
   };
@@ -471,8 +481,10 @@ const DesignPortal = ({
     setDallePrompt(newDallePrompt);
   }, [words]); // This useEffect will run whenever the 'words' state changes
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+
   return (
-    <div style={{ height: "100vh" }} className="design-portal-container">
+    <div className="design-portal-container">
       <AnimatePresence>
         {instructionsOpen || editPopup ? (
           <motion.div
@@ -560,7 +572,18 @@ const DesignPortal = ({
               <ambientLight intensity={0.2} />
               {/* <directionalLightHelper /> */}
             </Canvas>
-            <div className="free-range-input-container">
+            <div
+              className="free-range-input-container"
+              style={{
+                transition: "ease-in-out all .5s",
+                bottom: isMobile
+                  ? promptContainerOpen
+                    ? "38rem"
+                    : "10rem"
+                  : "9.1rem",
+                right: isMobile ? "1.2rem" : "auto",
+              }}
+            >
               <input
                 className="free-range-input"
                 placeholder="Type in a detailed description..."
@@ -621,181 +644,499 @@ const DesignPortal = ({
           </div>
         </div>
       </div>
-      <div className="prompt-container">
-        <div className="tab-buttons">
-          <div className="tab-container">
-            {tabs.map((tab) => (
-              <button
-                key={tab.name}
-                className={activeTab === tab.name ? "active" : ""}
-                onClick={() => setActiveTab(tab.name)}
-              >
-                <img
-                  style={{
-                    width: "40px",
-
-                    padding: "2px",
-                  }}
-                  src={tab.icon}
-                  alt={tab.name}
-                />
-              </button>
-            ))}
-          </div>
-          {/* Underline element */}
-          <motion.div
-            className="underline-2"
-            initial={false}
-            animate={underlineStyle}
-          />
-        </div>
-
-        <AnimatePresence mode="wait">
-          {activeTab === "generate" && (
-            <TabContent key="generate">
-              <PromptContainer
-                setWords={setWords}
-                words={words}
-                isGenerating={isGenerating}
-                setIsGenerating={setIsGenerating}
-                isSaving={isSaving}
-                setIsSaving={setIsSaving}
-                triggerCounter={triggerCounter}
-                isFreeRange={isFreeRange}
-                setIsFreeRange={setIsFreeRange}
-                freeRangeInput={freeRangeInput}
-                editPrompt={editPrompt}
-                maskImage={maskImage}
-                hoodieImage={hoodieImage}
-                dalleImages={dalleImages}
-                setDalleImages={setDalleImages}
-                selectedImageIndex={selectedImageIndex}
-                setSelectedImageIndex={setSelectedImageIndex}
-                setEditPopup={setEditPopup}
-                editPopup={editPopup}
-                setHoodieImage={setHoodieImage}
-                freeRangeToggle={freeRangeToggle}
-                setFreeRangeToggle={setFreeRangeToggle}
-                freeRangePrompt={freeRangePrompt}
-              />
-            </TabContent>
-          )}
-
-          {activeTab === "upload" && (
-            <TabContent key="upload">
-              <ImageUpload setHoodieImage={setHoodieImage} />
-            </TabContent>
-          )}
-
-          {activeTab === "assets" && (
-            <TabContent key="assets">
-              <AssetLibrary setHoodieImage={setHoodieImage} />
-            </TabContent>
-          )}
-
-          {activeTab === "designs" && (
-            <TabContent key="designs">
-              <UserDesigns setHoodieImage={setHoodieImage} />
-            </TabContent>
-          )}
-        </AnimatePresence>
-        <div
+      {!isMobile ? (
+        <motion.div
+          className="prompt-container"
+          initial={{ x: "100%" }}
+          animate={promptContainerOpen ? { x: 0 } : { x: "100%" }}
+          exit={{ x: "100%" }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            duration: 0.5,
+          }}
           style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            backgroundColor: "rgba(255, 255, 255, .6)",
-            borderBottomRightRadius: "1rem",
-            height: "36px",
-            paddingTop: ".5rem",
-            paddingBottom: ".5rem",
+            position: "fixed",
+            top: 0,
+            right: 0,
+            borderBottomLeftRadius: "1rem",
+            // height: "100vh",
+            // width: "440px",
+            // background: "white",
+            zIndex: 1001,
           }}
         >
+          <div className="tab-buttons">
+            <div className="tab-container">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.name}
+                  className={activeTab === tab.name ? "active" : ""}
+                  onClick={() => setActiveTab(tab.name)}
+                >
+                  <img
+                    style={{
+                      width: "40px",
+                      padding: "2px",
+                    }}
+                    src={tab.icon}
+                    alt={tab.name}
+                  />
+                </button>
+              ))}
+            </div>
+            <motion.div
+              className="underline-2"
+              initial={false}
+              animate={underlineStyle}
+            />
+          </div>
+
+          {/* <button
+          style={{ position: "absolute", zIndex: "1000" }}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          Toggle Dropdown
+        </button> */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial="closed"
+              animate={isDropdownOpen ? "open" : "closed"}
+              exit="closed"
+              variants={dropdownVariants}
+              transition={{ duration: 0.5 }}
+              style={{ overflow: "hidden" }}
+            >
+              {activeTab === "generate" && (
+                <TabContent key="generate">
+                  <PromptContainer
+                    setWords={setWords}
+                    words={words}
+                    isGenerating={isGenerating}
+                    setIsGenerating={setIsGenerating}
+                    isSaving={isSaving}
+                    setIsSaving={setIsSaving}
+                    triggerCounter={triggerCounter}
+                    isFreeRange={isFreeRange}
+                    setIsFreeRange={setIsFreeRange}
+                    freeRangeInput={freeRangeInput}
+                    editPrompt={editPrompt}
+                    maskImage={maskImage}
+                    hoodieImage={hoodieImage}
+                    dalleImages={dalleImages}
+                    setDalleImages={setDalleImages}
+                    selectedImageIndex={selectedImageIndex}
+                    setSelectedImageIndex={setSelectedImageIndex}
+                    setEditPopup={setEditPopup}
+                    editPopup={editPopup}
+                    setHoodieImage={setHoodieImage}
+                    freeRangeToggle={freeRangeToggle}
+                    setFreeRangeToggle={setFreeRangeToggle}
+                    freeRangePrompt={freeRangePrompt}
+                  />
+                </TabContent>
+              )}
+
+              {activeTab === "upload" && (
+                <TabContent key="upload">
+                  <ImageUpload setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+
+              {activeTab === "designs" && (
+                <TabContent key="designs">
+                  <UserDesigns setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+            </motion.div>
+          </AnimatePresence>
           <div
-            className="prompt-buttons-container"
+            className="testing-this-out"
             style={{
               position: "absolute",
-              zIndex: 10000,
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
+              bottom: 0,
+              width: "100%",
+              backgroundColor: "rgba(255, 255, 255, .6)",
+              borderBottomLeftRadius: "1rem",
+              borderBottomRightRadius: "1rem",
+              height: "36px",
+              paddingTop: ".5rem",
+              paddingBottom: ".5rem",
+              borderRadius: "1rem",
             }}
           >
-            <button
-              // className="apply-image-btn"
-              onClick={generateImageCheck}
-              className="prompt-button"
+            <div
+              className="prompt-buttons-container"
               style={{
-                marginTop: "0",
-                width: "10px",
-                fontFamily: "oatmeal-pro-bold",
-                padding: ".7rem",
-                borderRadius: ".5rem",
-                transition: "all .2s ease-in-out",
-                cursor: "pointer",
-                fontSize: "15px",
-                // boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
-              }}
-              // disabled={dallePrompt === "genie"}
-            >
-              Generate
-            </button>
-            <Link
-              className="prompt-button"
-              to={"/cart"}
-              // className="apply-image-btn"
-              onClick={addToCart}
-              style={{
-                backgroundColor: "black",
-                transition: "all .2s ease-in-out ",
+                position: "absolute",
+                zIndex: 10000,
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
               }}
             >
               <button
+                onClick={generateImageCheck}
+                className="prompt-button"
                 style={{
-                  border: "none",
-                  backgroundColor: "black",
-                  // boxShadow: "5px 13px 5px rgba(0, 0, 0, 0.3)",
-                  fontFamily: "oatmeal-pro-regular",
-                  cursor: "pointer",
-                  color: "white",
+                  marginTop: "0",
+                  width: "10px",
                   fontFamily: "oatmeal-pro-bold",
+                  padding: ".7rem",
+                  borderRadius: ".5rem",
+                  transition: "all .2s ease-in-out",
+                  cursor: "pointer",
                   fontSize: "15px",
-                  borderRadius: "1rem",
-                  // boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
                 }}
               >
-                Add to Cart
+                Generate
               </button>
-            </Link>
-            <button
-              className="save-design-button"
-              style={{
-                border: "none",
-                background: "white",
-                boxShadow: "none",
-                fontFamily: "oatmeal-pro-regular",
-                borderRadius: ".5rem",
-                // marginTop: "1rem",
-                maxWidth: "50px",
-              }}
-              onClick={saveDesign}
-            >
-              {isSaving ? (
-                <Ring size={20} lineWeight={5} speed={2} color="black" />
-              ) : (
-                <img
-                  src={saveDesignIcon}
-                  alt="save"
+              <Link
+                className="prompt-button"
+                to={"/cart"}
+                onClick={addToCart}
+                style={{
+                  backgroundColor: "black",
+                  transition: "all .2s ease-in-out ",
+                }}
+              >
+                <button
                   style={{
-                    height: "20px",
-                    backgroundColor: "transparent",
+                    border: "none",
+                    backgroundColor: "black",
+                    fontFamily: "oatmeal-pro-regular",
+                    cursor: "pointer",
+                    color: "white",
+                    fontFamily: "oatmeal-pro-bold",
+                    fontSize: "15px",
+                    borderRadius: "1rem",
                   }}
-                />
-              )}
-            </button>
+                >
+                  Add to Cart
+                </button>
+              </Link>
+              <button
+                className="save-design-button"
+                style={{
+                  border: "none",
+                  background: "white",
+                  boxShadow: "none",
+                  fontFamily: "oatmeal-pro-regular",
+                  borderRadius: ".5rem",
+                  maxWidth: "50px",
+                }}
+                onClick={saveDesign}
+              >
+                {isSaving ? (
+                  <Ring size={20} lineWeight={5} speed={2} color="black" />
+                ) : (
+                  <img
+                    src={saveDesignIcon}
+                    alt="save"
+                    style={{
+                      height: "20px",
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
+          <div
+            className="prompt-panel-toggle"
+            onClick={() => setPromptContainerOpen(!promptContainerOpen)}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "-40px",
+              transform: "translateY(-50%)",
+              width: "40px",
+              height: "100px",
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "act-of-creation",
+              // fontFamily: "oatmeal-pro-bold",
+              fontSize: "25px",
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              borderTopLeftRadius: "1rem",
+              borderBottomLeftRadius: "1rem",
+            }}
+          >
+            <img
+              width={40}
+              src={promptingArrow}
+              style={{
+                transition: "all ease-in-out .3s",
+                transform: promptContainerOpen ? "scaleX(-1)" : "",
+              }}
+            ></img>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          className="prompt-container"
+          initial={{ x: "100%", y: 0 }}
+          animate={
+            promptContainerOpen
+              ? { x: -30, y: 180 }
+              : {
+                  x: -30,
+                  y: "139%",
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
+                    duration: 0.5,
+                    delay: 0.07, // Delay on entrance
+                  },
+                }
+          }
+          exit={{
+            x: "100%",
+            transition: {
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              duration: 0.5,
+              delay: 0, // No delay on exit
+            },
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            duration: 0.5,
+            delay: 0.15,
+          }}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            borderTopLeftRadius: "1rem",
+            // height: "100vh",
+            // width: "440px",
+            // background: "white",
+            zIndex: 1001,
+          }}
+        >
+          <div className="tab-buttons">
+            <div className="tab-container">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.name}
+                  className={activeTab === tab.name ? "active" : ""}
+                  onClick={() => setActiveTab(tab.name)}
+                >
+                  <img
+                    style={{
+                      width: "40px",
+                      padding: "2px",
+                    }}
+                    src={tab.icon}
+                    alt={tab.name}
+                  />
+                </button>
+              ))}
+            </div>
+            <motion.div
+              className="underline-2"
+              initial={false}
+              animate={underlineStyle}
+            />
+          </div>
 
+          {/* <button
+          style={{ position: "absolute", zIndex: "1000" }}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          Toggle Dropdown
+        </button> */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial="closed"
+              animate={isDropdownOpen ? "open" : "closed"}
+              exit="closed"
+              variants={dropdownVariants}
+              transition={{ duration: 0.5 }}
+              style={{ overflow: "hidden" }}
+            >
+              {activeTab === "generate" && (
+                <TabContent key="generate">
+                  <PromptContainer
+                    setWords={setWords}
+                    words={words}
+                    isGenerating={isGenerating}
+                    setIsGenerating={setIsGenerating}
+                    isSaving={isSaving}
+                    setIsSaving={setIsSaving}
+                    triggerCounter={triggerCounter}
+                    isFreeRange={isFreeRange}
+                    setIsFreeRange={setIsFreeRange}
+                    freeRangeInput={freeRangeInput}
+                    editPrompt={editPrompt}
+                    maskImage={maskImage}
+                    hoodieImage={hoodieImage}
+                    dalleImages={dalleImages}
+                    setDalleImages={setDalleImages}
+                    selectedImageIndex={selectedImageIndex}
+                    setSelectedImageIndex={setSelectedImageIndex}
+                    setEditPopup={setEditPopup}
+                    editPopup={editPopup}
+                    setHoodieImage={setHoodieImage}
+                    freeRangeToggle={freeRangeToggle}
+                    setFreeRangeToggle={setFreeRangeToggle}
+                    freeRangePrompt={freeRangePrompt}
+                  />
+                </TabContent>
+              )}
+
+              {activeTab === "upload" && (
+                <TabContent key="upload">
+                  <ImageUpload setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+
+              {activeTab === "designs" && (
+                <TabContent key="designs">
+                  <UserDesigns setHoodieImage={setHoodieImage} />
+                </TabContent>
+              )}
+            </motion.div>
+          </AnimatePresence>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              backgroundColor: "rgba(255, 255, 255, .6)",
+              borderBottomLeftRadius: "1rem",
+              height: "36px",
+              paddingTop: ".5rem",
+              paddingBottom: ".5rem",
+            }}
+          >
+            <div
+              className="prompt-buttons-container"
+              style={{
+                position: "absolute",
+                zIndex: 10000,
+                paddingLeft: "1rem",
+                paddingRight: "1rem",
+              }}
+            >
+              <button
+                onClick={generateImageCheck}
+                className="prompt-button"
+                style={{
+                  marginTop: "0",
+                  width: "10px",
+                  fontFamily: "oatmeal-pro-bold",
+                  padding: ".7rem",
+                  borderRadius: ".5rem",
+                  transition: "all .2s ease-in-out",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                }}
+              >
+                Generate
+              </button>
+              <Link
+                className="prompt-button"
+                to={"/cart"}
+                onClick={addToCart}
+                style={{
+                  backgroundColor: "black",
+                  transition: "all .2s ease-in-out ",
+                }}
+              >
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "black",
+                    fontFamily: "oatmeal-pro-regular",
+                    cursor: "pointer",
+                    color: "white",
+                    fontFamily: "oatmeal-pro-bold",
+                    fontSize: "15px",
+                    borderRadius: "1rem",
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </Link>
+              <button
+                className="save-design-button"
+                style={{
+                  border: "none",
+                  background: "white",
+                  boxShadow: "none",
+                  fontFamily: "oatmeal-pro-regular",
+                  borderRadius: ".5rem",
+                  maxWidth: "50px",
+                }}
+                onClick={saveDesign}
+              >
+                {isSaving ? (
+                  <Ring size={20} lineWeight={5} speed={2} color="black" />
+                ) : (
+                  <img
+                    src={saveDesignIcon}
+                    alt="save"
+                    style={{
+                      height: "20px",
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                )}
+              </button>
+            </div>
+          </div>
+          <div
+            className="prompt-panel-toggle"
+            onClick={() => setPromptContainerOpen(!promptContainerOpen)}
+            style={{
+              position: "absolute",
+              top: "-12px",
+              left: "110px",
+              transform: "translateY(-50%)",
+              width: "100px",
+              height: "25px",
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "black",
+              fontFamily: "act-of-creation",
+              // fontFamily: "oatmeal-pro-bold",
+              fontSize: "25px",
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              borderTopLeftRadius: "1rem",
+              borderTopRightRadius: "1rem",
+            }}
+          >
+            <img
+              width={30}
+              src={promptingArrow}
+              style={{
+                transition: "all ease-in-out .3s",
+                transform: promptContainerOpen ? "scaleY(-1)" : "",
+              }}
+            ></img>
+          </div>
+        </motion.div>
+      )}
+
+      {/* <div
+        className="prompt-panel-toggle"
+        onClick={() => setPromptContainerOpen(!promptContainerOpen)}
+      ></div> */}
       {/* <motion.div className="genie-lamp-canvas">
         <Canvas>
           <GenieLamp toggleGenieChat={toggleGenieChat} />

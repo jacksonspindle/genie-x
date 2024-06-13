@@ -1,43 +1,30 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../config/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
-
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CreateAccount } from "./CreateAccount";
 
 export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
-  // eslint-disable-next-line no-unused-vars
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // New state for error message
-
+  const [error, setError] = useState("");
   const [toggleCreateAccount, setToggleCreateAccount] = useState(false);
-
   const loginBoxRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        // User is signed in
-        console.log("Currently logged in as:", user.email);
-        setSignedIn(true); // Set signedIn state to true when user is signed in
+        setSignedIn(true);
+        navigate("/design");
       } else {
-        // No user is signed in
-        console.log("No user is currently logged in.");
-        setSignedIn(false); // Set signedIn state to false when user is not signed in
+        setSignedIn(false);
       }
     });
-
-    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [setSignedIn]);
+  }, [setSignedIn, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -45,16 +32,11 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
         setToggleLogInPage(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup the event listener on component unmount
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setToggleLogInPage]);
-
-  console.log(auth?.currentUser?.email);
 
   const signIn = async () => {
     try {
@@ -62,8 +44,8 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
       setSignedIn(true);
       toast("Signed In!");
       setToggleLogInPage(false);
+      navigate("/design");
     } catch (ex) {
-      console.log(ex);
       if (ex.code === "auth/wrong-password") {
         setError("Incorrect password. Please try again.");
       } else if (ex.code === "auth/user-not-found") {
@@ -77,22 +59,19 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      setSignedIn(true);
-      toast("Signed In!");
-      setToggleLogInPage(false);
+      // Check for user authentication state
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          setSignedIn(true);
+          toast("Signed In!");
+          setToggleLogInPage(false);
+          navigate("/design");
+        }
+      });
     } catch (ex) {
       console.log(ex);
     }
   };
-
-  // const logout = async () => {
-  //   try {
-  //     await signOut(auth);
-  //     toast("Signed Out!");
-  //   } catch (ex) {
-  //     console.log(ex);
-  //   }
-  // };
 
   return !toggleCreateAccount ? (
     <CreateAccount
@@ -124,8 +103,7 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        {error && <div style={{ color: "red" }}>{error}</div>}{" "}
-        {/* Display error message */}
+        {error && <div style={{ color: "red" }}>{error}</div>}
         <button className="login-btn" onClick={signIn}>
           Login
         </button>
@@ -136,7 +114,7 @@ export const Auth = ({ setSignedIn, setToggleLogInPage }) => {
           Don't have an account?{" "}
           <span
             style={{ color: "#4a90e2", cursor: "pointer" }}
-            onClick={() => setToggleCreateAccount(false)}
+            onClick={() => setToggleCreateAccount(true)}
           >
             Create one
           </span>

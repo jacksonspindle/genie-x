@@ -757,19 +757,7 @@ const PhotoPrompt = ({
 
   return (
     <div ref={ref} className="prompt-content-container">
-      {/* <div className="info-icon-container">
-        <img src={infoIcon} width="20px" alt="infoIcon"></img>
-        <p
-          style={{
-            color: "black",
-            opacity: 1,
-            fontFamily: "oatmeal-pro-regular",
-          }}
-        >
-          click colored words to replace them...
-        </p>
-      </div> */}
-      <div
+      {/* <div
         className="madlibs-container"
         style={{ textAlign: "left", lineHeight: "4rem" }}
       >
@@ -930,101 +918,8 @@ const PhotoPrompt = ({
             ))}
           </div>,
           portalRoot // Added the portalRoot reference here
-        )}
+        )} */}
 
-      {/* <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0, x: "-30vw" }}
-            animate={{ opacity: 1, x: "-30vw" }}
-            exit={{ opacity: 0 }}
-            // onClick={handleCloseImage}
-            style={{
-              position: "fixed",
-              // top: 0,
-              // left: 0,
-              // right: 0,
-              // bottom: 0,
-              width: "50rem",
-              height: "50rem",
-              borderRadius: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              // backgroundColor: "rgba(0,0,0,0.5)",
-              backdropFilter: "blur(10px)",
-              zIndex: 1000,
-              boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <motion.div
-              // src={selectedImage}
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 0.8 }}
-              exit={{ scale: 0.5 }}
-              style={{
-                // maxHeight: "80vh",
-                // maxWidth: "80vh",
-                // objectFit: "contain",
-                borderRadius: "2rem",
-              }}
-            >
-              <ImageEditor selectedImage={selectedImage} />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
-
-      {/* THIS SECTION IS FOR THE 4 IMAGE FEATURE */}
-      {/* <div className="preview-images-container">
-        {Array(4)
-          .fill(null)
-          .map((_, index) => (
-            <div
-              key={index}
-              className="preview-image-container"
-              style={{
-                border:
-                  selectedImageIndex === index ? "2px solid #5300FF" : "none",
-              }}
-            >
-              {dalleImages[index] ? (
-                <div style={{ width: "100%", height: "100%" }}>
-                  {selectedImageIndex === index && (
-                    <button
-                      className="edit-button"
-                      onClick={() => {
-                        setEditPopup(true);
-                        console.log("edit popup opening");
-                        console.log(typeof setEditPopup);
-                      }}
-                    >
-                      Edit
-                    </button>
-                  )}
-                  <img
-                    src={dalleImages[index]}
-                    className="preview-image"
-                    alt={`previewImage-${index}`}
-                    style={{
-                      borderRadius: "1rem",
-                      width: "100%",
-                    }}
-                    onClick={() => handleImageClick(dalleImages[index], index)}
-                  />
-                </div>
-              ) : (
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "white",
-                  }}
-                ></div>
-              )}
-            </div>
-          ))}
-      </div> */}
       <div className="preview-images-container">
         <div
           className="preview-image-container"

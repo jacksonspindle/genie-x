@@ -31,6 +31,7 @@ const Cart = ({ setHoodieImage }) => {
   const itemPrice = 120; // Price per item
   const [quantities, setQuantities] = useState({});
   const [sizes, setSizes] = useState({});
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     const initialSizes = {};
@@ -248,6 +249,7 @@ const Cart = ({ setHoodieImage }) => {
   };
 
   const handleCheckout = async () => {
+    setCheckoutLoading(true); // Set loading to true when the checkout process starts
     console.log("NODE_ENV:", process.env.NODE_ENV);
     console.log(
       "REACT_APP_STRIPE_TEST_PUBLIC_KEY:",
@@ -257,7 +259,7 @@ const Cart = ({ setHoodieImage }) => {
       "REACT_APP_STRIPE_LIVE_PUBLIC_KEY:",
       process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
     );
-    // Load Stripe
+    // Load Stripe PRODUCTION
     const stripeKey =
       process.env.NODE_ENV === "production"
         ? process.env.REACT_APP_STRIPE_LIVE_PUBLIC_KEY
@@ -271,6 +273,7 @@ const Cart = ({ setHoodieImage }) => {
     if (!currentUser) {
       // Handle the case where the user is not authenticated
       console.error("User not authenticated.");
+      setCheckoutLoading(false); // Set loading to false if there's an error
       return;
     }
 
@@ -324,6 +327,8 @@ const Cart = ({ setHoodieImage }) => {
       // Handle fetch errors
       console.error("Fetch error:", error.message);
     }
+
+    setCheckoutLoading(false); // Set loading to false after the checkout process completes
   };
 
   return (
@@ -625,10 +630,16 @@ const Cart = ({ setHoodieImage }) => {
                       backgroundColor: "#4a90e2",
                       color: "white",
                       border: "none",
+                      height: "45px",
                     }}
                     onClick={handleCheckout}
+                    disabled={checkoutLoading} // Disable button during loading
                   >
-                    Checkout
+                    {checkoutLoading ? (
+                      <Ring size={20} color="white" />
+                    ) : (
+                      "Checkout"
+                    )}
                   </button>
                   <Link
                     to={"/design"}

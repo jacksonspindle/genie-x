@@ -10,6 +10,7 @@ import { getAuth, signOut } from "firebase/auth";
 import defaultProfile from "../assets/defaultProfile.webp";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
+import homeIcon from "../assets/home_icon.png";
 
 const dropdownVariants = {
   hidden: { opacity: 0, y: 0 },
@@ -123,7 +124,14 @@ const Nav = ({
                 top: 2,
               }}
             >
-              <img src={actofcreationicon} width={70} />
+              <div>
+                <img src={homeIcon} className="home-icon"></img>
+              </div>
+              <img
+                src={actofcreationicon}
+                width={70}
+                // className="act-of-creation-icon"
+              />
               {/* <img src={actofcreationicon} width={70} /> */}
               {/* <img src={actofcreationicon} width={70} /> */}
             </Link>
@@ -207,6 +215,7 @@ const Nav = ({
                 <AnimatePresence>
                   {isHovered && (
                     <motion.div
+                      style={{ position: "absolute", zIndex: "2000" }}
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
                       initial="hidden"
@@ -216,6 +225,9 @@ const Nav = ({
                       className="drop-down-menu"
                       // Your styling here
                     >
+                      <li>
+                        <Link to="/design">Design</Link>
+                      </li>
                       <li>
                         <Link to="/orders">Orders</Link>
                       </li>

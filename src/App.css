@@ -95,6 +95,11 @@ body {
   src: url(../public/OatmealProTRIAL-Light.otf);
 }
 
+@font-face {
+  font-family: act-of-creation;
+  src: url(../public/ActOfCreation.otf);
+}
+
 
 
 .nav-container {
@@ -157,9 +162,9 @@ body {
 .drop-down-menu {
   background-color: rgba(20, 20, 20, .6) !important;
     backdrop-filter: blur(12px);
-  z-index: 100;
+  z-index: 2000;
   position: absolute;
-  top: 3.5rem;
+  /* top: 3.5rem; */
   right: 0;
   height: auto;
   padding: 2rem;
@@ -192,4 +197,10 @@ body {
 
 .drop-down-menu li a:hover {
   color: black;
+}
+
+.home-icon {
+  width: 60px;
+  border-radius: 50%;
+  margin-left: 3rem;
 }

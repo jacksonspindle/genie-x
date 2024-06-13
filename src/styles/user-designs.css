@@ -6,6 +6,7 @@
 
 .user-design{
     width: 100%;
+    max-width: 135px;
         height: auto;
         border-radius: .5rem;
         cursor: pointer;

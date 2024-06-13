@@ -1,4 +1,5 @@
 .design-portal-container {
+    /* margin-top: 1vh; */
     display: flex;
     /* position: absolute; */
     z-index: 10;
@@ -7,10 +8,10 @@
     /* gap: 4rem; */
     /* top: 10rem; */
     /* left: 3rem; */
-    padding: 0 2rem 2rem 2rem;
+    /* padding: 0 2rem 2rem 2rem; */
     box-sizing: border-box;
     /* height: 92vh !important; */
-    height: 93vh !important;
+    height: 100vh !important;
     gap: 0rem;
     overflow-y: hidden;
     font-family: oatmeal-pro-regular;
@@ -74,7 +75,6 @@
 } */
 
 .hoodie_canvas {
-    /* width: 70%; */
     /* height: 90%; */
     display: flex;
     flex: 2;
@@ -85,7 +85,7 @@
     gap: 1rem;
     /* background-color: blue; */
     background-color: rgba(255, 255, 255, .3);
-    border-radius: 1rem;
+    /* border-radius: 1rem; */
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
@@ -113,6 +113,7 @@
 
 .prompt-container {
     /* position: relative; */
+    height: 480px;
     flex: .75;
     justify-content: start;
     z-index: 16;
@@ -124,7 +125,11 @@
     border-bottom-left-radius: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    min-width: 430px;
+    /* min-width: 430px; */
+    position: absolute;
+    right: 0rem;
+    top: 0rem;
+    /* width: 200px; */
 }
 
 
@@ -206,37 +211,61 @@
     border-radius: 40px;
 }
 
+
+
 .free-range-input-container{
+    border-radius: 1rem;
 position: absolute;
-bottom: 1.1rem;
+bottom: 9.1rem;
 width: 40vw;
 display: flex;
+background-color: rgba(255, 255, 255, 0.3);
 justify-content: right;
 /* background-color: red; */
 border-bottom-right-radius: .5rem;
     border-top-right-radius: .5rem;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    font-family: oatmeal-pro-bold;
+    box-shadow:
+            inset 0 0 30px #fff,
+            0 0 20px #fff,
+            0px 0 20px #0ff;
+
+outline: 1px solid white;
+
 }
 
 .free-range-input {
     z-index: 1000;
     width: 40vw;
-        border-radius: .5rem;
+        border-radius: 1rem;
         font-size: 20px;
         padding-left: 1rem;
-        font-family: oatmeal-pro-regular;
         border: none;
-        
+        font-family: oatmeal-pro-bold;
         /* position: absolute; */
         bottom: 1.1rem;
         /* top: 0; */
     background-color: rgba(255, 255, 255, 0.4);
-    height: 35px;
+    height: 55px;
         backdrop-filter: blur(10px);
         border-bottom-right-radius: 0;
             border-top-right-radius: 0;
         
     
+}
+
+@media (max-width: 440px) {
+    .free-range-input-container {
+        min-width: 90vw;
+       
+    }
+
+    .free-range-input {
+        width: 80vw;
+        font-size: 16px;
+        height: 45px;
+    }
 }
 
 .free-range-input:focus {
@@ -249,16 +278,18 @@ border-bottom-right-radius: .5rem;
     /* Adjusted from display: absolute; */
     top: 0rem;
     /* Other properties */
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-bottom-right-radius: .5rem;
     border-top-right-radius: .5rem;
     cursor: pointer;
     outline: none;
     border: none;
+    font-size: 17px;
     border-left: 1px solid rgba(0, 0, 0, 0.3);
-    font-family: oatmeal-pro-regular;
+    font-family: oatmeal-pro-bold;
     transition: all ease-in-out .3s;
+
 }
 
 
@@ -267,15 +298,17 @@ border-bottom-right-radius: .5rem;
     /* Adjusted from display: absolute; */
     top: 0rem;
     /* Other properties */
-    background-color: #5300FF;
+    background-color: #8C6CFF;
+    
     backdrop-filter: blur(10px);
     border-bottom-right-radius: .5rem;
     border-top-right-radius: .5rem;
     cursor: pointer;
     outline: none;
     border: none;
+    font-size: 17px;
     border-left: 1px solid #5300FF;
-    font-family: oatmeal-pro-regular;
+    font-family: oatmeal-pro-bold;
     color: white;
 }
 
@@ -353,18 +386,21 @@ border-bottom-right-radius: .5rem;
     width: 100%;
         display: flex;
         
+        
         /* justify-content: space-around; */
     /* ... your styles for the container ... */
 }
 
 .tab-container {
+    
     width: 100%;
     display: flex;
     /* justify-content: space-around; */
     background-color: rgba(255, 255, 255, .3);
     border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
     padding-bottom: .3rem;
-    
+    /* margin-top: 30vh; */
 }
 
 .tab-container button {
@@ -402,4 +438,70 @@ border-bottom-right-radius: .5rem;
 
 .prompt-button:hover {
 transform: scale(1.05);
+}
+
+
+
+/* .prompt-panel-toggle {
+    position: absolute;
+    top: 2rem;
+    right: 0rem;
+    width: 50px;
+    background-color: white;
+    height: 100px;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+.prompt-panel-toggle-mobile {
+    position: absolute;
+    top: 2rem;
+    right: 0rem;
+    width: 50px;
+    background-color: white;
+    height: 100px
+}
+ */
+
+/* */
+
+
+.prompt-container {
+    border-radius: 1rem !important;
+    /* border-bottom-right-radius: 1rem !important; */
+    position: fixed;
+    top: 0;
+    right: 0;
+    /* height: 100vh;
+     */
+     /* border-bottom-left-radius: 0rem; */
+     /* border-bottom-right-radius: 0rem; */
+    /* width: 400px; */
+    /* background: white; */
+    z-index: 1001;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.prompt-panel-toggle {
+    position: absolute;
+    top: 50%;
+    left: -40px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.hoodie_canvas {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* background: #f5f5f5; */
 }
