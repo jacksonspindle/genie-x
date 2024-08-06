@@ -204,7 +204,7 @@ const HeroSection = ({ scrollContainerRef, scrollingUp }) => {
               fontFamily: "act-of-creation",
             }}
           >
-            {splitTextIntoWords("MAXIMIZE YOUR CREATIVITY", scrollingUp)}
+            {splitTextIntoWords("ACT OF CREATION", scrollingUp)}
           </motion.h1>
         )}
       </AnimatePresence>

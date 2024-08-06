@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import genieXLogo from "../assets/genieXLogo.png";
 import genieXLogo2 from "../assets/genieXLogo2.png";
 import cart from "../assets/cart.svg";
-import actofcreationlogo from "../assets/actofcreationLogo.svg";
+import actofcreationlogo from "../assets/actofcreationlogo.svg";
 import actofcreationicon from "../assets/actofcreationicon.svg";
 import { getAuth, signOut } from "firebase/auth";
 import defaultProfile from "../assets/defaultProfile.webp";
