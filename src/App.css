@@ -210,3 +210,31 @@ html {
   border-radius: 50%;
   margin-left: 3rem;
 }
+
+
+
+.scrollable-container {
+  position: fixed;
+  top: 60vh;
+  /* Adjust to appear below the phone */
+  width: 100%;
+  height: 50vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: red; */
+  /* z-index: 1000; */
+  /* Optional: to create a background */
+}
+
+.scroll-item {
+  margin: 20px;
+  text-align: center;
+}
+
+.scroll-item img {
+  max-width: 100px;
+  max-height: 200px;
+}

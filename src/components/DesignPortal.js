@@ -295,32 +295,7 @@ const DesignPortal = ({
       freeRangeToggle,
       isFreeRange,
     ]
-  ); // Note: I've added hoodieImage as a dependency
-  // const generateEdit = useCallback(async () => {
-  //   console.log("generating edit");
-  //   const res = await openai.createImageEdit({
-  //     image: hoodieImage,
-  //     mask: maskImage,
-  //     prompt: editPrompt,
-  //   });
-
-  //   console.log(res);
-
-  //   console.log(res.data.data.map((img) => img.url));
-  // });
-
-  // useEffect(() => {
-  //   if (hoodieImage !== false) {
-  //     return;
-  //   } else {
-  //     setDalleImages([]);
-  //     if (dalleImages.length === 0) {
-  //       setDalleImages([hoodieImage]);
-  //       // Only generate if no images have been generated yet
-  //       // generateImage();
-  //     }
-  //   }
-  // }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
+  );
 
   const applyImage = async () => {
     toast("Applying Design to Hoodie!");
@@ -503,50 +478,6 @@ const DesignPortal = ({
 
   const inputRef = useRef(null);
 
-  // useEffect(() => {
-  //   // setPanelStages("prompting");
-  //   inputRef.current.onfocus = () => {
-  //     setPanelStages("prompting");
-  //     window.scrollTo(0, 0);
-  //     document.body.scrollTop = 0;
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     window.scrollTo(1, 0);
-  //   };
-
-  //   // Set initial scroll position to 0
-
-  //   setTimeout(() => {
-  //     handleScroll();
-  //   }, 2000);
-
-  //   // Add scroll event listener
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     // Remove scroll event listener on cleanup
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-
-  // const handleInputClick = () => {
-  //   setPanelStages("prompting");
-
-  //   // Scroll to the top of the page
-  //   window.scrollTo(0, 0);
-  //   document.body.scrollTop = 0;
-
-  //   // Use requestAnimationFrame to ensure the scroll completes before focusing the input
-  //   requestAnimationFrame(() => {
-  //     if (inputRef.current) {
-  //       inputRef.current.readOnly = false;
-  //       inputRef.current.focus();
-  //     }
-  //   });
-  // };
-
   return (
     <div className="design-portal-container">
       <AnimatePresence>
@@ -568,23 +499,6 @@ const DesignPortal = ({
           />
         ) : null}
       </AnimatePresence>
-      {/* <div className="design-portal-container">
-        <img alt="icons" src={slotsIcon} className="lottery-btn" />
-        <img
-          alt="icons"
-          src={saveIcon}
-          onClick={saveHoodieDesign}
-          className="design-portal-btn"
-        />
-        <ToastContainer />
-        <img alt="icons" src={screenshotIcon} className="design-portal-btn" />
-        <img alt="icons" src={shareIcon} className="design-portal-btn" />
-        <img alt="icons" src={helpIcon} className="design-portal-btn" />
-      </div> */}
-      {/* <div className="checkout-btn-container">
-        <Link className="">Checkout</Link>
-        <Link to="collection">My Collection</Link>
-      </div> */}
 
       <AnimatePresence>
         {instructionsOpen ? (
@@ -610,16 +524,6 @@ const DesignPortal = ({
 
       <div className="hoodie_canvas">
         <div className="hoodie-canvas-left">
-          {/* <h3
-            onClick={() => {
-              setProductDetails(true);
-              console.log(productDetails);
-            }}
-            className="product-details-button"
-          >
-            <img width={20} src={infoIcon} alt="info" />
-            Product Details{" "}
-          </h3> */}
           <div className="hoodie-scene">
             <Canvas>
               <SetupCamera />
@@ -638,21 +542,6 @@ const DesignPortal = ({
             </Canvas>
             <motion.div
               className="free-range-input-container"
-              // style={{
-              //   transition: "ease-in-out all .6s",
-              //   bottom: isMobile
-              //     ? panelStages === "prompting"
-              //       ? isIphoneMax
-              //         ? "80%"
-              //         : "79.5%"
-              //       : panelStages === "product"
-              //       ? isIphoneMax
-              //         ? "105%"
-              //         : "100.5%"
-              //       : "10rem"
-              //     : "9.1rem",
-              //   right: isMobile ? "1.2rem" : "auto",
-              // }}
               initial={{ x: "0%", y: "-20%" }}
               animate={
                 panelStages === "prompting"
@@ -696,15 +585,8 @@ const DesignPortal = ({
               }}
             >
               <input
-                // onClick={() => {
-                //   // handleInputClick();
-                //   setPanelStages("prompting");
-                // }}
                 ref={inputRef}
                 className="free-range-input"
-                // focus={false}
-                // readOnly={true}
-
                 placeholder="Type in a detailed description..."
                 // disabled={!freeRangeToggle}
                 style={{
@@ -728,20 +610,6 @@ const DesignPortal = ({
               </button>
             </motion.div>
 
-            {/* <div
-              className="switch"
-              data-isOn={freeRangeToggle}
-              onClick={toggleSwitch}
-              style={{
-                position: "absolute",
-                margin: "1rem",
-                backgroundColor: `${
-                  !freeRangeToggle ? "rgba(255, 255, 255, 0.4)" : "#2685e3"
-                } `,
-              }}
-            >
-              <motion.div className="handle" layout transition={spring} />
-            </div> */}
             {!isMobile ? (
               <div
                 style={{
@@ -819,12 +687,6 @@ const DesignPortal = ({
             />
           </div>
 
-          {/* <button
-          style={{ position: "absolute", zIndex: "1000" }}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          Toggle Dropdown
-        </button> */}
           <AnimatePresence mode="wait">
             <motion.div
               initial="closed"
@@ -1086,12 +948,6 @@ const DesignPortal = ({
             />
           </div>
 
-          {/* <button
-          style={{ position: "absolute", zIndex: "1000" }}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          Toggle Dropdown
-        </button> */}
           <AnimatePresence mode="wait">
             <motion.div
               initial="closed"
@@ -1327,12 +1183,6 @@ const DesignPortal = ({
             />
           </div>
 
-          {/* <button
-          style={{ position: "absolute", zIndex: "1000" }}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          Toggle Dropdown
-        </button> */}
           <AnimatePresence mode="wait">
             <motion.div
               initial="closed"

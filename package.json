@@ -5,6 +5,7 @@
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^1.10.1",
     "@chatscope/chat-ui-kit-styles": "^1.4.0",
+    "@react-spring/three": "^9.7.4",
     "@react-three/drei": "^9.75.0",
     "@react-three/fiber": "^8.13.3",
     "@splinetool/react-spline": "^3.1.0",

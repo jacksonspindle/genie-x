@@ -26,6 +26,7 @@ import "./styles/user-designs.css";
 import "./styles/asset-library.css";
 import "./styles/upload-image.css";
 import "./styles/big-hoodie-live-feed.css";
+import "./styles/home-page.css";
 import Orders from "./components/Orders";
 import HoodieCollection from "./components/Collection";
 import Nav from "./components/Nav";
@@ -82,29 +83,6 @@ function App() {
       gradient.initGradient("#gradient-canvas");
     }
   }, [ref, location.pathname]);
-
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       console.log("User is logged in, fetching current profile pic...");
-  //       setSignedIn(true);
-  //       const userRef = doc(db, "users", user.uid);
-  //       const unsubscribeSnapshot = onSnapshot(userRef, (doc) => {
-  //         const userData = doc.data();
-  //         const currentPic = userData?.currentProfilePic || defaultProfile;
-  //         setCurrentProfilePic(currentPic);
-  //       });
-  //       return () => unsubscribeSnapshot();
-  //     } else {
-  //       setSignedIn(false);
-  //       console.log("No user logged in.");
-  //     }
-  //     setLoading(false);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, []);
 
   if (loading) {
     return <div>Loading...</div>; // Or any loading spinner

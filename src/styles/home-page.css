@@ -1,0 +1,25 @@
+.shadow {
+    color: white;
+    text-shadow: 0 0 5px #50b1fe, 0 0 10px #50b1fe, 0 0 20px #fff,
+        0 0 40px #886bff, 0 0 80px #886bff, 0 0 90px #886bff, 0 0 100px #886bff,
+        0 0 150px #886bff;
+}
+
+.hero-button {
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    border: none;
+    border-radius: 0.5rem;
+    top: 80vh;
+    box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.3);
+    /* transition: all ease-in-out 0.2s; */
+    cursor: pointer;
+    font-family: oatmeal-pro-bold;
+    font-size: 15px;
+}
+/* 
+.hero-button:hover {
+    box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.7);
+
+} */

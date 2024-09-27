@@ -1,337 +1,292 @@
-import React, { useState } from "react";
-import Spline from "@splinetool/react-spline";
 import { Canvas } from "@react-three/fiber";
-import { ActTShirtOversized } from "./ActTShirtOversized";
-import { Environment, OrbitControls } from "@react-three/drei";
-import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import splineGif from "../assets/orb2.gif";
-
-const testimonials = [
-  {
-    image: "testimonial-image1.jpg",
-    text: "This product changed my life! - Customer A",
-  },
-  {
-    image: "testimonial-image2.jpg",
-    text: "I can't imagine working without it. - Customer B",
-  },
-  {
-    image: "testimonial-image3.jpg",
-    text: "A game changer for my business. - Customer C",
-  },
-];
+import React, { useRef, useState } from "react";
+import { OrbitControls, Environment } from "@react-three/drei";
+import hoodieFront from "../assets/hoodieFront.png";
+import { HoodieHomePage } from "./HoodieHomePage";
+import homePageSampleImage1 from "../assets/homePageSampleImage1.jpeg";
+import homePageSampleImage2 from "../assets/homePageSampleImage2.jpeg";
+import homePageSampleImage3 from "../assets/homePageSampleImage3.PNG";
+import homePageSampleImage4 from "../assets/homePageSampleImage4.jpg";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
 const HomeMobile = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Create an array of image objects with src and name
+  const images = [
+    {
+      src: homePageSampleImage1,
+      name: "Oil painting card game between a sailor, merchant, pharaoh",
+    },
+    {
+      src: homePageSampleImage2,
+      name: "Bee landing on a chrome flower growing from lava",
+    },
+    {
+      src: homePageSampleImage3,
+      name: "Van Gogh style painting of flower in a pond",
+    },
+    {
+      src: homePageSampleImage4,
+      name: "Comic book style drawing of golfer at sunset",
+    },
+  ];
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  // State to track the selected image object
+  const [selectedImage, setSelectedImage] = useState(images[0]);
+
+  // Function to handle image click and load texture
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
   };
 
-  const prevTestimonial = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length
-    );
+  // Refs and inView hooks for each section
+  const heroRef = useRef(null);
+  const isHeroInView = useInView(heroRef);
+
+  const creativityRef = useRef(null);
+  const isCreativityInView = useInView(creativityRef);
+
+  const canvasRef = useRef(null);
+  const isCanvasInView = useInView(canvasRef);
+
+  // Animation variants using transform properties
+  const fadeInUp = {
+    visible: { opacity: 1, transform: "translateY(0)" },
+    hidden: { opacity: 0, transform: "translateY(20px)" },
+  };
+
+  const fadeIn = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 },
+  };
+
+  const scaleIn = {
+    visible: { opacity: 1, transform: "scale(1)" },
+    hidden: { opacity: 0, transform: "scale(0.8)" },
   };
 
   return (
-    <div style={{ height: "100vh" }}>
-      <Canvas>
-        <ActTShirtOversized />
-        <Environment preset="warehouse" />
-        {/* <OrbitControls /> */}
-      </Canvas>
+    <div>
+      {/* Hero Section */}
+      <motion.section
+        ref={heroRef}
+        style={{
+          minHeight: "100vh",
+          position: "relative",
+          background:
+            "linear-gradient(180deg, rgba(136,107,255,1) 0%, rgba(80,177,254,1) 49%, rgba(255,255,255,1) 100%)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+        variants={fadeIn}
+        initial="hidden"
+        animate={isHeroInView ? "visible" : "hidden"}
+        transition={{ duration: 1 }}
+      >
+        <motion.h2
+          style={{
+            top: "12%",
+            position: "absolute",
+            fontFamily: "oatmeal-pro-bold",
+            fontSize: "33px",
+          }}
+          className="shadow"
+          variants={fadeInUp}
+          initial="hidden"
+          animate={isHeroInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          Act of Creation
+        </motion.h2>
 
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
+        <motion.img
+          src={hoodieFront}
+          alt="Hoodie Front"
+          style={{ width: "250px", position: "absolute" }}
+          variants={scaleIn}
+          initial="hidden"
+          animate={isHeroInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.4 }}
+        />
+
+        <motion.button
+          className="hero-button"
+          variants={fadeInUp}
+          initial="hidden"
+          animate={isHeroInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          Design Now
+        </motion.button>
+      </motion.section>
+
+      {/* Creativity Section */}
+      <motion.section
+        ref={creativityRef}
+        style={{
+          minHeight: "100vh",
+          width: "100%",
+          backgroundColor: "white",
+          position: "relative",
+          overflow: "hidden",
+        }}
+        variants={fadeIn}
+        initial="hidden"
+        animate={isCreativityInView ? "visible" : "hidden"}
+        transition={{ duration: 1 }}
+      >
+        <motion.h2
           style={{
-            position: "absolute",
-            zIndex: "1000",
-            color: "black",
-            bottom: "10.5rem",
+            fontFamily: "oatmeal-pro-bold",
             fontSize: "50px",
-            fontFamily: "act-of-creation",
-            width: "80%",
-            textAlign: "center",
+            marginLeft: "1rem",
+            marginBottom: "0",
+            padding: ".5rem",
+            marginTop: "0",
           }}
+          variants={fadeInUp}
+          initial="hidden"
+          animate={isCreativityInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.2 }}
         >
-          MAXIMIZE YOUR CREATIVITY
-        </div>
+          Creativity
+        </motion.h2>
+        <motion.p
+          style={{
+            fontFamily: "oatmeal-pro-regular",
+            marginLeft: "1rem",
+            fontSize: "25px",
+            marginTop: "1rem",
+            opacity: ".5",
+            padding: ".5rem",
+            marginBottom: "0",
+            color: "gray",
+          }}
+          variants={fadeInUp}
+          initial="hidden"
+          animate={isCreativityInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.4 }}
+        >
+          Design anything you want using just text.
+        </motion.p>
+
+        {/* Canvas Container */}
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            // padding: "1rem ",
-            paddingTop: "0",
-            backgroundColor: "white",
-            width: "100%",
-            position: "absolute",
-            bottom: ".3rem",
+            position: "relative",
+            height: "480px",
+            overflow: "hidden",
           }}
         >
-          <Link
+          <motion.div
+            ref={canvasRef}
             style={{
               position: "absolute",
-              zIndex: "1000",
-              backgroundColor: "black",
-              bottom: "7rem",
-              width: "120px",
-              fontSize: "20px",
-              fontFamily: "oatmeal-pro-bold",
-              width: "35%",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
             }}
-            to="/design"
+            variants={fadeIn}
+            initial="hidden"
+            animate={isCanvasInView ? "visible" : "hidden"}
+            transition={{ duration: 1, delay: 0.6 }}
           >
-            Design Now
-          </Link>
+            <Canvas style={{ height: "100%", width: "100%" }}>
+              <HoodieHomePage selectedImage={selectedImage.src} />
+              {/* <OrbitControls enableZoom={false} /> */}
+              <ambientLight intensity={0.3} />
+              <Environment preset="city" />
+            </Canvas>
+          </motion.div>
         </div>
-      </div>
-      <div
-        style={{
-          pointerEvents: "none",
-          width: "100vw",
-          // backgroundColor: "white",
-        }}
-      >
-        <Spline
-          // style={{ width: "100vw", height: "520px" }}
-          scene="https://prod.spline.design/ywTq9T9cBN2vgMou/scene.splinecode"
-        />
-      </div>
-      <div
-        style={{
-          height: "1000px",
-          position: "absolute",
-          width: "100%",
-          fontFamily: "act-of-creation",
-          color: "black",
-        }}
-      >
-        <h1
-          style={{
-            filter: "invert(1)",
-            fontSize: "50px",
-            // margin: -20,
-          }}
-        >
-          DESIGN WITH AI
-        </h1>
 
-        <div
+        {/* Thumbnails Section */}
+        <motion.div
           style={{
+            position: "absolute",
+            bottom: "20px",
+            width: "100%",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            marginTop: "5rem",
-            paddingLeft: "2rem",
+            justifyContent: "center",
           }}
+          variants={fadeInUp}
+          initial="hidden"
+          animate={isCanvasInView ? "visible" : "hidden"}
+          transition={{ duration: 1, delay: 0.6 }}
         >
-          <div
+          <motion.div
             style={{
+              width: "75%",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              marginBottom: "1rem",
-              width: "100%",
-              fontFamily: "oatmeal-pro-bold",
+              backgroundColor: "rgba(19,19,19,.6)",
+              padding: "1rem",
+              borderRadius: "1rem",
             }}
+            variants={fadeInUp}
+            initial="hidden"
+            animate={isCanvasInView ? "visible" : "hidden"}
+            transition={{ duration: 1, delay: 0.6 }}
           >
-            <div
-              style={{
-                width: "100px",
-                height: "100px",
-                backgroundColor: "black",
-                borderRadius: "10px",
-                marginRight: "1rem",
-              }}
-            ></div>
-            <p style={{ fontSize: "20px", maxWidth: "250px" }}>
-              Design Products Using Text
-            </p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "1rem",
-              width: "100%",
-              fontFamily: "oatmeal-pro-bold",
-            }}
-          >
-            <div
-              style={{
-                width: "100px",
-                height: "100px",
-                backgroundColor: "black",
-                borderRadius: "10px",
-                marginRight: "1rem",
-              }}
-            ></div>
-            <p style={{ fontSize: "20px" }}>Edit Images With Ease</p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              fontFamily: "oatmeal-pro-bold",
-            }}
-          >
-            <div
-              style={{
-                width: "100px",
-                height: "100px",
-                backgroundColor: "black",
-                borderRadius: "10px",
-                marginRight: "1rem",
-              }}
-            ></div>
-            <p style={{ fontSize: "20px" }}>Save Designs</p>
-          </div>
-        </div>
-
-        <h1
-          style={{
-            filter: "invert(1)",
-            fontSize: "50px",
-            marginTop: 150,
-          }}
-        >
-          PRODUCT SHOTS
-        </h1>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "10px",
-            marginTop: "2rem",
-            padding: "0 2rem",
-            height: "1200px",
-          }}
-        >
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "300px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "300px" }}></div>
-          <div
-            style={{
-              backgroundColor: "gray",
-              height: "400px",
-              gridColumn: "span 2",
-            }}
-          ></div>
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-          <div style={{ backgroundColor: "gray", height: "200px" }}></div>
-        </div>
-
-        <h1
-          style={{
-            filter: "invert(1)",
-            fontSize: "50px",
-            marginTop: 150,
-          }}
-        >
-          TESTIMONIALS
-        </h1>
-        <div style={{ width: "80%", margin: "0 auto", paddingTop: "2rem" }}>
-          <div style={{ position: "relative" }}>
-            <button
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "0",
-                transform: "translateY(-50%)",
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "2rem",
-                zIndex: 2,
-              }}
-              onClick={prevTestimonial}
-            >
-              &lt;
-            </button>
-            <AnimatePresence>
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5 }}
+            {/* Use AnimatePresence to wrap the text */}
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={selectedImage.name}
                 style={{
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "300px",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "10px",
-                  overflow: "hidden",
+                  textAlign: "center",
+                  color: "white",
+                  fontFamily: "oatmeal-pro-bold",
+                  fontSize: "16px",
+                  marginBottom: "10px",
+                  marginTop: 0,
                 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                <img
-                  src={testimonials[currentIndex].image}
-                  alt={`Testimonial ${currentIndex + 1}`}
-                  style={{ height: "100%", width: "auto" }}
-                />
-                <p
-                  style={{
-                    position: "absolute",
-                    bottom: "10px",
-                    color: "#000",
-                  }}
-                >
-                  {testimonials[currentIndex].text}
-                </p>
-              </motion.div>
+                {selectedImage.name}
+              </motion.p>
             </AnimatePresence>
-            <button
+            {/* Image Thumbnails */}
+            <div
               style={{
-                position: "absolute",
-                top: "50%",
-                right: "0",
-                transform: "translateY(-50%)",
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "2rem",
-                zIndex: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
               }}
-              onClick={nextTestimonial}
             >
-              &gt;
-            </button>
-          </div>
-        </div>
-
-        <div
-          style={{
-            height: "100px",
-            backgroundColor: "black",
-            marginTop: "5rem",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "90%",
-              justifyContent: "space-between",
-              gap: "1rem",
-              marginLeft: "1rem",
-              // fontSize: "12px",
-
-              // padding: "2rem",
-            }}
-          >
-            <h1>HOME</h1>
-            <h1>DESIGN</h1>
-            <h1>SHIPPING</h1>
-            <h1>CONTACT</h1>
-          </div>
-        </div>
-      </div>
+              {images.map((image, index) => (
+                <motion.img
+                  key={index}
+                  src={image.src}
+                  alt={image.name}
+                  onClick={() => handleImageClick(image)}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    objectFit: "cover",
+                    borderRadius: ".5rem",
+                    cursor: "pointer",
+                    boxSizing: "border-box",
+                    border:
+                      selectedImage.src === image.src
+                        ? "2px solid white"
+                        : "2px solid transparent",
+                  }}
+                  variants={scaleIn}
+                  initial="hidden"
+                  animate={isCanvasInView ? "visible" : "hidden"}
+                  transition={{ duration: 0.8, delay: 0.6 + index * 0.2 }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.section>
     </div>
   );
 };
